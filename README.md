@@ -26,3 +26,13 @@
         </td>
     </tr>
 </table>
+
+#### 애그리게이트 분리 단계
+<table>
+    <tr>
+        <td align="center">
+            <img src="https://user-images.githubusercontent.com/48042490/150772741-c17fd353-01eb-43ee-853c-a2ebd9224f23.jpg" width="500" height="500"/>
+        </td>
+    </tr>
+</table>
+
