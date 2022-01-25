@@ -20,5 +20,15 @@ spring:
       open-in-view: false
       default_batch_fetch_size: 1000
 
-  logging.level:
+eureka:
+  client:
+    service-url:
+      defalutZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+logging:
+  level:
     com.justpickup: DEBUG
+    org.hibernate.SQL: debug

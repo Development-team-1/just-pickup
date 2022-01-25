@@ -30,5 +30,5 @@ eureka:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 logging:
   level:
-    com.justpickup.storeservice: DEBUG
+    com.justpickup: DEBUG
     org.hibernate.SQL: debug
