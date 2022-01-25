@@ -1,0 +1,35 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: order-servcie
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    generate-ddl: true
+    show-sql: true
+    format_sql: true
+    open-in-view: false
+    default_batch_fetch_size: 1000
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/orderdb
+    username: postgres
+    password: admin
+
+
+eureka:
+  client:
+    service-url:
+      defalutZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+logging:
+  level:
+    com.justpickup: DEBUG
+    org.hibernate.SQL: debug
