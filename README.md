@@ -36,3 +36,14 @@
     </tr>
 </table>
 
+### DB 설계
+
+#### 물리 모델 (Physical model)
+<table>
+    <tr>
+        <td align="center">            
+            <img src="https://user-images.githubusercontent.com/48042490/150922528-21c6c430-a9d6-4e03-a450-3d4d22e62126.png" width="500" height="500"/>
+        </td>
+    </tr>
+</table>
+
