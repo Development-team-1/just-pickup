@@ -47,3 +47,15 @@
     </tr>
 </table>
 
+#### 논리 모델 (Logical model)
+
+<table>
+    <tr>
+        <td align="center">            
+            <img src="https://user-images.githubusercontent.com/72686708/151095981-4222b765-ae8e-46f5-9289-f9189d4c1b28.png" width="500" height="500"/>
+        </td>
+    </tr>
+</table>
+
+
+
