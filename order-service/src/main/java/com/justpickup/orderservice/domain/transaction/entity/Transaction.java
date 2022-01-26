@@ -2,6 +2,7 @@ package com.justpickup.orderservice.domain.transaction.entity;
 
 import com.justpickup.orderservice.domain.order.entity.Order;
 import com.justpickup.orderservice.global.entity.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "transaction")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Transaction extends BaseEntity {
 
     @Id    @GeneratedValue
