@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <title>패스오더</title>
+
+  <th:block th:replace="/fragments/head"></th:block>
+
+</head>
+<body class="theme-light" data-highlight="highlight-red" data-gradient="body-default">
+<div th:replace="/fragments/header::header"></div>
+<div th:replace="/fragments/sidebar"></div>
+
+<div id="preloader"><div class="spinner-border color-highlight" role="status"></div></div>
+
+<main layout:fragment="content"></main>
+
+<div th:replace ="/fragments/footer::footer"></div>
+
+
+<th:block th:replace="/fragments/menu"></th:block>
+
+<script type="text/javascript" src="https://hoonytemplatebucket.s3.ap-northeast-2.amazonaws.com/scripts/jquery.js"></script>
+<script type="text/javascript" src="https://hoonytemplatebucket.s3.ap-northeast-2.amazonaws.com/scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://hoonytemplatebucket.s3.ap-northeast-2.amazonaws.com/scripts/custom.js"></script>
+<script type="text/javascript" >
+  $(document).ready(function(){
+    init();
+  });
+</script>
+
+</body>
+</html>
