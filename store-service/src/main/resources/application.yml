@@ -8,9 +8,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    generate-ddl: true
-    show-sql: true
-    format_sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
     open-in-view: false
     default_batch_fetch_size: 1000
 
