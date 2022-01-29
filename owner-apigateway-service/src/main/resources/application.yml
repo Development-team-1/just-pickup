@@ -1,0 +1,13 @@
+server:
+  port: 8001
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defalutZone: http://localhost:8761/eureka
+
+spring:
+  application:
+    name: owner-apigateway-service
