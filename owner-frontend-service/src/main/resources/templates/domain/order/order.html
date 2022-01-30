@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+>
+
+
+<head></head>
+
+<div layout:fragment="content">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">주문</h1>
+
+    <!-- Date Section -->
+    <h5 class="h5 mb-4 text-gray-800">2022년 01년 14일</h5>
+
+    <!-- Card Section -->
+    <div class="row row-cols-md-3">
+        <!-- card start -->
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header text-center font-weight-bold">
+                    닉네임
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="d-inline-block text-truncate" style="max-width: 80%;">
+                            메뉴1, 메뉴2, 메뉴3
+                        </span>
+                    </h5>
+                    <p class="card-text">
+                        <small class="text-muted">오전 11:03</small>
+                    </p>
+                    <a href="#" class="btn btn-outline-dark btn-sm">상세보기</a>
+                </div>
+                <div class="card-footer rounded bg-primary text-white text-center" role="button">
+                    주문접수하기
+                </div>
+            </div>
+        </div>
+        <!-- card end -->
+
+        <!-- card start -->
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header text-center font-weight-bold">
+                    닉네임
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="d-inline-block text-truncate" style="max-width: 80%;">
+                            메뉴1, 메뉴2, 메뉴3, 메뉴4, 메뉴5, 메뉴6
+                        </span>
+                    </h5>
+                    <p class="card-text">
+                        <small class="text-muted">오후 04:03</small>
+                    </p>
+                    <a href="#" class="btn btn-outline-dark btn-sm">상세보기</a>
+                </div>
+                <div class="card-footer rounded bg-dark text-white text-center" role="button">
+                    수령완료
+                </div>
+            </div>
+        </div>
+        <!-- card end -->
+
+        <!-- card start -->
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header text-center font-weight-bold">
+                    닉네임
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="d-inline-block text-truncate" style="max-width: 80%;">
+                            메뉴1, 메뉴2
+                        </span>
+                    </h5>
+                    <p class="card-text">
+                        <small class="text-muted">오후 10:45</small>
+                    </p>
+                    <a href="#" class="btn btn-outline-dark btn-sm">상세보기</a>
+                </div>
+                <div class="card-footer rounded bg-success text-white text-center" role="button">
+                    조리완료
+                </div>
+            </div>
+        </div>
+        <!-- card end -->
+
+    </div>
+
+    <script type="text/javascript">
+        function init() {
+
+        }
+
+        function setEvent() {
+
+        }
+    </script>
+</div>
+
+</html>
