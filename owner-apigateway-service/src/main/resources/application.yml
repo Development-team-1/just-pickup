@@ -11,3 +11,19 @@ eureka:
 spring:
   application:
     name: owner-apigateway-service
+
+  cloud:
+    gateway:
+      routes:
+        - id: owner-frontend-service
+          uri: lb://OWNER-FRONTEND-SERVICE
+          predicates:
+            - Path=/owner-frontend-service/**
+          filters:
+            - RewritePath=/owner-frontend-service/(?<segment>.*),/$\{segment}
+        - id: order-service
+          uri: lb://ORDER-SERVCIE
+          predicates:
+            - Path=/order-service/**
+          filters:
+            - RewritePath=/order-service/(?<segment>.*),/$\{segment}
