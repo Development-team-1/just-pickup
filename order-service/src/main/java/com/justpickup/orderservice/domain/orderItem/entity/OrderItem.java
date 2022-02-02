@@ -1,6 +1,7 @@
 package com.justpickup.orderservice.domain.orderItem.entity;
 
 import com.justpickup.orderservice.domain.order.entity.Order;
+import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
 import com.justpickup.orderservice.domain.orderItemOption.entity.OrderItemOption;
 import com.justpickup.orderservice.global.entity.BaseEntity;
 import lombok.AccessLevel;
@@ -33,4 +34,12 @@ public class OrderItem extends BaseEntity {
 
     private Long count;
 
+    public OrderItemDto toOrderItemDto() {
+        return OrderItemDto.builder()
+                .id(id)
+                .itemId(itemId)
+                .price(price)
+                .count(count)
+                .build();
+    }
 }
