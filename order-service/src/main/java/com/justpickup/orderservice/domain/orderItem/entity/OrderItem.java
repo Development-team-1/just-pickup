@@ -34,12 +34,4 @@ public class OrderItem extends BaseEntity {
 
     private Long count;
 
-    public OrderItemDto toOrderItemDto() {
-        return OrderItemDto.builder()
-                .id(id)
-                .itemId(itemId)
-                .price(price)
-                .count(count)
-                .build();
-    }
 }

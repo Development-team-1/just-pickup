@@ -4,6 +4,7 @@ import com.justpickup.orderservice.domain.order.dto.OrderDto;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.order.service.OrderService;
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
+import com.justpickup.orderservice.global.dto.Result;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,26 +30,20 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/orderMain")
-    public ResponseEntity orderMain(@Valid OrderRequest orderRequest) {
+    public ResponseEntity orderMain(@Valid OrderController.OrderMainRequest orderMainRequest) {
 
-        List<OrderDto> orderDto = orderService.findOrderMain(orderRequest.convertOrderTimeToLocalDate());
+        List<OrderDto> orderDto = orderService.findOrderMain(orderMainRequest.convertOrderTimeToLocalDate());
 
-        List<OrderResponse> orderResponses = orderDto.stream()
-                .map(OrderResponse::new)
+        List<OrderMainResponse> orderMainResponses = orderDto.stream()
+                .map(OrderMainResponse::new)
                 .collect(Collectors.toList());
         
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Result<>("OK", orderResponses));
+                .body(new Result<>("OK", orderMainResponses));
     }
 
     @Data @NoArgsConstructor @AllArgsConstructor
-    static class Result<T> {
-        private String message;
-        private T data;
-    }
-
-    @Data @NoArgsConstructor @AllArgsConstructor
-    static class OrderRequest {
+    static class OrderMainRequest {
         // yyyy-mm-dd 형태를 가지는 패턴 조사
         @Pattern(regexp = "^(19|20)\\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$")
         private String orderTime;
@@ -59,14 +54,15 @@ public class OrderController {
     }
 
     @Data @NoArgsConstructor @AllArgsConstructor
-    static class OrderResponse {
+    static class OrderMainResponse {
         private Long orderId;
         private Long userId;
-        private List<OrderItemResponse> orderItemDtoList;
+        private String userName;
+        private List<OrderItemResponse> orderItemResponses;
         private OrderStatus orderStatus;
         private String orderTime;
         
-        public OrderResponse(OrderDto orderDto) {
+        public OrderMainResponse(OrderDto orderDto) {
             List<OrderItemResponse> orderItemDtoList = orderDto.getOrderItemDtoList()
                     .stream()
                     .map(OrderItemResponse::new)
@@ -74,7 +70,8 @@ public class OrderController {
 
             this.orderId = orderDto.getId();
             this.userId = orderDto.getUserId();
-            this.orderItemDtoList = orderItemDtoList;
+            this.userName = orderDto.getUserName();
+            this.orderItemResponses = orderItemDtoList;
             this.orderStatus = orderDto.getOrderStatus();
             this.orderTime = orderDto.getOrderTime()
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -85,10 +82,12 @@ public class OrderController {
     static class OrderItemResponse {
         private Long orderItemId;
         private Long itemId;
+        private String itemName;
         
         public OrderItemResponse(OrderItemDto orderItemDto) {
             this.orderItemId = orderItemDto.getId();
             this.itemId = orderItemDto.getItemId();
+            this.itemName = orderItemDto.getItemName();
         }
     }
 }

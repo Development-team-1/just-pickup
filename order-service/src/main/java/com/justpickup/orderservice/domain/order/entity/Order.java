@@ -43,22 +43,4 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
 
-    // == 변환 메소드 == //
-    public OrderDto toOrderDto() {
-        List<OrderItemDto> orderItemDtoList = orderItems.stream()
-                .map(OrderItem::toOrderItemDto)
-                .collect(Collectors.toList());
-
-        return OrderDto.builder()
-                .id(id)
-                .userId(userId)
-                .userCouponId(userCouponId)
-                .orderPrice(orderPrice)
-                .orderTime(orderTime)
-                .usedPoint(usedPoint)
-                .orderStatus(orderStatus)
-                .orderItemDtoList(orderItemDtoList)
-                .build();
-    }
-
 }
