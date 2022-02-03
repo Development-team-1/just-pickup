@@ -30,7 +30,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/orderMain")
-    public ResponseEntity orderMain(@Valid OrderController.OrderMainRequest orderMainRequest) {
+    public ResponseEntity orderMain(@Valid OrderMainRequest orderMainRequest) {
 
         List<OrderDto> orderDto = orderService.findOrderMain(orderMainRequest.convertOrderTimeToLocalDate());
 
@@ -45,7 +45,8 @@ public class OrderController {
     @Data @NoArgsConstructor @AllArgsConstructor
     static class OrderMainRequest {
         // yyyy-mm-dd 형태를 가지는 패턴 조사
-        @Pattern(regexp = "^(19|20)\\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$")
+        @Pattern(regexp = "^(19|20)\\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$",
+                message = "YYYY-MM-DD 형식에 맞게 작성되지 않았습니다.")
         private String orderTime;
 
         public LocalDate convertOrderTimeToLocalDate() {
