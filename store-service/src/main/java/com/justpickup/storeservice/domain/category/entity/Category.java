@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
@@ -24,7 +23,8 @@ public class Category extends BaseEntity {
 
     private String name;
 
-    private Integer orders;
+    @Column(name = "orders")
+    private Integer order;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "store_id")
