@@ -26,8 +26,10 @@ public class UserController {
 
         CustomerDto customerDto = userService.findCustomerByUserId(userId);
 
+        GetCustomerResponse getCustomerResponse = new GetCustomerResponse(customerDto);
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Result<>("OK", new GetCustomerResponse(customerDto)));
+                .body(Result.createSuccessResult(getCustomerResponse));
     }
 
     @Data @NoArgsConstructor @AllArgsConstructor

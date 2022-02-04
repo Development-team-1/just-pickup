@@ -39,7 +39,7 @@ public class OrderController {
                 .collect(Collectors.toList());
         
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Result<>("OK", orderMainResponses));
+                .body(Result.createSuccessResult(orderMainResponses));
     }
 
     @Data @NoArgsConstructor @AllArgsConstructor

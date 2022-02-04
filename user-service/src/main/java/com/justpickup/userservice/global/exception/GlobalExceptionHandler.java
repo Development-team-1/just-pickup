@@ -1,14 +1,11 @@
 package com.justpickup.userservice.global.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.justpickup.userservice.global.dto.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -18,30 +15,25 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorBody> customExceptionHandler(CustomException ce) {
-        ErrorEnum errorEnum = ce.getErrorEnum();
+    public ResponseEntity customExceptionHandler(CustomException ce) {
+        HttpStatus status = ce.getStatus();
+        Result errorResult = ce.getErrorResult();
 
-        log.warn("##################################################");
-        log.warn("## CustomException = {}", errorEnum);
-        log.warn("##################################################");
-
-        HttpStatus errorHttpStatus = errorEnum.getHttpStatus();
-
-        return ResponseEntity.status(errorHttpStatus)
-                .body(new ErrorBody(errorEnum.getMessage(), errorHttpStatus.getReasonPhrase()));
+        return ResponseEntity.status(status)
+                .body(errorResult);
     }
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<ErrorBody> bindExceptionHandler(BindException exception) {
+    public ResponseEntity bindExceptionHandler(BindException exception) {
         return getValidationErrorBody(exception);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorBody> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException exception) {
+    public ResponseEntity methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException exception) {
         return getValidationErrorBody(exception);
     }
 
-    private ResponseEntity<ErrorBody> getValidationErrorBody(BindException exception) {
+    private ResponseEntity getValidationErrorBody(BindException exception) {
         BindingResult bindingResult = exception.getBindingResult();
 
         StringBuilder builder = new StringBuilder();
@@ -56,19 +48,8 @@ public class GlobalExceptionHandler {
                     builder.append("]");
                 });
 
-        ErrorBody errorBody = new ErrorBody(builder.toString(), HttpStatus.BAD_REQUEST.getReasonPhrase());
-
-        log.warn("##################################################");
-        log.warn("## getValidationErrorBody = {}", errorBody);
-        log.warn("##################################################");
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(errorBody);
+                .body(Result.createErrorResult(builder.toString()));
     }
 
-    @Data @NoArgsConstructor @AllArgsConstructor
-    static class ErrorBody {
-        private String message;
-        private String httpStatus;
-    }
 }

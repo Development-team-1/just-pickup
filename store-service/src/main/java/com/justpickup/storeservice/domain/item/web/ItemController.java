@@ -2,6 +2,7 @@ package com.justpickup.storeservice.domain.item.web;
 
 import com.justpickup.storeservice.domain.item.dto.ItemDto;
 import com.justpickup.storeservice.domain.item.service.ItemService;
+import com.justpickup.storeservice.global.dto.Result;
 import com.justpickup.storeservice.global.entity.Yn;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,13 +28,7 @@ public class ItemController {
 
         GetItemResponse getItemResponse = new GetItemResponse(itemByItemId);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Result<>("OK", getItemResponse));
-    }
-
-    @Data @NoArgsConstructor @AllArgsConstructor
-    static class Result<T> {
-        private String message;
-        private T data;
+                .body(Result.createSuccessResult(getItemResponse));
     }
 
     @Data @NoArgsConstructor @AllArgsConstructor

@@ -1,4 +1,4 @@
-package com.justpickup.userservice.global.dto;
+package com.justpickup.storeservice.global.dto;
 
 import lombok.Builder;
 import lombok.Data;
