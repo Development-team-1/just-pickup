@@ -64,8 +64,11 @@
 == snippets 작성 컨벤션
 domain-httpRequestCode-etc
 
-== 상품
-=== 상품 조회
-operation::item-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
-=== 상품 조회 (존재하지 않는 상품)
-operation::item-get-notExistItemException[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
+== 주문
+=== 점주 서비스 - 주문 페이지
+- 페이지 offset : 6
+
+operation::orderMain-get[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
+=== 점주 서비스 - 주문 페이지 (잘못된 파라미터 형식)
+
+operation::orderMain-get-badParameterException[snippets='curl-request,http-request,http-response,request-parameters,response-fields']

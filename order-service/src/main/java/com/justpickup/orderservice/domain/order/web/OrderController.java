@@ -1,6 +1,7 @@
 package com.justpickup.orderservice.domain.order.web;
 
 import com.justpickup.orderservice.domain.order.dto.OrderDto;
+import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.order.service.OrderService;
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,28 +29,19 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/orderMain")
-    public ResponseEntity orderMain(@Valid OrderMainRequest orderMainRequest) {
+    public ResponseEntity orderMain(@Valid OrderSearchCondition condition) {
+        // TODO: 2022/02/04 JWT 구현 시 변경 요망
+        Long userId = 1L;
+        Long storeId = 1L;
 
-        List<OrderDto> orderDto = orderService.findOrderMain(orderMainRequest.convertOrderTimeToLocalDate());
+        List<OrderDto> orderDto = orderService.findOrderMain(condition, storeId);
 
         List<OrderMainResponse> orderMainResponses = orderDto.stream()
                 .map(OrderMainResponse::new)
                 .collect(Collectors.toList());
-        
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Result.createSuccessResult(orderMainResponses));
-    }
-
-    @Data @NoArgsConstructor @AllArgsConstructor
-    static class OrderMainRequest {
-        // yyyy-mm-dd 형태를 가지는 패턴 조사
-        @Pattern(regexp = "^(19|20)\\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$",
-                message = "YYYY-MM-DD 형식에 맞게 작성되지 않았습니다.")
-        private String orderTime;
-
-        public LocalDate convertOrderTimeToLocalDate() {
-            return LocalDate.parse(orderTime, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        }
     }
 
     @Data @NoArgsConstructor @AllArgsConstructor
