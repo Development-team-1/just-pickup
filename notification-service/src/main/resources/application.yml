@@ -12,13 +12,12 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
+    generate-ddl: true
+    open-in-view: false
     properties:
       hibernate:
-        format_sql: true
-        show_sql: true
-    open-in-view: false
-    default_batch_fetch_size: 1000
+        default_batch_fetch_size: 1000
 
 eureka:
   client:
@@ -28,7 +27,11 @@ eureka:
     register-with-eureka: true
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
 logging:
   level:
     com.justpickup: DEBUG
-    org.hibernate.SQL: debug
+
+# jpa query, parameter 로그 (p6spy)
+decorator.datasource.p6spy:
+  enable-logging: true
