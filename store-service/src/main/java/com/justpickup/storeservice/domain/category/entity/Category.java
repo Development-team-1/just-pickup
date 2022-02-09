@@ -43,4 +43,21 @@ public class Category extends BaseEntity {
         items.add(item);
         item.setCategory(this);
     }
+
+    public void changeNameAndOrder(String name , Integer order){
+        this.name = name;
+        this.order = order;
+    }
+
+    private Category (Long id , String name, Integer order, Store store){
+        this.id = id;
+        this.name = name;
+        this.order = order;
+        this.store = store;
+    }
+
+    public static Category createCategory(Long id ,String name, Integer order, Store store){
+        return new Category(id,name,order,store);
+    }
+
 }

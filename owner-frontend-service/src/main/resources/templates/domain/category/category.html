@@ -80,7 +80,7 @@
     </div>
 
     <script>
-
+        let deletedList =[];
 
         function init(){
             dragInit();
@@ -95,14 +95,16 @@
         }
         function initCategoryList(){
             $("#categoryList").empty();
+            deletedList = [];
             $.ajax({
                 type: 'get'
                 , url: '/store-service/category'
                 , success: function (ajaxData, status, request) {
+                    console.log(ajaxData)
 
                     $(ajaxData.data).each(function (index,element) {
                         $("#categoryList").append("<li class=\"list-group-item d-flex justify-content-between align-items-center\" role=\"button\">\n" +
-                            "                                    <span class=\"list-element\" contenteditable=\"true\"  data-value=\""+element.order+"\" > "+element.name+"</span>\n" +
+                            "                                    <span class=\"list-element\" contenteditable=\"true\"  data-id=\""+element.categoryId+"\" >"+element.name+"</span>\n" +
                             "                                    <span class=\"badge badge-danger badge-pill remove-element \" role=\"button\" >삭제</span>\n" +
                             "                                </li>");
 
@@ -129,22 +131,44 @@
 
         }
         function clickSave(){
-            alert("저장되었습니다.");
             let categoryArr =[];
             let order = 1;
             $("#categoryList li .list-element").each(function (index,element) {
                 let category = {
-                    categoryId : $(element).attr('data-value'),
-                    categoryName : $(element).text(),
-                    ordered : order++
+                    categoryId : $(element).attr('data-id'),
+                    name : $(element).text(),
+                    order : order++
                 }
                 categoryArr.push(category)
             });
 
-            console.log(categoryArr);
 
+            let data = {
+                storeId : "1",
+                categoryList: categoryArr,
+                deletedList: deletedList
+            }
+
+            console.log(data)
+
+            $.ajax({
+                type: 'put'
+                , async: true
+                , url: '/store-service/category'
+                , data: JSON.stringify(data)
+                ,dataType : "text"
+                , beforeSend: function(xhr) {
+                    xhr.setRequestHeader("Content-type","application/json; charset=utf-8");
+                }
+                , success: function (ajaxData, status, request) {
+                    alert("저장 성공");
+                }
+                , error: function(request, status, err) {
+                    alert("저장 실패");
+                }
+                , complete: function(request, status) { }
+            });
             $("#myModal").modal('toggle');
-
         }
 
         function dblclickCategoryList(ele) {
@@ -159,7 +183,14 @@
             selection.addRange(newRange);
         }
         function clickRemoveElement(item){
-            $(item).parent().remove()
+
+            let category = {
+                categoryId : $(item).parent().children(".list-element").attr('data-id'),
+                name : $(item).parent().children(".list-element").text(),
+                order:""
+            }
+            deletedList.push(category)
+            $(item).parent().remove();
         }
 
 
