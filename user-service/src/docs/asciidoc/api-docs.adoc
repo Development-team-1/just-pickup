@@ -64,17 +64,8 @@
 == snippets 작성 컨벤션
 domain-httpRequestCode-etc
 
-== 주문
-=== 점주 서비스 - 카테고리 페이지
-- 페이지 offset : 6
-
-== 카테고리 조회
-
-operation::get-categoryList[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
-
----
-
-== 카테고리 수정
-
-operation::put-categoryList[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
-
+== 유저
+=== 회원 조회
+operation::customer-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
+=== 회원 조회 (존재하지 않는 회원)
+operation::customer-get-notExistUserException[snippets='curl-request,http-request,http-response,path-parameters,response-fields']

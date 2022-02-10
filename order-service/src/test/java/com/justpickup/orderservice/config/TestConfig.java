@@ -1,4 +1,4 @@
-package com.justpickup.storeservice.config;
+package com.justpickup.orderservice.config;
 
 import org.springframework.boot.test.autoconfigure.restdocs.RestDocsMockMvcConfigurationCustomizer;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -8,6 +8,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 
 @TestConfiguration
 public class TestConfig {
+    
     @Bean
     public RestDocsMockMvcConfigurationCustomizer restDocsMockMvcConfigurationCustomizer() {
         return configurer -> configurer.operationPreprocessors()

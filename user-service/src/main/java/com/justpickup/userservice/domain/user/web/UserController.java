@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -22,7 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/customer/{userId}")
-    public ResponseEntity getCustomer(@PathVariable("userId") Long userId) {
+    public ResponseEntity getCustomer(@Valid @PathVariable("userId") Long userId) {
 
         CustomerDto customerDto = userService.findCustomerByUserId(userId);
 

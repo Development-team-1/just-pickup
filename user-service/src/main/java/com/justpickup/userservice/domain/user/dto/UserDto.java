@@ -1,6 +1,7 @@
 package com.justpickup.userservice.domain.user.dto;
 
 import com.justpickup.userservice.domain.user.entity.Customer;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -16,5 +17,12 @@ public class UserDto {
         this.password = customer.getPassword();
         this.name = customer.getName();
         this.phoneNumber = customer.getPhoneNumber();
+    }
+
+    public UserDto(Long id, String password, String name, String phoneNumber) {
+        this.id = id;
+        this.password = password;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
     }
 }

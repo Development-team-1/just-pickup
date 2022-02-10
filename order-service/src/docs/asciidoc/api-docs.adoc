@@ -65,16 +65,10 @@
 domain-httpRequestCode-etc
 
 == 주문
-=== 점주 서비스 - 카테고리 페이지
+=== 점주 서비스 - 주문 페이지
 - 페이지 offset : 6
 
-== 카테고리 조회
+operation::orderMain-get[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
+=== 점주 서비스 - 주문 페이지 (잘못된 파라미터 형식)
 
-operation::get-categoryList[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
-
----
-
-== 카테고리 수정
-
-operation::put-categoryList[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
-
+operation::orderMain-get-badParameterException[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
