@@ -1,10 +1,14 @@
 package com.justpickup.orderservice.domain.order.repository;
 
 import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
+import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
 import com.justpickup.orderservice.domain.order.entity.Order;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -48,4 +52,32 @@ public class OrderRepositoryCustom {
         return lastOrderId != null ? order.id.lt(lastOrderId) : null;
     }
 
+    public Page<Order> findPrevOrderMain(PrevOrderSearch search, Pageable pageable, Long storeId) {
+        // 카운트 가져오기
+        Long count = queryFactory
+                .select(order.countDistinct())
+                .from(order)
+                .innerJoin(order.transaction)
+                .where(
+                        order.orderTime.between(search.getStartDateTime(), search.getEndDateTime()),
+                        order.storeId.eq(storeId)
+                )
+                .fetchOne();
+
+        // 데이터 가져오기
+        List<Order> orders = queryFactory
+                .selectFrom(order)
+                .join(order.transaction).fetchJoin()
+                .where(
+                        order.orderTime.between(search.getStartDateTime(), search.getEndDateTime()),
+                        order.storeId.eq(storeId)
+                )
+                .orderBy(order.orderTime.desc())
+                .limit(1)
+                .offset(pageable.getOffset())
+                .distinct()
+                .fetch();
+
+        return PageableExecutionUtils.getPage(orders, pageable, () -> count);
+    }
 }
