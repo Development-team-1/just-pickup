@@ -65,13 +65,16 @@ public class CategoryController {
                 .body(Result.createSuccessResult(null));
     }
 
-    @Data @NoArgsConstructor @AllArgsConstructor
+    @Data @NoArgsConstructor @AllArgsConstructor @Builder
     public static class PutCategoryRequest{
         private Long storeId;
         private List<Category> categoryList;
         private List<Category> deletedList;
 
         @Data
+        @Builder
+        @NoArgsConstructor
+        @AllArgsConstructor
         public static class Category{
             private Long categoryId;
             private String name;
