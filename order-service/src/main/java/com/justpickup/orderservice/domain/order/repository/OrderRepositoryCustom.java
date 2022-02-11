@@ -73,7 +73,7 @@ public class OrderRepositoryCustom {
                         order.storeId.eq(storeId)
                 )
                 .orderBy(order.orderTime.desc())
-                .limit(1)
+                .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .distinct()
                 .fetch();

@@ -42,18 +42,7 @@ public class OrderServiceImpl implements OrderService {
                         .collect(Collectors.toList());
 
         // 사용자명 및 아이템 이름 가져오기
-        orderDtoList.forEach(orderDto -> {
-            GetCustomerResponse getCustomerResponse =
-                    userClient.getUser(orderDto.getUserId()).getData();
-            orderDto.setUserName(getCustomerResponse.getUserName());
-
-            orderDto.getOrderItemDtoList()
-                    .forEach(orderItemDto -> {
-                        GetItemResponse getItemResponse =
-                                storeClient.getItem(orderItemDto.getItemId()).getData();
-                        orderItemDto.setItemName(getItemResponse.getName());
-                    });
-        });
+        getUserNameAndItemName(orderDtoList);
 
         return orderDtoList;
     }
@@ -67,6 +56,24 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderDto::createFullField)
                 .collect(Collectors.toList());
 
+        // 사용자명 및 아이템 이름 가져오기
+        getUserNameAndItemName(orderDtoList);
+
         return PageableExecutionUtils.getPage(orderDtoList, pageable, orderPage::getTotalElements);
+    }
+
+    private void getUserNameAndItemName(List<OrderDto> orderDtoList) {
+        orderDtoList.forEach(orderDto -> {
+            GetCustomerResponse getCustomerResponse =
+                    userClient.getUser(orderDto.getUserId()).getData();
+            orderDto.setUserName(getCustomerResponse.getUserName());
+
+            orderDto.getOrderItemDtoList()
+                    .forEach(orderItemDto -> {
+                        GetItemResponse getItemResponse =
+                                storeClient.getItem(orderItemDto.getItemId()).getData();
+                        orderItemDto.setItemName(getItemResponse.getName());
+                    });
+        });
     }
 }

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +38,7 @@ public class OrderController {
     private final PrevOrderSearchValidator prevOrderSearchValidator;
 
     @GetMapping("/orderMain")
-    public ResponseEntity orderMain(@Valid OrderSearchCondition condition) {
+    public ResponseEntity<Result> orderMain(@Valid OrderSearchCondition condition) {
         // TODO: 2022/02/04 JWT 구현 시 변경 요망
         Long userId = 1L;
         Long storeId = 1L;
@@ -92,14 +93,67 @@ public class OrderController {
 
     @GetMapping("/prevOrder")
     public ResponseEntity<Result> findPrevOrder(@Valid PrevOrderSearch prevOrderSearch,
-                                                @PageableDefault(page = 0, size = 1) Pageable pageable,
+                                                @PageableDefault(page = 0, size = 10) Pageable pageable,
                                                 BindingResult bindingResult) throws BindException {
+        // validation
         if (bindingResult.hasErrors()) throw new BindException(bindingResult);
         prevOrderSearchValidator.validate(prevOrderSearch, bindingResult);
         if (bindingResult.hasErrors()) throw new BindException(bindingResult);
 
+        // get data
         Page<OrderDto> prevOrderMain = orderService.findPrevOrderMain(prevOrderSearch, pageable, 1L);
 
-        return ResponseEntity.ok(Result.createSuccessResult(prevOrderMain));
+        // format data
+        ResponsePrevOrder responsePrevOrder =
+                new ResponsePrevOrder(prevOrderMain.getContent(), prevOrderMain.getNumber(), prevOrderMain.getTotalPages());
+        return ResponseEntity.ok(Result.createSuccessResult(responsePrevOrder));
+    }
+
+    @Data @AllArgsConstructor @NoArgsConstructor
+    static class ResponsePrevOrder {
+        private List<OrderVo> orders;
+        private Page page;
+
+        public ResponsePrevOrder(List<OrderDto> orderDtoList, int startPage, int totalPage) {
+            orders = orderDtoList.stream().map(OrderVo::new).collect(Collectors.toList());
+            page = new Page(startPage, totalPage);
+        }
+
+        @Data
+        static class OrderVo {
+            private Long orderId;
+            private OrderStatus orderStatus;
+            private String orderTime;
+            private Long orderPrice;
+            private String userName;
+            private List<OrderItemVo> orderItems;
+
+            public OrderVo(OrderDto orderDto) {
+                this.orderId = orderDto.getId();
+                this.orderStatus = orderDto.getOrderStatus();
+                this.orderTime = orderDto.getOrderTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                this.orderPrice = orderDto.getOrderPrice();
+                this.userName = orderDto.getUserName();
+                this.orderItems = orderDto.getOrderItemDtoList()
+                        .stream().map(OrderItemVo::new).collect(Collectors.toList());
+            }
+        }
+
+        @Data
+        static class OrderItemVo {
+            private Long orderItemId;
+            private String orderItemName;
+
+            public OrderItemVo(OrderItemDto orderItemDto) {
+                this.orderItemId = orderItemDto.getId();
+                this.orderItemName = orderItemDto.getItemName();
+            }
+        }
+
+        @Data @AllArgsConstructor
+        static class Page {
+            int startPage;
+            int totalPage;
+        }
     }
 }
