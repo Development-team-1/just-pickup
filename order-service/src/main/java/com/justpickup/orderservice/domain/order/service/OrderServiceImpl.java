@@ -2,6 +2,8 @@ package com.justpickup.orderservice.domain.order.service;
 
 import com.justpickup.orderservice.domain.order.dto.OrderDto;
 import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
+import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
+import com.justpickup.orderservice.domain.order.entity.Order;
 import com.justpickup.orderservice.domain.order.repository.OrderRepository;
 import com.justpickup.orderservice.domain.order.repository.OrderRepositoryCustom;
 import com.justpickup.orderservice.global.client.store.GetItemResponse;
@@ -10,6 +12,9 @@ import com.justpickup.orderservice.global.client.user.GetCustomerResponse;
 import com.justpickup.orderservice.global.client.user.UserClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +42,27 @@ public class OrderServiceImpl implements OrderService {
                         .collect(Collectors.toList());
 
         // 사용자명 및 아이템 이름 가져오기
+        getUserNameAndItemName(orderDtoList);
+
+        return orderDtoList;
+    }
+
+    @Override
+    public Page<OrderDto> findPrevOrderMain(PrevOrderSearch search, Pageable pageable, Long storeId) {
+        Page<Order> orderPage = orderRepositoryCustom.findPrevOrderMain(search, pageable, storeId);
+
+        List<OrderDto> orderDtoList = orderPage.getContent()
+                .stream()
+                .map(OrderDto::createFullField)
+                .collect(Collectors.toList());
+
+        // 사용자명 및 아이템 이름 가져오기
+        getUserNameAndItemName(orderDtoList);
+
+        return PageableExecutionUtils.getPage(orderDtoList, pageable, orderPage::getTotalElements);
+    }
+
+    private void getUserNameAndItemName(List<OrderDto> orderDtoList) {
         orderDtoList.forEach(orderDto -> {
             GetCustomerResponse getCustomerResponse =
                     userClient.getUser(orderDto.getUserId()).getData();
@@ -49,7 +75,5 @@ public class OrderServiceImpl implements OrderService {
                         orderItemDto.setItemName(getItemResponse.getName());
                     });
         });
-
-        return orderDtoList;
     }
 }

@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.orderservice.config.TestConfig;
 import com.justpickup.orderservice.domain.order.dto.OrderDto;
 import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
+import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.order.service.OrderService;
+import com.justpickup.orderservice.domain.order.validator.PrevOrderSearchValidator;
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
 import com.justpickup.orderservice.global.dto.Code;
 import org.junit.jupiter.api.DisplayName;
@@ -14,11 +16,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -26,10 +33,11 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
 
 @WebMvcTest(OrderController.class)
 @Import(TestConfig.class)
@@ -44,6 +52,9 @@ class OrderControllerTest {
 
     @MockBean
     OrderService orderService;
+
+    @SpyBean
+    PrevOrderSearchValidator prevOrderSearchValidator;
 
     @Test
     @DisplayName("점주 서비스 - 주문 페이지")
@@ -168,5 +179,102 @@ class OrderControllerTest {
         orderDto_2.setUserName("닉네임");
 
         return List.of(orderDto_1, orderDto_2);
+    }
+
+    @Test
+    @DisplayName("점주 서비스 - 지난 주문 페이지")
+    void getPrevOrder() throws Exception {
+        // GIVEN
+        LocalDate startDate = LocalDate.of(2022, 2, 3);
+        LocalDate endDate = LocalDate.of(2022, 2, 4);
+        String page = "0";
+
+        PrevOrderSearch search = new PrevOrderSearch(LocalDate.of(2022, 2, 3), LocalDate.of(2022, 2, 4));
+        PageRequest pageRequest = PageRequest.of(Integer.parseInt(page), 10);
+        given(orderService.findPrevOrderMain(search, pageRequest, 1L))
+                .willReturn(
+                        new PageImpl<>(getOrderMainDtoList(), pageRequest, 1)
+                );
+
+        // WHEN
+        ResultActions actions = mockMvc.perform(get("/prevOrder")
+                .param("startDate", startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .param("endDate", endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .param("page", page)
+        );
+
+        // THEN
+        actions.andExpect(status().isOk())
+                .andExpect(jsonPath("code").value(Code.SUCCESS.name()))
+                .andExpect(jsonPath("message").isEmpty())
+                .andExpect(jsonPath("data.orders[*].orderId").exists())
+                .andExpect(jsonPath("data.orders[*].orderStatus").exists())
+                .andExpect(jsonPath("data.orders[*].orderTime").exists())
+                .andExpect(jsonPath("data.orders[*].orderPrice").exists())
+                .andExpect(jsonPath("data.orders[*].userName").exists())
+                .andExpect(jsonPath("data.orders[*].orderItems[*].orderItemId").exists())
+                .andExpect(jsonPath("data.orders[*].orderItems[*].orderItemName").exists())
+                .andExpect(jsonPath("data.page.startPage").value(0))
+                .andExpect(jsonPath("data.page.totalPage").value(1))
+                .andDo(print())
+                .andDo(document("prevOrder-get",
+                        requestParameters(
+                                parameterWithName("startDate").description("시작날짜 YYYY-MM-DD"),
+                                parameterWithName("endDate").description("종료날짜 YYYY-MM-DD"),
+                                parameterWithName("page").optional().description("검색 페이지 (0부터 시작)")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),
+                                fieldWithPath("message").description("메시지"),
+                                fieldWithPath("data.orders[*].orderId").description("주문 고유번호"),
+                                fieldWithPath("data.orders[*].orderStatus").description("주문상태"),
+                                fieldWithPath("data.orders[*].orderTime").description("주문시간"),
+                                fieldWithPath("data.orders[*].orderPrice").description("결제금액"),
+                                fieldWithPath("data.orders[*].userName").description("닉네임"),
+                                fieldWithPath("data.orders[*].orderItems[*].orderItemId").description("주문상품 고유번호"),
+                                fieldWithPath("data.orders[*].orderItems[*].orderItemName").description("주문상품 이름"),
+                                fieldWithPath("data.page.startPage").description("현재 페이지 (0부터 시작)"),
+                                fieldWithPath("data.page.totalPage").description("총 페이지 개수")
+                        )
+                        ))
+        ;
+    }
+
+    @Test
+    @DisplayName("점주 서비스 - 지난 주문 페이지 (파라미터 오류)")
+    void getPrevOrderBindException() throws Exception {
+        // GIVEN
+        LocalDate startDate = LocalDate.of(2023, 2, 3);
+        LocalDate endDate = LocalDate.of(2022, 2, 4);
+        String page = "0";
+
+        PrevOrderSearch search = new PrevOrderSearch(startDate, endDate);
+
+        // THEN
+        ResultActions actions = mockMvc.perform(get("/prevOrder")
+                .param("startDate", startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .param("endDate", endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .param("page", page)
+        );
+
+        // WHEN
+        actions.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("code").value(Code.ERROR.name()))
+                .andExpect(jsonPath("message").isNotEmpty())
+                .andExpect(jsonPath("data").isEmpty())
+                .andDo(print())
+                .andDo(document("prevOrder-get-BindException",
+                        requestParameters(
+                                parameterWithName("startDate").description("시작날짜 YYYY-MM-DD"),
+                                parameterWithName("endDate").description("종료날짜 YYYY-MM-DD"),
+                                parameterWithName("page").optional().description("검색 페이지 (0부터 시작)")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),
+                                fieldWithPath("message").description("메시지"),
+                                fieldWithPath("data").description("데이터")
+                        )
+                        ))
+        ;
     }
 }
