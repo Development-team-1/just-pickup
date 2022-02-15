@@ -4,6 +4,13 @@ spring:
   application:
     name: user-service
 
+  config:
+    import: optional:configserver:http://127.0.0.1:8888
+  cloud:
+    config:
+      name: user-service
+      profile: dev
+
   datasource:
     url: jdbc:postgresql://localhost:5432/userdb
     driver-class-name: org.postgresql.Driver
@@ -12,7 +19,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     generate-ddl: true
     open-in-view: false
     properties:
@@ -31,6 +38,8 @@ eureka:
 logging:
   level:
     com.justpickup: DEBUG
+
+
 
 # jpa query, parameter 로그 (p6spy)
 decorator.datasource.p6spy:

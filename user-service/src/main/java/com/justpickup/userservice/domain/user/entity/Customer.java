@@ -11,5 +11,6 @@ import javax.persistence.Table;
 @Table(name = "customer")
 @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Customer extends User {
-
+    private AuthType oauthType;
+    private String oauthId;
 }

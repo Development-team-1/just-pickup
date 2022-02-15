@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "DTYPE")
 @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseEntity {
+public abstract class User extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "user_id")
@@ -23,4 +23,13 @@ public class User extends BaseEntity {
     private String name;
 
     private String phoneNumber;
+
+    @Column(insertable = false,updatable = false)
+    private String dtype;
+
+    public User(String password, String name, String phoneNumber) {
+        this.password = password;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
 }
