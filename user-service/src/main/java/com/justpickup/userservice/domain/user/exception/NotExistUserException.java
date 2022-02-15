@@ -8,4 +8,5 @@ public class NotExistUserException extends CustomException {
     public NotExistUserException(String message) {
         super(HttpStatus.CONFLICT, message);
     }
+
 }

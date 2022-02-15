@@ -1,4 +1,4 @@
-server.port: 0
+server.port: 60000
 
 spring:
   application:

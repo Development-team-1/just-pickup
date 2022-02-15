@@ -35,6 +35,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     /*implementation 'org.springframework.boot:spring-boot-starter-amqp'*/
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    compileOnly 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     /*implementation 'org.springframework.kafka:spring-kafka'*/
 

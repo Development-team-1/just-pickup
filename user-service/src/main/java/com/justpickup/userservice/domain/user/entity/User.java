@@ -18,18 +18,26 @@ public abstract class User extends BaseEntity {
     @Column(name = "user_id")
     private Long id;
 
+    private String email;
+
     private String password;
 
     private String name;
 
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     @Column(insertable = false,updatable = false)
     private String dtype;
 
-    public User(String password, String name, String phoneNumber) {
+    public User(String email, String password, String name, String phoneNumber, Role role) {
+        this.email = email;
         this.password = password;
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.role = role;
     }
 }

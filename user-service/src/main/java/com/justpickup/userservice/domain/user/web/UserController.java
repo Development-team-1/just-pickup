@@ -1,6 +1,7 @@
 package com.justpickup.userservice.domain.user.web;
 
 import com.justpickup.userservice.domain.user.dto.CustomerDto;
+import com.justpickup.userservice.domain.user.entity.Customer;
 import com.justpickup.userservice.domain.user.service.UserService;
 import com.justpickup.userservice.global.dto.Result;
 import lombok.*;
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,25 +51,6 @@ public class UserController {
         }
     }
 
-    @GetMapping("/afterLogin")
-    public ResponseEntity afterLogin(@RequestParam String code){
 
-        log.info("로그인 성공 - code::"+ code);
-
-        String accessToken = userService.authByGithub(code);
-
-
-
-
-        // access token 발급받는다 -> User DB에 저장한다.  github ID 를 db에 저장한다.
-        // Oauth type, id 저장 . password
-        //
-        // https://api.github.com/user
-        // 이미 있는 github iD? 회원 가입한 사용자.
-        //
-
-
-        return ResponseEntity.ok(accessToken);
-    }
 
 }
