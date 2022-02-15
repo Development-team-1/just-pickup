@@ -12,7 +12,7 @@ public class CustomerDto extends UserDto {
     }
 
     @Builder
-    public CustomerDto(Long id, String password, String name, String phoneNumber) {
-        super(id, password, name, phoneNumber);
+    public CustomerDto(Long id, String email, String password, String name, String phoneNumber, String dtype) {
+        super(id, email, password, name, phoneNumber, dtype);
     }
 }
