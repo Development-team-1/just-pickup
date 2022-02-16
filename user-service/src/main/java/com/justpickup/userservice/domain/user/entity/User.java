@@ -29,7 +29,6 @@ public class User extends BaseEntity {
     private String refreshTokenId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Role role;
 
     @Column(insertable = false,updatable = false)

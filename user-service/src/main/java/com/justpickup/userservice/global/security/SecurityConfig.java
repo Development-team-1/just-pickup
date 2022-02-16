@@ -2,6 +2,7 @@ package com.justpickup.userservice.global.security;
 
 import com.justpickup.userservice.domain.jwt.service.RefreshTokenServiceImpl;
 import com.justpickup.userservice.domain.jwt.utils.JwtTokenProvider;
+import com.justpickup.userservice.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenServiceImpl refreshTokenServiceImpl;
 
+    private final UserService userService;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
@@ -43,6 +46,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout()
                 .logoutUrl("/logout")
                 .deleteCookies("");
+
+        http.oauth2Login()
+            .defaultSuccessUrl("http://just-pickup.com:8000/customer-frontend-service/")
+            .userInfoEndpoint()
+            .userService(userService);
 
         http.addFilter(loginAuthenticationFilter);
         http.addFilterBefore(new HeaderAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
