@@ -12,7 +12,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     generate-ddl: true
     open-in-view: false
     properties:
@@ -35,3 +35,8 @@ logging:
 # jpa query, parameter 로그 (p6spy)
 decorator.datasource.p6spy:
   enable-logging: true
+
+token:
+  access-expired-time: 3600000
+  refresh-expired-time: 604800000
+  secret: my-secret

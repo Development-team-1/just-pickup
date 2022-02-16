@@ -14,8 +14,9 @@ import javax.persistence.Table;
 public class StoreOwner extends User {
     private String businessNumber;
 
-    public StoreOwner(String email, String password, String name, String phoneNumber, String businessNumber) {
-        super(email, password, name, phoneNumber);
+    public StoreOwner(String email, String password, String name, String phoneNumber,
+                      String businessNumber, String refreshTokenId) {
+        super(email, password, name, phoneNumber, refreshTokenId);
         this.businessNumber = businessNumber;
     }
 }

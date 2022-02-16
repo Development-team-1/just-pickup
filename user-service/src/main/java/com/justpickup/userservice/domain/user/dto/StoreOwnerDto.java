@@ -9,8 +9,8 @@ public class StoreOwnerDto extends UserDto {
 
     @Builder
     public StoreOwnerDto(Long id, String email, String password, String name,
-                         String phoneNumber, String dtype, String businessNumber) {
-        super(id, email, password, name, phoneNumber, dtype);
+                         String phoneNumber, String dtype, String businessNumber, String refreshTokenId) {
+        super(id, email, password, name, phoneNumber, dtype, refreshTokenId);
         this.businessNumber = businessNumber;
     }
 }

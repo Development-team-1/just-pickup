@@ -26,13 +26,24 @@ public abstract class User extends BaseEntity {
 
     private String phoneNumber;
 
+    private String refreshTokenId;
+
     @Column(insertable = false, updatable = false)
     private String dtype;
 
-    public User(String email, String password, String name, String phoneNumber) {
+    public User(String email, String password, String name, String phoneNumber, String refreshTokenId) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.refreshTokenId = refreshTokenId;
+    }
+
+    public void changeRefreshToken(String refreshToken) {
+        this.refreshTokenId = refreshToken;
+    }
+
+    public void deleteRefreshToken() {
+        this.refreshTokenId = null;
     }
 }

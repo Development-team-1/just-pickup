@@ -55,8 +55,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String encode = passwordEncoder.encode(storeOwnerDto.getPassword());
 
         StoreOwner storeOwner = new StoreOwner(storeOwnerDto.getEmail(), encode, storeOwnerDto.getName(),
-                storeOwnerDto.getPhoneNumber(), storeOwnerDto.getBusinessNumber());
+                storeOwnerDto.getPhoneNumber(), storeOwnerDto.getBusinessNumber(), storeOwnerDto.getRefreshTokenId());
 
         return userRepository.save(storeOwner);
     }
+
 }

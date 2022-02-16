@@ -1,9 +1,9 @@
 package com.justpickup.userservice.global.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.justpickup.userservice.domain.jwt.service.RefreshTokenServiceImpl;
+import com.justpickup.userservice.domain.jwt.utils.JwtTokenProvider;
 import com.justpickup.userservice.global.dto.LoginRequest;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -30,6 +30,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenServiceImpl refreshTokenServiceImpl;
 
     // login 리퀘스트 패스로 오는 요청을 판단
     @Override
@@ -55,30 +57,25 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         org.springframework.security.core.userdetails.User user = (User) authResult.getPrincipal();
 
-        String accessToken = Jwts.builder()
-                .setSubject(user.getUsername())
-                .setExpiration(
-                        new Date(System.currentTimeMillis() + 10 * 60 * 1000)
-                )
-                .signWith(SignatureAlgorithm.HS512, "your-256-bit-secret")
-                .setIssuer(request.getRequestURI())
-                .addClaims(Map.of("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())))
-                .compact();
+        List<String> roles = user.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
 
-        String refreshToken = Jwts.builder()
-                .setSubject(user.getUsername())
-                .setExpiration(
-                        new Date(System.currentTimeMillis() + 30 * 60 * 1000)
-                )
-                .signWith(SignatureAlgorithm.HS512, "your-256-bit-secret")
-                .setIssuer(request.getRequestURI())
-                .compact();
+        String userId = user.getUsername();
+
+        String accessToken = jwtTokenProvider.createJwtAccessToken(userId, request.getRequestURI(), roles);
+        String refreshToken = jwtTokenProvider.createJwtRefreshToken();
+
+        refreshTokenServiceImpl.updateRefreshToken(Long.valueOf(userId), jwtTokenProvider.getRefreshTokenId(refreshToken));
 
         Map<String, String> tokens = Map.of(
                 "access_token", accessToken,
                 "refresh_token", refreshToken
         );
+
         response.setContentType(APPLICATION_JSON_VALUE);
+
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }
 

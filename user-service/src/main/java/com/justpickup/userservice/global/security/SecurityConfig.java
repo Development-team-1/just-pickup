@@ -1,5 +1,7 @@
 package com.justpickup.userservice.global.security;
 
+import com.justpickup.userservice.domain.jwt.service.RefreshTokenServiceImpl;
+import com.justpickup.userservice.domain.jwt.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenServiceImpl refreshTokenServiceImpl;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -26,12 +30,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        LoginAuthenticationFilter loginAuthenticationFilter = new LoginAuthenticationFilter(authenticationManagerBean());
+        LoginAuthenticationFilter loginAuthenticationFilter =
+                new LoginAuthenticationFilter(authenticationManagerBean(), jwtTokenProvider, refreshTokenServiceImpl);
         loginAuthenticationFilter.setFilterProcessesUrl("/login");
 
         http.csrf().disable();
+
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/login").permitAll();
+
+        http.authorizeRequests().anyRequest().permitAll();
+
+        http.logout()
+                .logoutUrl("/logout")
+                .deleteCookies("");
+
         http.addFilter(loginAuthenticationFilter);
         http.addFilterBefore(new HeaderAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
