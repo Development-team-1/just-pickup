@@ -1,23 +1,14 @@
 package com.justpickup.userservice.domain.user.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.userservice.domain.user.dto.CustomerDto;
 import com.justpickup.userservice.domain.user.dto.OAuthAttributeDto;
-import com.justpickup.userservice.domain.user.entity.AuthType;
 import com.justpickup.userservice.domain.user.entity.Customer;
 import com.justpickup.userservice.domain.user.exception.NotExistUserException;
 import com.justpickup.userservice.domain.user.repository.CustomerRepository;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
-import org.springframework.data.annotation.ReadOnlyProperty;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -27,14 +18,10 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +30,7 @@ import java.util.function.Function;
 public class UserServiceImpl implements UserService {
 
     private final CustomerRepository customerRepository;
-    private final HttpSession httpSession;
+    private final HttpServletResponse response;
     private final Environment env;
 
     @Override
@@ -98,7 +85,7 @@ public class UserServiceImpl implements UserService {
                 .orElse(attributeDto.toEntity(attributeDto))
         );
 
-        httpSession.setAttribute("user", new SessionCustomer(customer)); // SessionUser (직렬화된 dto 클래스 사용)
+        // TODO: 2022/02/16 Response에 token 담아 보내기
 
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(customer.getRole().getKey()))
@@ -108,11 +95,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Getter
-    public class SessionCustomer implements Serializable {
+    public static class UserPayload implements Serializable {
         private String name;
         private String email;
 
-        public SessionCustomer(Customer user){
+        public UserPayload(Customer user){
             this.name = user.getName();
             this.email = user.getEmail();
         }

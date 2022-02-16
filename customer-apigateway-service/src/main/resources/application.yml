@@ -21,7 +21,7 @@ spring:
           predicates:
             - Path=/customer-frontend-service/**
           filters:
-            - RewritePath=/owner-frontend-service/(?<segment>.*),/$\{segment}
+            - RewritePath=/customer-frontend-service/(?<segment>.*),/$\{segment}
         - id: order-service
           uri: lb://ORDER-SERVCIE
           predicates:

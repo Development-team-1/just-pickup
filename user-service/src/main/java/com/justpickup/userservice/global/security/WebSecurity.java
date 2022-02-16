@@ -24,6 +24,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                         .logoutSuccessUrl("/")
                 .and()
                     .oauth2Login()
+                    .defaultSuccessUrl("http://just-pickup.com:8000/customer-frontend-service/")
                         .userInfoEndpoint()
                 .userService(userService);
 
