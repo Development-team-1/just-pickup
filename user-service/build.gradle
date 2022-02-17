@@ -38,6 +38,7 @@ dependencies {
     compileOnly 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     /*implementation 'org.springframework.kafka:spring-kafka'*/
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     // https://mvnrepository.com/artifact/com.github.gavlyukovskiy/p6spy-spring-boot-starter
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'

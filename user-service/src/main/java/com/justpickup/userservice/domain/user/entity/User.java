@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "DTYPE")
 @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseEntity {
+public abstract class User extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "user_id")
@@ -25,8 +25,6 @@ public class User extends BaseEntity {
     private String name;
 
     private String phoneNumber;
-
-    private String refreshTokenId;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -42,19 +40,11 @@ public class User extends BaseEntity {
         this.role = role;
     }
 
-    public User(String email, String password, String name, String phoneNumber, String refreshTokenId) {
+    public User(String email, String password, String name, String phoneNumber) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.refreshTokenId = refreshTokenId;
     }
 
-    public void changeRefreshToken(String refreshToken) {
-        this.refreshTokenId = refreshToken;
-    }
-
-    public void deleteRefreshToken() {
-        this.refreshTokenId = null;
-    }
 }

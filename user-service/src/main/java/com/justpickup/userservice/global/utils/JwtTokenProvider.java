@@ -1,4 +1,4 @@
-package com.justpickup.userservice.domain.jwt.utils;
+package com.justpickup.userservice.global.utils;
 
 
 import io.jsonwebtoken.*;
@@ -16,11 +16,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class JwtTokenProvider {
-
-    private final UserDetailsService userDetailsService;
 
     @Value("${token.access-expired-time}")
     private long ACCESS_EXPIRED_TIME;
@@ -60,29 +57,24 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public Authentication getAuthentication(String email) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
-    }
-
     public String getUserId(String token) {
-        try {
-            return getClaimsFromJwtToken(token).getBody().getSubject();
-        } catch (ExpiredJwtException expiredJwtException) {
-            return expiredJwtException.getClaims().getSubject();
-        }
+        return getClaimsFromJwtToken(token).getSubject();
     }
 
-    private Jws<Claims> getClaimsFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
+    private Claims getClaimsFromJwtToken(String token) {
+        try {
+            return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
     }
 
     public String getRefreshTokenId(String token) {
-        try {
-            return getClaimsFromJwtToken(token).getBody().get("value").toString();
-        } catch (ExpiredJwtException expiredJwtException) {
-            return expiredJwtException.getClaims().get("value").toString();
-        }
+        return getClaimsFromJwtToken(token).get("value").toString();
+    }
+
+    public List<String> getRoles(String token) {
+        return (List<String>) getClaimsFromJwtToken(token).get("roles");
     }
 
     public boolean validateJwtToken(String token) {

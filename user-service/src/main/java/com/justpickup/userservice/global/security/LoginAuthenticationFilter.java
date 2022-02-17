@@ -2,10 +2,13 @@ package com.justpickup.userservice.global.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.userservice.domain.jwt.service.RefreshTokenServiceImpl;
-import com.justpickup.userservice.domain.jwt.utils.JwtTokenProvider;
+import com.justpickup.userservice.global.utils.JwtTokenProvider;
 import com.justpickup.userservice.global.dto.LoginRequest;
+import com.justpickup.userservice.global.dto.Result;
+import com.justpickup.userservice.global.utils.CookieProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,6 +36,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenServiceImpl refreshTokenServiceImpl;
+    private final CookieProvider cookieProvider;
 
     // login 리퀘스트 패스로 오는 요청을 판단
     @Override
@@ -69,14 +74,20 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
 
         refreshTokenServiceImpl.updateRefreshToken(Long.valueOf(userId), jwtTokenProvider.getRefreshTokenId(refreshToken));
 
-        Map<String, String> tokens = Map.of(
-                "access_token", accessToken,
-                "refresh_token", refreshToken
-        );
+        // 쿠키 설정
+        ResponseCookie refreshTokenCookie = cookieProvider.createRefreshTokenCookie(refreshToken);
+
+        Cookie cookie = cookieProvider.of(refreshTokenCookie);
 
         response.setContentType(APPLICATION_JSON_VALUE);
+        response.addCookie(cookie);
 
-        new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+        // body 설정
+        Map<String, String> tokens = Map.of(
+                "access_token", accessToken
+        );
+
+        new ObjectMapper().writeValue(response.getOutputStream(), Result.createSuccessResult(tokens));
     }
 
     @Override

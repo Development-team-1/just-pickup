@@ -1,8 +1,9 @@
 package com.justpickup.userservice.global.security;
 
 import com.justpickup.userservice.domain.jwt.service.RefreshTokenServiceImpl;
-import com.justpickup.userservice.domain.jwt.utils.JwtTokenProvider;
+import com.justpickup.userservice.global.utils.JwtTokenProvider;
 import com.justpickup.userservice.domain.user.service.UserService;
+import com.justpickup.userservice.global.utils.CookieProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenServiceImpl refreshTokenServiceImpl;
+    private final CookieProvider cookieProvider;
 
     private final UserService userService;
 
@@ -34,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         LoginAuthenticationFilter loginAuthenticationFilter =
-                new LoginAuthenticationFilter(authenticationManagerBean(), jwtTokenProvider, refreshTokenServiceImpl);
+                new LoginAuthenticationFilter(authenticationManagerBean(), jwtTokenProvider, refreshTokenServiceImpl, cookieProvider);
         loginAuthenticationFilter.setFilterProcessesUrl("/login");
 
         http.csrf().disable();
@@ -45,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.logout()
                 .logoutUrl("/logout")
-                .deleteCookies("");
+                .deleteCookies("refresh-token");
 
         http.oauth2Login()
             .defaultSuccessUrl("http://just-pickup.com:8000/customer-frontend-service/")

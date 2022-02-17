@@ -26,6 +26,10 @@ spring:
       hibernate:
         default_batch_fetch_size: 1000
 
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
 eureka:
   client:
     service-url:
@@ -39,8 +43,6 @@ logging:
   level:
     com.justpickup: DEBUG
 
-
-
 # jpa query, parameter 로그 (p6spy)
 decorator.datasource.p6spy:
   enable-logging: true
@@ -49,3 +51,5 @@ token:
   access-expired-time: 3600000
   refresh-expired-time: 604800000
   secret: my-secret
+  refresh-token-name: refresh-token
+  access-token-name: access-token
