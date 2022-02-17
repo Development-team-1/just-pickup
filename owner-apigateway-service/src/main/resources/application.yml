@@ -66,3 +66,5 @@ token:
   access-expired-time: 3600000
   refresh-expired-time: 604800000
   secret: my-secret
+  refresh-token-name: refresh-token
+  access-token-name: access-token

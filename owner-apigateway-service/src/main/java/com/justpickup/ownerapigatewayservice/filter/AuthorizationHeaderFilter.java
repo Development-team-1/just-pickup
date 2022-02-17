@@ -1,8 +1,6 @@
 package com.justpickup.ownerapigatewayservice.filter;
 
 import com.justpickup.ownerapigatewayservice.security.JwtTokenProvider;
-import io.jsonwebtoken.Jwts;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -46,29 +44,30 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             // JWT 토큰 판별
             String token = authorizationHeader.replace("Bearer", "");
 
-            if (jwtTokenProvider.isExpired(token)) {
-                return onError(exchange, "Access Token is Expired", HttpStatus.UNAUTHORIZED);
-            }
-
-            String subject = jwtTokenProvider.getUserId(token);
-            if (subject == null) {
+            if (!jwtTokenProvider.validateJwtToken(token)) {
                 return onError(exchange, "JWT token is not valid", HttpStatus.UNAUTHORIZED);
             }
 
-            ServerHttpRequest request1 = request.mutate()
-                    .header("jwt-sub", subject)
+            String subject = jwtTokenProvider.getUserId(token);
+            if (false == jwtTokenProvider.getRoles(token).contains("StoreOwner")) {
+                return onError(exchange, "권한 없음", HttpStatus.UNAUTHORIZED);
+            }
+
+            ServerHttpRequest newRequest = request.mutate()
+                    .header("user-id", subject)
                     .build();
 
-            return chain.filter(exchange.mutate().request(request1).build());
+            return chain.filter(exchange.mutate().request(newRequest).build());
         };
     }
 
     // Mono(단일 값), Flux(다중 값) -> Spring WebFlux
     private Mono<Void> onError(ServerWebExchange exchange, String errorMsg, HttpStatus httpStatus) {
+        log.error(errorMsg);
+
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);
 
-        log.error(errorMsg);
         return response.setComplete();
     }
 }
