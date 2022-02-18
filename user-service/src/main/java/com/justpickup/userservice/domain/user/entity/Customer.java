@@ -17,7 +17,7 @@ public class Customer extends User {
     private AuthType oauthType;
 
     public Customer(String email, String password, String name, String phoneNumber, AuthType oauthType) {
-        super(email, password, name, phoneNumber,null);
+        super(email, password, name, phoneNumber);
         this.dtype = Customer.class.getSimpleName();
         this.oauthType = oauthType;
     }

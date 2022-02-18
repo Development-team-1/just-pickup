@@ -26,9 +26,6 @@ public abstract class User extends BaseEntity {
 
     private String phoneNumber;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
     @Column(insertable = false,updatable = false)
     protected String dtype;
 

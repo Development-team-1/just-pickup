@@ -1,5 +1,6 @@
 package com.justpickup.userservice.global.security;
 
+import com.justpickup.userservice.domain.jwt.service.OAuthService;
 import com.justpickup.userservice.domain.jwt.service.RefreshTokenServiceImpl;
 import com.justpickup.userservice.global.utils.JwtTokenProvider;
 import com.justpickup.userservice.domain.user.service.UserService;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -26,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final RefreshTokenServiceImpl refreshTokenServiceImpl;
     private final CookieProvider cookieProvider;
 
-    private final UserService userService;
+    private final OAuthService oAuthService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -52,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.oauth2Login()
             .defaultSuccessUrl("http://just-pickup.com:8000/customer-frontend-service/")
             .userInfoEndpoint()
-            .userService(userService);
+            .userService(oAuthService);
 
         http.addFilter(loginAuthenticationFilter);
         http.addFilterBefore(new HeaderAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
