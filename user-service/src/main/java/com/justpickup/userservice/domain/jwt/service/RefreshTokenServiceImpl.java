@@ -8,8 +8,12 @@ import com.justpickup.userservice.domain.user.repository.UserRepository;
 import com.justpickup.userservice.domain.jwt.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,17 +25,11 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @Slf4j
 public class RefreshTokenServiceImpl implements RefreshTokenService {
+    private final UserDetailsService userDetailsService;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Transactional
-    @Override
-    public void updateRefreshToken(Long id, String refreshToken) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new NotExistUserException("사용자 고유번호 : " + id + "는 없는 사용자입니다."));
 
-        user.changeRefreshToken(refreshToken);
-    }
 
     @Transactional
     @Override
@@ -56,7 +54,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                     ", refreshToken = " + refreshToken);
         }
 
-        Authentication authentication = jwtTokenProvider.getAuthentication(user.getEmail());
+        Authentication authentication = getAuthentication(user.getEmail());
         List<String> roles = authentication.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
 
@@ -70,4 +68,10 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                 .refreshToken(newRefreshToken)
                 .build();
     }
+
+    public Authentication getAuthentication(String email) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+    }
+
 }

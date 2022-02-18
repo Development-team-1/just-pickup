@@ -3,6 +3,7 @@ package com.justpickup.userservice.global.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.userservice.domain.jwt.service.RefreshTokenServiceImpl;
 import com.justpickup.userservice.domain.jwt.utils.JwtTokenProvider;
+import com.justpickup.userservice.domain.user.service.UserService;
 import com.justpickup.userservice.global.dto.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
-    private final RefreshTokenServiceImpl refreshTokenServiceImpl;
+    private final UserService userService;
 
     // login 리퀘스트 패스로 오는 요청을 판단
     @Override
@@ -67,7 +68,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         String accessToken = jwtTokenProvider.createJwtAccessToken(userId, request.getRequestURI(), roles);
         String refreshToken = jwtTokenProvider.createJwtRefreshToken();
 
-        refreshTokenServiceImpl.updateRefreshToken(Long.valueOf(userId), jwtTokenProvider.getRefreshTokenId(refreshToken));
+        userService.updateRefreshToken(Long.valueOf(userId), jwtTokenProvider.getRefreshTokenId(refreshToken));
 
         Map<String, String> tokens = Map.of(
                 "access_token", accessToken,

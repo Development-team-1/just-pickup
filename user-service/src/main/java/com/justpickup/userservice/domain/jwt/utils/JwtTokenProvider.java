@@ -16,11 +16,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class JwtTokenProvider {
-
-    private final UserDetailsService userDetailsService;
 
     @Value("${token.access-expired-time}")
     private long ACCESS_EXPIRED_TIME;
@@ -60,10 +57,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public Authentication getAuthentication(String email) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
-    }
+
 
     public String getUserId(String token) {
         try {

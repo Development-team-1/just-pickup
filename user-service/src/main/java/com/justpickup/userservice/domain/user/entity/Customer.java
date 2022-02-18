@@ -16,9 +16,9 @@ public class Customer extends User {
     @Enumerated(EnumType.STRING)
     private AuthType oauthType;
 
-
     public Customer(String email, String password, String name, String phoneNumber, AuthType oauthType) {
-        super(email, password, name, phoneNumber,Role.USER);
+        super(email, password, name, phoneNumber,null);
+        this.dtype = Customer.class.getSimpleName();
         this.oauthType = oauthType;
     }
 }
