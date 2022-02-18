@@ -12,10 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.HttpHeaders;
 
@@ -29,7 +26,7 @@ public class AuthController {
 
     @GetMapping("/refreshToken")
     public ResponseEntity<Result> refreshToken(@RequestHeader("X-AUTH-TOKEN") String accessToken,
-                                               @RequestHeader("REFRESH-TOKEN") String refreshToken) {
+                                               @CookieValue("refresh-token") String refreshToken) {
 
         JwtTokenDto jwtTokenDto = refreshTokenServiceImpl.refreshJwtToken(accessToken, refreshToken);
 
