@@ -9,6 +9,8 @@ import com.justpickup.userservice.domain.user.dto.StoreOwnerDto;
 import com.justpickup.userservice.domain.user.entity.StoreOwner;
 
 public interface UserService extends OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+
+    void updateRefreshToken(Long id, String refreshToken);
     CustomerDto findCustomerByUserId(Long userId);
     StoreOwner saveStoreOwner(StoreOwnerDto storeOwnerDto);
 }

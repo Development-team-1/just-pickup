@@ -30,15 +30,7 @@ public abstract class User extends BaseEntity {
     private Role role;
 
     @Column(insertable = false,updatable = false)
-    private String dtype;
-
-    public User(String email, String password, String name, String phoneNumber, Role role) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.role = role;
-    }
+    protected String dtype;
 
     public User(String email, String password, String name, String phoneNumber) {
         this.email = email;
