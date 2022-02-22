@@ -9,6 +9,11 @@ const routes = [
     name: 'dashboard',
     component: () => import('./../views/Dashboard')
   },
+  {
+    path: '/prev-order',
+    name: 'prev-order',
+    component: () => import('./../views/PrevOrder')
+  }
 ]
 
 const router = new VueRouter({
