@@ -14,6 +14,16 @@ spring:
 
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:8080"
+            allowedMethods:
+              - POST
+              - GET
+              - PUT
+              - OPTIONS
+              - DELETE
       routes:
         - id: owner-frontend-service
           uri: lb://OWNER-FRONTEND-SERVICE
@@ -39,3 +49,9 @@ spring:
             - Path=/user-service/**
           filters:
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        - id: owner-vue
+          uri: http://localhost:8080
+          predicates:
+            - Path=/owner-vue/**
+          filters:
+            - RewritePath=/owner-vue/(?<segment>.*),/$\{segment}

@@ -9,6 +9,11 @@ const routes = [
     name: 'dashboard',
     component: () => import('./../views/Dashboard')
   },
+  {
+    path: '/category',
+    name: 'category',
+    component: () => import('./../views/Category')
+  },
 ]
 
 const router = new VueRouter({
