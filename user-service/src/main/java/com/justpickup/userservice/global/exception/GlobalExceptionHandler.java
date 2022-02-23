@@ -1,8 +1,13 @@
 package com.justpickup.userservice.global.exception;
 
+import com.justpickup.userservice.domain.jwt.exception.RefreshTokenNotValidException;
 import com.justpickup.userservice.global.dto.Result;
+import com.justpickup.userservice.global.utils.CookieProvider;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -11,8 +16,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 @Slf4j
 public class GlobalExceptionHandler {
+
+    private final CookieProvider cookieProvider;
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity customExceptionHandler(CustomException ce) {
@@ -21,6 +29,16 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(status)
                 .body(errorResult);
+    }
+
+    @ExceptionHandler(RefreshTokenNotValidException.class)
+    public ResponseEntity customJwtExceptionHandler(RefreshTokenNotValidException e) {
+        // 쿠키 삭제
+        ResponseCookie responseCookie = cookieProvider.removeRefreshTokenCookie();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                .body(e.getResult());
     }
 
     @ExceptionHandler(BindException.class)

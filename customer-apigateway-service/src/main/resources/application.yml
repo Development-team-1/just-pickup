@@ -12,3 +12,72 @@ eureka:
 spring:
   application:
     name: customer-apigateway-service
+
+  cloud:
+    gateway:
+      routes:
+        - id: owner-frontend-service
+          uri: lb://CUSTOMER-FRONTEND-SERVICE
+          predicates:
+            - Path=/customer-frontend-service/**
+          filters:
+            - RewritePath=/customer-frontend-service/(?<segment>.*),/$\{segment}
+        - id: order-service
+          uri: lb://ORDER-SERVCIE
+          predicates:
+            - Path=/order-service/**
+          filters:
+            - RewritePath=/order-service/(?<segment>.*),/$\{segment}
+        - id: store-service
+          uri: lb://STORE-SERVCIE
+          predicates:
+            - Path=/store-service/**
+          filters:
+            - RewritePath=/store-service/(?<segment>.*),/$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/login
+            - Method=POST
+          filters:
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/refreshToken
+            - Method=GET
+          filters:
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/logout
+            - Method=POST
+          filters:
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/oauth2/authorization/*
+          filters:
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/*/oauth2/code/*
+          filters:
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/**
+          filters:
+            - AuthorizationHeaderFilter
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+
+token:
+  access-expired-time: 3600000
+  refresh-expired-time: 604800000
+  secret: my-secret
+  refresh-token-name: refresh-token
+  access-token-name: access-token
