@@ -133,13 +133,13 @@ export default {
         url:'/store-service/category',
         responseType:'json'
       })
-          .then(function (response) {
-            console.log(response.data.data)
-            vm.categoryList = response.data.data;
-          });
+      .then(function (response) {
+        console.log(response.data.data)
+        vm.categoryList = response.data.data;
+      });
     }
   },
-  created() {
+  mounted() {
     this.getCategoryList();
   }
 }

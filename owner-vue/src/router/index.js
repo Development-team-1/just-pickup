@@ -14,6 +14,11 @@ const routes = [
     name: 'category',
     component: () => import('./../views/Category')
   },
+  {
+    path: '/menu',
+    name: 'menu',
+    component: () => import('./../views/Menu')
+  },
 ]
 
 const router = new VueRouter({
