@@ -3,15 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --port 8080",
+    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "service": "node service.js"
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@mdi/js": "^6.5.95",
     "axios": "^0.26.0",
     "core-js": "^3.6.5",
+    "moment": "^2.29.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuedraggable": "^2.24.3",
@@ -26,8 +26,6 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
-    "font-awesome": "^4.7.0",
-    "gulp": "^3.9.1",
     "sass": "~1.32.0",
     "sass-loader": "^10.0.0",
     "vue-cli-plugin-vuetify": "~2.4.2",

@@ -19,6 +19,16 @@ const routes = [
     name: 'menu',
     component: () => import('./../views/Menu')
   },
+  {
+    path: '/prev-order',
+    name: 'prev-order',
+    component: () => import('./../views/PrevOrder')
+  },
+  {
+    path: '/order',
+    name: 'order',
+    component: () => import('./../views/Order.vue')
+  }
 ]
 
 const router = new VueRouter({
