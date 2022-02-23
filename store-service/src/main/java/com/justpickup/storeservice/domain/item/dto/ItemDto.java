@@ -1,11 +1,17 @@
 package com.justpickup.storeservice.domain.item.dto;
 
+import com.justpickup.storeservice.domain.category.dto.CategoryDto;
 import com.justpickup.storeservice.domain.item.entity.Item;
 import com.justpickup.storeservice.global.entity.Yn;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ItemDto {
 
     private Long id;
@@ -16,15 +22,15 @@ public class ItemDto {
 
     private Long price;
 
+    private CategoryDto categoryDto;
+
     /*
      private PhotoDto photoDto;
-     private CategoryDto categoryDto;
      private StoreDto storeDto;
      private List<ItemOptionDto> itemOptionDtoList;
     */
 
     // == 생성 메소드 == //
-    @Builder
     public ItemDto(Long id, String name, Yn salesYn, Long price) {
         this.id = id;
         this.name = name;
@@ -36,6 +42,16 @@ public class ItemDto {
         return ItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())
+                .price(item.getPrice())
+                .salesYn(item.getSalesYn())
+                .build();
+    }
+
+    public static ItemDto createWithCategoryItemDto(Item item) {
+        return ItemDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .categoryDto(new CategoryDto(item.getCategory()))
                 .price(item.getPrice())
                 .salesYn(item.getSalesYn())
                 .build();
