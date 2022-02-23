@@ -9,57 +9,12 @@
     <br>
 
     <v-row>
-      <v-menu
-          v-model="isDuePop"
-          :close-on-content-click="false"
-          :nudge-right="40"
-          transition="scale-transition"
-          offset-y
-          min-width="auto"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-text-field
-              v-model="dueDate"
-              label="시작일"
-              prepend-icon="mdi-calendar"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-          ></v-text-field>
-        </template>
-        <v-date-picker
-            v-model="dueDate"
-            @input="isDuePop = false"
-        ></v-date-picker>
-      </v-menu>
-
-      <v-menu
-          v-model="isEndPop"
-          :close-on-content-click="false"
-          :nudge-right="40"
-          transition="scale-transition"
-          offset-y
-          min-width="auto"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-text-field
-              v-model="endDate"
-              label="종료일"
-              prepend-icon="mdi-calendar"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-          ></v-text-field>
-        </template>
-        <v-date-picker
-            v-model="endDate"
-            @input="isEndPop = false"
-        ></v-date-picker>
-      </v-menu>
+      <date-picker :label=" '시작일' " @inputDate="inputStartDate"></date-picker>
+      <date-picker :label=" '종료일' " @inputDate="inputEndDate"></date-picker>
     </v-row>
 
     <v-row>
-      <h1>{{ dueDate }}, {{ endDate }}</h1>
+      <div class="subtitle-1">{{startDate}} ~ {{endDate}} 내역</div>
     </v-row>
     <br>
 
@@ -82,30 +37,57 @@
 </template>
 
 <script>
-// import axios from 'axios';
 import orderApi from '../api/order.js';
+
+import DatePicker from "@/components/DatePicker";
 
 const moment = require('moment');
 
 export default {
   name: "PrevOrder",
+  components: {
+    'date-picker': DatePicker
+  },
+  mounted: function() {
+    orderApi.requestPrevOrder(this.startDate, this.endDate, this.page - 1)
+        .then( (response) => {
+          this.renderList(response.data);
+        })
+        .catch( (error) => {
+          console.log(error);
+        });
+  },
+  watch: {
+    "page": function (newPage) {
+      orderApi.requestPrevOrder(this.startDate, this.endDate, newPage - 1)
+          .then( (response) => {
+            this.renderList(response.data);
+          })
+          .catch( (error) => {
+            console.log(error);
+            console.log(error.response.data);
+          });
+    }
+  },
   data: function() {
     return {
-      dueDate: moment().format('YYYY-MM-DD'),
-      isDuePop: false,
-      endDate: moment().format('YYYY-MM-DD'),
-      isEndPop: false,
+      // date
+      startDate: '',
+      endDate: '',
 
+      // pagination
       page: 1,
       pageCount: 1,
       itemsPerPage: 10,
       totalVisible: 10,
+
+      // data table
       headers: [
         {
           text: '주문번호',
           align: 'start',
           sortable: false,
-          value: 1,
+          value: 'orderId',
         },
         { text: '주문상태', value: 'orderStatus' },
         { text: '주문시간', value: 'orderTime' },
@@ -113,23 +95,20 @@ export default {
         { text: '결제금액', value: 'orderPrice' },
         { text: '닉네임', value: 'userName' },
       ],
-      orders: [
-
-      ],
+      orders: [],
     }
   },
+
   methods: {
     search: function() {
       if(!this.checkDate()) return;
 
-      this.orders = [];
-      orderApi.requestPrevOrder(this.dueDate, this.endDate, this.page - 1)
+      orderApi.requestPrevOrder(this.startDate, this.endDate, this.page - 1)
           .then( (response) => {
             this.renderList(response.data);
           })
           .catch( (error) => {
             console.log(error);
-            console.log(error.response.data);
           });
     },
     renderList: function(json) {
@@ -143,6 +122,7 @@ export default {
         })
 
         this.orders.push({
+          orderId: order.orderId,
           orderStatus: order.orderStatus,
           orderTime: order.orderTime,
           orderItemNames: orderItemNames.join(", "),
@@ -157,29 +137,23 @@ export default {
       this.pageCount = page.totalPage;
     },
     checkDate: function() {
-      if (!this.dueDate || !this.endDate) {
+      if (!this.startDate || !this.endDate) {
         alert("시작일과 종료일을 입력해주세요.");
         return false;
       }
 
-      if (moment(this.dueDate).isAfter(this.endDate)) {
+      if (moment(this.startDate).isAfter(this.endDate)) {
         alert("시작일은 종료일보다 클 수 없습니다.");
         return false;
       }
 
       return true;
-    }
-  },
-  watch: {
-    "page": function (newPage) {
-      orderApi.requestPrevOrder(this.dueDate, this.endDate, newPage - 1)
-          .then( (response) => {
-            this.renderList(response.data);
-          })
-          .catch( (error) => {
-            console.log(error);
-            console.log(error.response.data);
-          });
+    },
+    inputStartDate: function(value) {
+      this.startDate = value;
+    },
+    inputEndDate: function(value) {
+      this.endDate = value;
     }
   }
 }
