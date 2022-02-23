@@ -122,7 +122,7 @@ export default {
       .then(function (response) {
         console.log(response)
         vm.deletedList=[]
-
+        vm.getCategoryList()
       });
 
     },
