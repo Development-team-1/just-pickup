@@ -13,6 +13,7 @@
 <script>
 import Sidebar from "./components/Sidebar";
 import Topbar from "./components/Topbar";
+
 export default {
   name: "App",
   components: { Topbar, Sidebar},
@@ -20,6 +21,8 @@ export default {
     cards: ["Today", "Yesterday"],
     drawer: null,
   }),
-  methods: {},
+  mounted() {
+
+  }
 };
 </script>

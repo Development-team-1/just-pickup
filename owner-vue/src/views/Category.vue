@@ -22,15 +22,24 @@
     </v-subheader>
 
     <v-expansion-panels style="display: block">
-      <draggable v-model="categoryList" >
+      <draggable v-model="categoryList" id="categoryEl" >
         <v-expansion-panel
-            v-for="item in categoryList" :key="item.order" class="category-item"
+            v-for="item in categoryList" :key="item.categoryId" class="category-item" :data-id="item.categoryId"
         >
-          <v-expansion-panel-header>
-            {{ item.name }}
+          <v-expansion-panel-header >
+            <span contenteditable="true" >{{ item.name }}</span>
+
+            <template v-slot:actions>
+              <v-btn
+                  elevation="2"
+                  icon
+                  @click.stop="clickDelete($event)"
+              ><v-icon>{{ icons.mdiDelete }}</v-icon></v-btn>
+            </template>
+
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            item-list
           </v-expansion-panel-content>
         </v-expansion-panel>
       </draggable>
@@ -42,7 +51,7 @@
 <script>
 import draggable from 'vuedraggable'
 import {
-  mdiContentSave,
+  mdiContentSave, mdiDelete,
   mdiPlus,
 } from '@mdi/js'
 import axios from "axios";
@@ -57,43 +66,81 @@ export default {
       icons: {
         mdiContentSave,
         mdiPlus,
+        mdiDelete,
       },
       categoryList: [
-        {
-          name: 'cc',
-          no: 1,
-        },
-        {
-          name: 'bb',
-          no: 2,
-        },
-        {
-          name: 'aa',
-          no: 3,
-        },
+
       ],
+      deletedList: []
     }
   },
   methods:{
     clickAdd:function (){
-      alert();
+      var count = this.categoryList.length+1
+      var item = {
+        name: 'new Category',
+        order:count
+      }
+      this.categoryList.push(item)
+    },
+    clickDelete:function (event){
+      var category = event.currentTarget.parentNode.parentNode.parentNode;
+      let delCategory = {
+        categoryId : category.dataset.id,
+        name : category.children[0].children[0].innerHTML,
+      }
+      this.deletedList.push(delCategory)
+      category.remove();
     },
     clickSave:function (){
+      var vm =this;
+      let data = {
+        storeId : "1",
+        categoryList: [],
+        deletedList: vm.deletedList
+      }
 
+      var categoryEl = document.querySelector("#categoryEl");
+      categoryEl.childNodes.forEach(function(item ,index){
+        let category = {
+          categoryId : item.dataset.id,
+          name : item.children[0].children[0].innerHTML,
+          order : index+1
+        }
+        data.categoryList.push(category)
+      })
+      axios({
+        method:'put',
+        url:'/store-service/category',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        data: data,
+        responseType:'json'
+      })
+      .then(function (response) {
+        console.log(response)
+        vm.deletedList=[]
+
+      });
 
     },
+    getCategoryList:function(){
+      var vm =this;
+      axios({
+        method:'get',
+        url:'/store-service/category',
+        responseType:'json'
+      })
+          .then(function (response) {
+            console.log(response.data.data)
+            vm.categoryList = response.data.data;
+          });
+    }
   },
   created() {
-    var vm =this;
-    axios({
-      method:'get',
-      url:'http://localhost:8001/store-service/category',
-      responseType:'json'
-    })
-    .then(function (response) {
-      console.log(response.data.data)
-      vm.categoryList = response.data.data;
-    });
+    this.getCategoryList();
   }
 }
 </script>
