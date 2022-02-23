@@ -7,8 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @Slf4j
-@RequestMapping("/")
 public class CustomerController {
+
+    @GetMapping("/")
+    public String index(){
+        return "/index";
+    }
 
     @GetMapping("/food-home")
     public String hello(){

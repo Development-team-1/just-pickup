@@ -1,8 +1,15 @@
-server.port: 0
+server.port: 60000
 
 spring:
   application:
     name: user-service
+
+  config:
+    import: optional:configserver:http://127.0.0.1:8888
+  cloud:
+    config:
+      name: user-service
+      profile: dev
 
   datasource:
     url: jdbc:postgresql://localhost:5432/userdb
@@ -12,12 +19,16 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     generate-ddl: true
     open-in-view: false
     properties:
       hibernate:
         default_batch_fetch_size: 1000
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
 
 eureka:
   client:
@@ -35,3 +46,10 @@ logging:
 # jpa query, parameter 로그 (p6spy)
 decorator.datasource.p6spy:
   enable-logging: true
+
+token:
+  access-expired-time: 3600000
+  refresh-expired-time: 604800000
+  secret: my-secret
+  refresh-token-name: refresh-token
+  access-token-name: access-token
