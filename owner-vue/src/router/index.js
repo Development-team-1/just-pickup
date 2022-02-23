@@ -13,6 +13,11 @@ const routes = [
     path: '/prev-order',
     name: 'prev-order',
     component: () => import('./../views/PrevOrder')
+  },
+  {
+    path: '/order',
+    name: 'order',
+    component: () => import('./../views/Order.vue')
   }
 ]
 

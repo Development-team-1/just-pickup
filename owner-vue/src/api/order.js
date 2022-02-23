@@ -10,5 +10,14 @@ export default {
             }
         }
         return axios.get("http://localhost:8001/order-service/prevOrder", options);
+    },
+    requestOrder(orderDate, lastOrderId) {
+        const options = {
+            params: {
+                orderDate: orderDate,
+                lastOrderId: lastOrderId
+            }
+        }
+        return axios.get("http://localhost:8001/order-service/orderMain", options);
     }
 }
