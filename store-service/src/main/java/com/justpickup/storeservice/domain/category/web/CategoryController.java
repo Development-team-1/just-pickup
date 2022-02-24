@@ -2,6 +2,7 @@ package com.justpickup.storeservice.domain.category.web;
 
 import com.justpickup.storeservice.domain.category.dto.CategoryDto;
 import com.justpickup.storeservice.domain.category.service.CategoryService;
+import com.justpickup.storeservice.domain.item.dto.ItemDto;
 import com.justpickup.storeservice.global.dto.Result;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -35,16 +36,33 @@ public class CategoryController {
     }
 
 
+
     @Data
     static class CategoryResponse{
         private Long categoryId;
         private String name;
         private Integer order;
+        private List<ItemResponse> items;
 
         public  CategoryResponse (CategoryDto categoryDto){
             this.categoryId = categoryDto.getId();
             this.name= categoryDto.getName();
             this.order= categoryDto.getOrder();
+            this.items = categoryDto.getItems().stream()
+                    .map(ItemResponse::new)
+                    .collect(Collectors.toList());
+        }
+
+        @Data
+        static class ItemResponse{
+            private Long id;
+            private String name;
+
+            public ItemResponse(ItemDto itemDto) {
+                this.id = itemDto.getId();
+                this.name = itemDto.getName();
+            }
+
         }
     }
 
