@@ -5,6 +5,7 @@ import com.justpickup.userservice.domain.user.dto.StoreOwnerDto;
 import com.justpickup.userservice.domain.user.entity.Customer;
 import com.justpickup.userservice.domain.user.entity.StoreOwner;
 import com.justpickup.userservice.domain.user.entity.User;
+import com.justpickup.userservice.domain.user.exception.DuplicateUserEmail;
 import com.justpickup.userservice.domain.user.exception.NotExistUserException;
 import com.justpickup.userservice.domain.user.repository.CustomerRepository;
 import com.justpickup.userservice.domain.user.repository.UserRepository;
@@ -53,9 +54,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public void saveStoreOwner(StoreOwnerDto storeOwnerDto) {
+        String email = storeOwnerDto.getEmail();
+        boolean exists = userRepository.existsByEmail(email);
+
+        if (exists) throw new DuplicateUserEmail(email + "은 중복된 이메일입니다.");
+
         String encode = passwordEncoder.encode(storeOwnerDto.getPassword());
 
-        StoreOwner storeOwner = new StoreOwner(storeOwnerDto.getEmail(), encode, storeOwnerDto.getName(),
+        StoreOwner storeOwner = new StoreOwner(email, encode, storeOwnerDto.getName(),
                 storeOwnerDto.getPhoneNumber(), storeOwnerDto.getBusinessNumber());
 
         StoreOwner save = userRepository.save(storeOwner);
