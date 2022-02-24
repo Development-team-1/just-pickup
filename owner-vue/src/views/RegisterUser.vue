@@ -53,11 +53,11 @@ export default {
   name: "RegisterUser",
   data: function() {
     return {
-      email: 'test@naver.com',
-      password: '1234',
-      name: 'Park',
-      phoneNumber: '010-1234-5678',
-      businessNumber: '1234'
+      email: '',
+      password: '',
+      name: '',
+      phoneNumber: '',
+      businessNumber: ''
     }
   },
   methods: {
@@ -71,6 +71,7 @@ export default {
         phoneNumber: this.phoneNumber,
         businessNumber: this.businessNumber
       }
+
       userApi.requestRegisterUser(user)
         .then( (response) => {
           if (response.status == '201') {
@@ -82,7 +83,8 @@ export default {
         })
         .catch( (error) => {
           console.log(error);
-          console.log(error.response.data);
+          let message = error.response.data.message;
+          if (message) alert(message);
         });
     }
   }
