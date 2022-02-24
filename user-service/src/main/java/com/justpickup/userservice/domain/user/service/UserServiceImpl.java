@@ -32,8 +32,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username)
@@ -54,12 +52,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public StoreOwner saveStoreOwner(StoreOwnerDto storeOwnerDto) {
+    public void saveStoreOwner(StoreOwnerDto storeOwnerDto) {
         String encode = passwordEncoder.encode(storeOwnerDto.getPassword());
 
         StoreOwner storeOwner = new StoreOwner(storeOwnerDto.getEmail(), encode, storeOwnerDto.getName(),
                 storeOwnerDto.getPhoneNumber(), storeOwnerDto.getBusinessNumber());
 
-        return userRepository.save(storeOwner);
+        StoreOwner save = userRepository.save(storeOwner);
     }
+
 }
