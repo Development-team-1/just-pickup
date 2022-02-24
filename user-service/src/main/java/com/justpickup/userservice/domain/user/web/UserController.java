@@ -48,7 +48,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/store/join")
+    @PostMapping("/store-owner")
     public ResponseEntity<Result> joinStoreOwner(@Valid @RequestBody JoinStoreOwnerRequest joinRequest) {
         // 회원 가입
         userService.saveStoreOwner(joinRequest.toStoreOwnerDto());
