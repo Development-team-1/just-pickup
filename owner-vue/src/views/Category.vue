@@ -24,10 +24,10 @@
     <v-expansion-panels style="display: block">
       <draggable v-model="categoryList" id="categoryEl" >
         <v-expansion-panel
-            v-for="item in categoryList" :key="item.categoryId" class="category-item" :data-id="item.categoryId"
+            v-for="category in categoryList" :key="category.categoryId" class="category-item" :data-id="category.categoryId"
         >
           <v-expansion-panel-header >
-            <span contenteditable="true" >{{ item.name }}</span>
+            <span contenteditable="true" >{{ category.name }}</span>
 
             <template v-slot:actions>
               <v-btn
@@ -39,7 +39,13 @@
 
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            item-list
+
+            <v-list-item v-for=" item in category.items" :key="item.id" >
+              <v-list-item-content>
+                <v-list-item-title> {{item.name}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
           </v-expansion-panel-content>
         </v-expansion-panel>
       </draggable>

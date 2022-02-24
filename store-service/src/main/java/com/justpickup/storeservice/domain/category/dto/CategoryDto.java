@@ -2,11 +2,13 @@ package com.justpickup.storeservice.domain.category.dto;
 
 import com.justpickup.storeservice.domain.category.entity.Category;
 import com.justpickup.storeservice.domain.category.web.CategoryController;
+import com.justpickup.storeservice.domain.item.dto.ItemDto;
 import com.justpickup.storeservice.domain.item.entity.Item;
 import com.justpickup.storeservice.domain.store.entity.Store;
 import lombok.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -18,14 +20,16 @@ public class CategoryDto {
     private String name;
     private Integer order;
     private Store store;
-    private List<Item> items;
+    private List<ItemDto> items;
 
     public CategoryDto(Category category) {
         this.id = category.getId();
         this.name = category.getName();
         this.order = category.getOrder();
         this.store = category.getStore();
-        this.items = category.getItems();
+        this.items = category.getItems().stream()
+                .map(ItemDto::createItemDto)
+                .collect(Collectors.toList());
     }
 
     public CategoryDto(CategoryController.PutCategoryRequest.Category category) {
