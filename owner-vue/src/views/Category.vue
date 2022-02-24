@@ -60,7 +60,6 @@ import {
   mdiContentSave, mdiDelete,
   mdiPlus,
 } from '@mdi/js'
-import axios from "axios";
 
 export default {
   name: "Category",
@@ -115,7 +114,7 @@ export default {
         }
         data.categoryList.push(category)
       })
-      axios({
+      this.$axios({
         method:'put',
         url:'/store-service/category',
         headers: {
@@ -134,7 +133,7 @@ export default {
     },
     getCategoryList:function(){
       var vm =this;
-      axios({
+      this.$axios({
         method:'get',
         url:'/store-service/category',
         responseType:'json'

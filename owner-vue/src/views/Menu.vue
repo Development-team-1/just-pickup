@@ -2,6 +2,14 @@
   <div>
     <v-subheader class="py-0 d-flex justify-space-between rounded-lg">
       <h3>메뉴 관리</h3>
+      <MenuItem
+          :modalData="modalData"
+          :icon="modalSet.icon.register"
+          :color="modalSet.color.red"
+          :name="modalSet.words.register"
+          @save="itemSave"
+      />
+
     </v-subheader>
     <v-form @submit.prevent>
       <v-container>
@@ -28,6 +36,18 @@
           hide-default-footer
           class="elevation-1"
       >
+
+        <template v-slot:item.modify="{ item }">
+          <MenuItem
+              :modalData="modalData"
+              :icon="modalSet.icon.modify"
+              :color="modalSet.color.primary"
+              :name="modalSet.words.modify"
+              @init="editItem(item)"
+              @save="itemSave"
+          />
+        </template>
+
       </v-data-table>
       <div class="text-center pt-2">
         <v-pagination
@@ -47,58 +67,13 @@ import {
   mdiPlus,
 
 } from '@mdi/js'
-import axios from "axios";
+// import axios from "axios";
+import MenuItem from "@/views/MenuItem";
 
 export default {
-  name: "Category",
+  name: "Menu",
   components:{
-  },
-  data() {
-    return {
-      icons: {
-        mdiContentSave,
-        mdiPlus,
-        mdiDelete,
-      },
-      page: 1,
-      pageCount: 1,
-      itemsPerPage: 10,
-      totalVisible: 10,
-      headers: [
-        {
-          text: '메뉴번호',
-          align: 'start',
-          sortable: false,
-          value: 'id',
-        },
-        { text: '이름', value: 'name' },
-        { text: '카테고리', value: 'categoryName' },
-        { text: '가격', value: 'price' },
-      ],
-      word:"",
-      menus: [],
-    }
-  },
-  methods:{
-    getMenu(){
-      var vm = this;
-      const searchParam= {
-        word: vm.word,
-        page: vm.page-1
-      }
-      axios({
-        method:'get',
-        url:'/store-service/item',
-        params : searchParam,
-        responseType:'json'
-      })
-      .then(function (response) {
-        const page = response.data.data.page;
-        vm.menus = response.data.data.itemList;
-        vm.page = page.startPage+1;
-        vm.pageCount = page.totalPage;
-      });
-    }
+    MenuItem,
   },
   watch:{
     page:function () {
@@ -111,8 +86,130 @@ export default {
         this.page =1;
     },
   },
+  data() {
+    return {
+      icons: {
+        mdiContentSave,
+        mdiPlus,
+        mdiDelete,
+      },
+      modalSet:{
+        words:{
+          register:"상품 등록",
+          modify:"수정 하기",
+        },
+        icon:{
+          register: "mdi-plus",
+          modify: "mdi-pencil",
+        },
+        color:{
+          primary: "primary",
+          red: "red"
+        }
+      },
+      modalData:{
+        itemId : Number,
+        itemName : String,
+        itemPrice : Number,
+        category: String,
+        categoryList : ['카테고리1','카테고리2'],
+        requiredOption : ['Ice' , 'Hot'],
+        otherOption : ['얼음많이','샷추가','생크림많이','덜 뜨겁게']
+      },
+      page: 1,
+      pageCount: 1,
+      itemsPerPage: 10,
+      totalVisible: 10,
+      headers: [
+        {
+          text: '메뉴번호',
+          align: 'start',
+          sortable: false,
+          value: 'id',
+        },
+        { text: '이름', value: 'name' , sortable: false},
+        { text: '카테고리', value: 'categoryName', sortable: false },
+        { text: '가격', value: 'price' , sortable: false},
+        { text: '수정', value: 'modify' , sortable: false},
+      ],
+      word:"",
+      menus: [],
+    }
+  },
+  methods:{
+    getMenu(){
+      var vm = this;
+      const searchParam= {
+        word: vm.word,
+        page: vm.page-1
+      }
+      this.$axios({
+        method:'get',
+        url:'/store-service/item',
+        params : searchParam,
+        responseType:'json'
+      })
+      .then(function (response) {
+        const page = response.data.data.page;
+        vm.menus = response.data.data.itemList;
+        vm.page = page.startPage+1;
+        vm.pageCount = page.totalPage;
+      });
+    },
+    getModalData:function(){
+      var vm =this;
+      this.modalData = {
+        itemName : '',
+        itemPrice : 0,
+        category: '',
+        categoryList : [],
+        requiredOption : [],
+        otherOption : []
+      }
+
+      this.$axios({
+        method:'get',
+        url:'/store-service/category',
+        responseType:'json'
+      })
+      .then(function (response) {
+        response.data.data.forEach(function (ele){
+          vm.modalData.categoryList.push(ele.name)
+        })
+      });
+    },
+    editItem:function(item){
+      var vm = this
+      this.getModalData();
+      // var vm =this;
+      this.$axios({
+        method:'get',
+        url:'/store-service/item/'+item.id,
+        responseType:'json'
+      })
+      .then(function (response) {
+        var item = response.data.data;
+        vm.modalData.itemId = item.id;
+        vm.modalData.itemName = item.name;
+        vm.modalData.itemPrice = item.price;
+        vm.modalData.category = item.categoryName;
+        item.itemOptions.forEach(function(ele){
+          if(ele.optionType === "REQUIRED")
+            vm.modalData.requiredOption.push(ele.name)
+          else
+            vm.modalData.otherOption.push(ele.name)
+        })
+      });
+      console.log(this.modalData)
+    },
+    itemSave:function(){
+      console.log(this.modalData)
+    }
+  },
+
   mounted() {
     this.getMenu()
+    this.getModalData()
   }
 }
 </script>

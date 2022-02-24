@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.justpickup.storeservice.domain.item.dto.ItemDto;
 import com.justpickup.storeservice.domain.item.service.ItemService;
+import com.justpickup.storeservice.domain.itemoption.dto.ItemOptionDto;
+import com.justpickup.storeservice.domain.itemoption.entity.ItemOption;
+import com.justpickup.storeservice.domain.itemoption.entity.OptionType;
 import com.justpickup.storeservice.global.dto.Result;
 import com.justpickup.storeservice.global.entity.Yn;
 import lombok.AllArgsConstructor;
@@ -83,8 +86,6 @@ public class ItemController {
             int startPage;
             int totalPage;
         }
-
-
     }
 
 
@@ -103,12 +104,37 @@ public class ItemController {
         private String name;
         private Yn salesYn;
         private Long price;
+        private String CategoryName;
+        private List<ItemOptionResponse> itemOptions;
 
         public GetItemResponse(ItemDto itemDto) {
             this.id = itemDto.getId();
             this.name = itemDto.getName();
             this.salesYn = itemDto.getSalesYn();
             this.price = itemDto.getPrice();
+            this.CategoryName = itemDto.getCategoryDto().getName();
+            this.itemOptions = itemDto.getItemOptions()
+                    .stream().map(ItemOptionResponse::new)
+                    .collect(Collectors.toList());
+        }
+
+        @Data
+        static class ItemOptionResponse{
+            private Long id;
+
+            private OptionType optionType;
+
+            private Long price;
+
+            private String name;
+
+            public ItemOptionResponse(ItemOptionDto itemOptionDto) {
+
+                this.id = itemOptionDto.getId();
+                this.optionType = itemOptionDto.getOptionType();
+                this.price = itemOptionDto.getPrice();
+                this.name = itemOptionDto.getName();
+            }
         }
     }
 }
