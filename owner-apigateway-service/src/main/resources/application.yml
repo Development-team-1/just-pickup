@@ -17,13 +17,14 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://localhost:8080"
+            allowedOrigins: "*"
             allowedMethods:
-              - POST
               - GET
+              - POST
+              - DELETE
               - PUT
               - OPTIONS
-              - DELETE
+            allowedHeaders: '*'
       routes:
         - id: owner-frontend-service
           uri: lb://OWNER-FRONTEND-SERVICE
@@ -67,9 +68,15 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
+            - Path=/user-service/store-owner
+            - Method=POST
+          filters:
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
             - Path=/user-service/**
           filters:
-            - AuthorizationHeaderFilter
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
 
 token:
