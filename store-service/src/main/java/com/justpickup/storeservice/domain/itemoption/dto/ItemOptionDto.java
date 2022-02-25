@@ -1,5 +1,6 @@
 package com.justpickup.storeservice.domain.itemoption.dto;
 
+import com.justpickup.storeservice.domain.item.entity.Item;
 import com.justpickup.storeservice.domain.itemoption.entity.ItemOption;
 import com.justpickup.storeservice.domain.itemoption.entity.OptionType;
 import lombok.AllArgsConstructor;
@@ -28,5 +29,11 @@ public class ItemOptionDto {
         this.optionType = itemOption.getOptionType();
         this.price = itemOption.getPrice();
         this.name = itemOption.getName();
+    }
+
+    public static ItemOption createItemOption (ItemOptionDto itemOptionDto, Item item){
+
+        return new ItemOption(itemOptionDto.getOptionType(),itemOptionDto.getPrice(),itemOptionDto.getName(),item);
+
     }
 }

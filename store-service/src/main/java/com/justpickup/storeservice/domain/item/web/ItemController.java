@@ -1,19 +1,12 @@
 package com.justpickup.storeservice.domain.item.web;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.justpickup.storeservice.domain.item.dto.ItemDto;
 import com.justpickup.storeservice.domain.item.service.ItemService;
 import com.justpickup.storeservice.domain.itemoption.dto.ItemOptionDto;
-import com.justpickup.storeservice.domain.itemoption.entity.ItemOption;
 import com.justpickup.storeservice.domain.itemoption.entity.OptionType;
 import com.justpickup.storeservice.global.dto.Result;
 import com.justpickup.storeservice.global.entity.Yn;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Parameter;
+import lombok.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -21,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,7 +96,7 @@ public class ItemController {
         private String name;
         private Yn salesYn;
         private Long price;
-        private String CategoryName;
+        private Long CategoryId;
         private List<ItemOptionResponse> itemOptions;
 
         public GetItemResponse(ItemDto itemDto) {
@@ -112,7 +104,7 @@ public class ItemController {
             this.name = itemDto.getName();
             this.salesYn = itemDto.getSalesYn();
             this.price = itemDto.getPrice();
-            this.CategoryName = itemDto.getCategoryDto().getName();
+            this.CategoryId = itemDto.getCategoryDto().getId();
             this.itemOptions = itemDto.getItemOptions()
                     .stream().map(ItemOptionResponse::new)
                     .collect(Collectors.toList());
@@ -137,4 +129,54 @@ public class ItemController {
             }
         }
     }
+
+    @PutMapping("/item")
+    public ResponseEntity<Result> putItem(@RequestBody ItemRequest putItemRequest){
+
+        List<ItemOptionDto> itemOption = putItemRequest.getRequiredOption().stream().map(ItemRequest.ItemOptionRequest::createItemDto).collect(Collectors.toList());
+        itemOption.addAll(putItemRequest.getOtherOption().stream().map(ItemRequest.ItemOptionRequest::createItemDto).collect(Collectors.toList()));
+
+        itemService.putItem(putItemRequest.getItemId()
+                , putItemRequest.getItemName()
+                , putItemRequest.getItemPrice()
+                , itemOption);
+
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(Result.createSuccessResult(null));
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ItemRequest {
+        private Long itemId;
+        private String itemName;
+        private Long itemPrice;
+        private List<ItemOptionRequest> requiredOption;
+        private List<ItemOptionRequest> otherOption;
+
+        @Data
+        @AllArgsConstructor
+        @NoArgsConstructor
+        @Builder
+        public static class ItemOptionRequest {
+            private Long id;
+            private String name;
+            private OptionType optionType;
+            private Long price;
+
+            public static ItemOptionDto createItemDto(ItemOptionRequest itemOptionRequest){
+                return ItemOptionDto.builder()
+                        .id(itemOptionRequest.getId())
+                        .name(itemOptionRequest.getName())
+                        .price(itemOptionRequest.getPrice())
+                        .optionType(itemOptionRequest.getOptionType())
+                        .build();
+
+            }
+        }
+    }
+
 }

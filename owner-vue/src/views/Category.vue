@@ -114,9 +114,11 @@ export default {
         }
         data.categoryList.push(category)
       })
+      console.log(data)
+
       this.$axios({
         method:'put',
-        url:'/store-service/category',
+        url:process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/category',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json;charset=UTF-8'
@@ -133,9 +135,10 @@ export default {
     },
     getCategoryList:function(){
       var vm =this;
+      console.log(process.env.OWNER_SERVICE_BASEURL)
       this.$axios({
         method:'get',
-        url:'/store-service/category',
+        url: process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/category',
         responseType:'json'
       })
       .then(function (response) {
@@ -145,6 +148,7 @@ export default {
     }
   },
   mounted() {
+    alert()
     this.getCategoryList();
   }
 }

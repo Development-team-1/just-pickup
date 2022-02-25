@@ -14,16 +14,24 @@ spring:
 
   cloud:
     gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway Global Filter
+            preLogger: true
+            postLogger: true
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://localhost:8080"
+            allowedOrigins: "*"
+            allowedHeaders: "*"
             allowedMethods:
               - POST
               - GET
               - PUT
               - OPTIONS
               - DELETE
+#        add-to-simple-url-handler-mapping: true
       routes:
         - id: owner-frontend-service
           uri: lb://OWNER-FRONTEND-SERVICE

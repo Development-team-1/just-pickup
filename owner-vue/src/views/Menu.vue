@@ -8,6 +8,7 @@
           :color="modalSet.color.red"
           :name="modalSet.words.register"
           @save="itemSave"
+          @addItemOption="addItemOption"
       />
 
     </v-subheader>
@@ -43,8 +44,9 @@
               :icon="modalSet.icon.modify"
               :color="modalSet.color.primary"
               :name="modalSet.words.modify"
-              @init="editItem(item)"
+              @init="editModalOpen(item)"
               @save="itemSave"
+              @addItemOption="addItemOption"
           />
         </template>
 
@@ -111,10 +113,10 @@ export default {
         itemId : Number,
         itemName : String,
         itemPrice : Number,
-        category: String,
+        categoryId: Number,
         categoryList : ['카테고리1','카테고리2'],
-        requiredOption : ['Ice' , 'Hot'],
-        otherOption : ['얼음많이','샷추가','생크림많이','덜 뜨겁게']
+        requiredOption : [],
+        otherOption : []
       },
       page: 1,
       pageCount: 1,
@@ -145,7 +147,7 @@ export default {
       }
       this.$axios({
         method:'get',
-        url:'/store-service/item',
+        url:process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/item',
         params : searchParam,
         responseType:'json'
       })
@@ -161,7 +163,7 @@ export default {
       this.modalData = {
         itemName : '',
         itemPrice : 0,
-        category: '',
+        categoryId: 0,
         categoryList : [],
         requiredOption : [],
         otherOption : []
@@ -169,41 +171,73 @@ export default {
 
       this.$axios({
         method:'get',
-        url:'/store-service/category',
+        url: process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/category',
         responseType:'json'
       })
       .then(function (response) {
         response.data.data.forEach(function (ele){
-          vm.modalData.categoryList.push(ele.name)
+          vm.modalData.categoryList.push(ele)
         })
       });
     },
-    editItem:function(item){
+    editModalOpen:function(item){
       var vm = this
       this.getModalData();
       // var vm =this;
       this.$axios({
         method:'get',
-        url:'/store-service/item/'+item.id,
+        url: process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/item/'+item.id,
         responseType:'json'
       })
       .then(function (response) {
+        console.log(response)
         var item = response.data.data;
+        console.log(item)
         vm.modalData.itemId = item.id;
         vm.modalData.itemName = item.name;
         vm.modalData.itemPrice = item.price;
-        vm.modalData.category = item.categoryName;
+        vm.modalData.categoryId = item.categoryId;
         item.itemOptions.forEach(function(ele){
+
+          console.log(ele)
           if(ele.optionType === "REQUIRED")
-            vm.modalData.requiredOption.push(ele.name)
+            vm.modalData.requiredOption.push(ele)
           else
-            vm.modalData.otherOption.push(ele.name)
+            vm.modalData.otherOption.push(ele)
         })
       });
-      console.log(this.modalData)
     },
     itemSave:function(){
-      console.log(this.modalData)
+      var method =''
+      var itemData = this.modalData;
+      if (this.modalData.itemId!=null)
+        method='put'
+      else
+        method='post'
+
+      this.$axios({
+        method:method,
+        url: process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/item',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        data: itemData,
+        responseType:'json'
+      })
+        .then(response => console.log(response))
+        .catch(reason => console.log(reason))
+
+    },
+    addItemOption:function (itemOptionValue,type){
+      var item = {
+        name:itemOptionValue,
+        optionType:type
+      }
+      if(type ==='REQUIRED')
+        this.modalData.requiredOption.push(item)
+      else
+        this.modalData.otherOption.push(item)
     }
   },
 

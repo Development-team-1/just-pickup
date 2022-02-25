@@ -35,4 +35,11 @@ public class ItemOption extends BaseEntity {
         this.item = item;
         item.getItemOptions().add(this);
     }
+
+    public ItemOption(OptionType optionType, Long price, String name, Item item) {
+        this.optionType = optionType;
+        this.price = price;
+        this.name = name;
+        this.item = item;
+    }
 }

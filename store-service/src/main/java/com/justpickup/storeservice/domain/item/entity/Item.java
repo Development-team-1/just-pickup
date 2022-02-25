@@ -62,6 +62,11 @@ public class Item extends BaseEntity {
         category.getItems().add(this);
     }
 
+    public void setItemNameAndPrice(String name , Long price){
+        this.name = name;
+        this.price = price;
+    }
+
     // == 생성 메소드 == //
     public static Item createdItem(Category category, Store store, List<ItemOption> itemOptions) {
         Item item = new Item();
