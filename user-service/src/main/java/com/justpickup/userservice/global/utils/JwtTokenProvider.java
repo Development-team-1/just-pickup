@@ -5,10 +5,6 @@ import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -57,8 +53,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-
-
     public String getUserId(String token) {
         return getClaimsFromJwtToken(token).getSubject();
     }
@@ -73,6 +67,10 @@ public class JwtTokenProvider {
 
     public String getRefreshTokenId(String token) {
         return getClaimsFromJwtToken(token).get("value").toString();
+    }
+
+    public Date getExpiredTime(String token) {
+        return getClaimsFromJwtToken(token).getExpiration();
     }
 
     public List<String> getRoles(String token) {

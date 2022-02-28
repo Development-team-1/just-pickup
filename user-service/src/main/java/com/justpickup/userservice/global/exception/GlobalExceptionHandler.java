@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
         // 쿠키 삭제
         ResponseCookie responseCookie = cookieProvider.removeRefreshTokenCookie();
 
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
                 .body(e.getResult());
     }
