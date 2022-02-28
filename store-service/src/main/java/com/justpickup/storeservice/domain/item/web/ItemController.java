@@ -135,8 +135,12 @@ public class ItemController {
     @PutMapping("/item")
     public ResponseEntity<Result> putItem(@RequestBody @Valid ItemRequest itemRequest){
 
-        List<ItemOptionDto> itemOption = itemRequest.getRequiredOption().stream().map(ItemRequest.ItemOptionRequest::createItemDto).collect(Collectors.toList());
-        itemOption.addAll(itemRequest.getOtherOption().stream().map(ItemRequest.ItemOptionRequest::createItemDto).collect(Collectors.toList()));
+        List<ItemOptionDto> itemOption = itemRequest.getRequiredOption().stream()
+                .map(ItemRequest.ItemOptionRequest::createItemOptionDto)
+                .collect(Collectors.toList());
+        itemOption.addAll(itemRequest.getOtherOption().stream()
+                .map(ItemRequest.ItemOptionRequest::createItemOptionDto)
+                .collect(Collectors.toList()));
 
         itemService.putItem(itemRequest.getItemId()
                 , itemRequest.getItemName()
@@ -174,7 +178,7 @@ public class ItemController {
             private OptionType optionType;
             private Long price;
 
-            public static ItemOptionDto createItemDto(ItemOptionRequest itemOptionRequest){
+            public static ItemOptionDto createItemOptionDto(ItemOptionRequest itemOptionRequest){
                 return ItemOptionDto.builder()
                         .id(itemOptionRequest.getId())
                         .name(itemOptionRequest.getName())
@@ -191,8 +195,12 @@ public class ItemController {
 
         Long storeId = 1L;
 
-        List<ItemOptionDto> itemOption = itemRequest.getRequiredOption().stream().map(ItemRequest.ItemOptionRequest::createItemDto).collect(Collectors.toList());
-        itemOption.addAll(itemRequest.getOtherOption().stream().map(ItemRequest.ItemOptionRequest::createItemDto).collect(Collectors.toList()));
+        List<ItemOptionDto> itemOption = itemRequest.getRequiredOption().stream()
+                .map(ItemRequest.ItemOptionRequest::createItemOptionDto)
+                .collect(Collectors.toList());
+        itemOption.addAll(itemRequest.getOtherOption().stream()
+                .map(ItemRequest.ItemOptionRequest::createItemOptionDto)
+                .collect(Collectors.toList()));
 
         itemService.createItem(storeId
                 , itemRequest.getItemName()
