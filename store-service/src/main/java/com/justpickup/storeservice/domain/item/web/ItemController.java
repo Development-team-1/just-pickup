@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -131,19 +133,20 @@ public class ItemController {
     }
 
     @PutMapping("/item")
-    public ResponseEntity<Result> putItem(@RequestBody ItemRequest putItemRequest){
+    public ResponseEntity<Result> putItem(@RequestBody @Valid ItemRequest itemRequest){
 
-        List<ItemOptionDto> itemOption = putItemRequest.getRequiredOption().stream().map(ItemRequest.ItemOptionRequest::createItemDto).collect(Collectors.toList());
-        itemOption.addAll(putItemRequest.getOtherOption().stream().map(ItemRequest.ItemOptionRequest::createItemDto).collect(Collectors.toList()));
+        List<ItemOptionDto> itemOption = itemRequest.getRequiredOption().stream().map(ItemRequest.ItemOptionRequest::createItemDto).collect(Collectors.toList());
+        itemOption.addAll(itemRequest.getOtherOption().stream().map(ItemRequest.ItemOptionRequest::createItemDto).collect(Collectors.toList()));
 
-        itemService.putItem(putItemRequest.getItemId()
-                , putItemRequest.getItemName()
-                , putItemRequest.getItemPrice()
+        itemService.putItem(itemRequest.getItemId()
+                , itemRequest.getItemName()
+                , itemRequest.getItemPrice()
+                , itemRequest.getCategoryId()
                 , itemOption);
 
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(Result.createSuccessResult(null));
+                .body(Result.success());
     }
 
     @Data
@@ -152,8 +155,12 @@ public class ItemController {
     @Builder
     public static class ItemRequest {
         private Long itemId;
+        @NotNull
         private String itemName;
+        @NotNull
         private Long itemPrice;
+        @NotNull
+        private Long categoryId;
         private List<ItemOptionRequest> requiredOption;
         private List<ItemOptionRequest> otherOption;
 
@@ -177,6 +184,26 @@ public class ItemController {
 
             }
         }
+    }
+
+    @PostMapping("/item")
+    public ResponseEntity createItem( @RequestBody @Valid ItemRequest itemRequest){
+
+        Long storeId = 1L;
+
+        List<ItemOptionDto> itemOption = itemRequest.getRequiredOption().stream().map(ItemRequest.ItemOptionRequest::createItemDto).collect(Collectors.toList());
+        itemOption.addAll(itemRequest.getOtherOption().stream().map(ItemRequest.ItemOptionRequest::createItemDto).collect(Collectors.toList()));
+
+        itemService.createItem(storeId
+                , itemRequest.getItemName()
+                , itemRequest.getItemPrice()
+                , itemRequest.getCategoryId()
+                , itemOption);
+
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Result.success());
+
     }
 
 }

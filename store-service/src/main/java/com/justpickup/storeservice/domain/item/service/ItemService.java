@@ -14,5 +14,7 @@ public interface ItemService {
 
     Page<ItemDto> findItemList(Long storeId,String word, Pageable pageable);
 
-    void putItem(Long itemId, String itemName, Long itemPrice, List<ItemOptionDto> itemOption);
+    void putItem(Long itemId, String itemName, Long itemPrice, Long categoryId, List<ItemOptionDto> itemOptionDtos);
+
+    void createItem( Long storeId, String itemName, Long itemPrice, Long categoryId, List<ItemOptionDto> itemOptionDtos);
 }

@@ -9,6 +9,7 @@
           :name="modalSet.words.register"
           @save="itemSave"
           @addItemOption="addItemOption"
+          @init="getModalData"
       />
 
     </v-subheader>
@@ -162,7 +163,7 @@ export default {
       var vm =this;
       this.modalData = {
         itemName : '',
-        itemPrice : 0,
+        itemPrice : '',
         categoryId: 0,
         categoryList : [],
         requiredOption : [],
@@ -190,9 +191,7 @@ export default {
         responseType:'json'
       })
       .then(function (response) {
-        console.log(response)
         var item = response.data.data;
-        console.log(item)
         vm.modalData.itemId = item.id;
         vm.modalData.itemName = item.name;
         vm.modalData.itemPrice = item.price;

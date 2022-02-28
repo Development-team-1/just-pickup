@@ -27,6 +27,7 @@
             >
               <v-text-field
                   v-model="modalData.itemName"
+                  :rules="[() => !!modalData.itemName || 'This field is required']"
                   label="이름*"
                   required
               />
@@ -38,6 +39,7 @@
             >
               <v-text-field
                   v-model="modalData.itemPrice"
+                  :rules="[() => !!modalData.itemPrice || 'This field is required']"
                   label="가격*"
                   hint="example of helper text only on focus"
               />
@@ -49,6 +51,7 @@
               <v-select
                   v-model="modalData.categoryId"
                   :items="modalData.categoryList"
+                  :rules="[() => !!modalData.categoryId || 'This field is required']"
                   item-text="name"
                   item-value="categoryId"
                   label="카테고리*"
@@ -149,7 +152,7 @@ export default {
     modalData: {
       itemName : String,
       itemPrice : Number,
-      category: String,
+      categoryId: String,
       categoryList : Array,
       requiredOption : Array,
       otherOption : Array,
@@ -160,8 +163,6 @@ export default {
   },
   methods:{
     save : function () {
-      console.log('save!')
-      this.dialog = false
       this.$emit('save')
     },
     addItemOption : function (itemOptionValue,optionType){
