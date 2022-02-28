@@ -85,7 +85,7 @@ public class JwtTokenProvider {
             return false;
         } catch (ExpiredJwtException e) {
             log.error("JWT token is expired: {}", e.getMessage());
-            return false;
+            throw e;
         } catch (UnsupportedJwtException e) {
             log.error("JWT token is unsupported: {}", e.getMessage());
             return false;
