@@ -1,3 +1,5 @@
+import jwt from '../common/jwt.js';
+
 export default {
   requestRegisterUser(user) {
     return axios.post("http://localhost:8001/user-service/store-owner", user);
@@ -11,10 +13,12 @@ export default {
 
     try {
       const response = await axios.post("http://localhost:8001/user-service/login", user);
-      console.log(response);
-      const AUTH_TOKEN = response.data.data.access_token;
-      localStorage.setItem('access_token', AUTH_TOKEN);
-      axios.defaults.headers.common['Authorization'] =  AUTH_TOKEN;
+      const data = response.data.data;
+
+      jwt.saveToken(data.accessToken);
+      jwt.saveExpiredTime(data.expiredTime);
+
+      axios.defaults.headers.common['Authorization'] =  "Bearer " + data.accessToken;
 
       return true;
     } catch (err) {
