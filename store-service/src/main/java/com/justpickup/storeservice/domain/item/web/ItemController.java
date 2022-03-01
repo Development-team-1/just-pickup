@@ -1,16 +1,12 @@
 package com.justpickup.storeservice.domain.item.web;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.justpickup.storeservice.domain.item.dto.ItemDto;
 import com.justpickup.storeservice.domain.item.service.ItemService;
+import com.justpickup.storeservice.domain.itemoption.dto.ItemOptionDto;
+import com.justpickup.storeservice.domain.itemoption.entity.OptionType;
 import com.justpickup.storeservice.global.dto.Result;
 import com.justpickup.storeservice.global.entity.Yn;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Parameter;
+import lombok.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -18,7 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Serializable;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,8 +80,6 @@ public class ItemController {
             int startPage;
             int totalPage;
         }
-
-
     }
 
 
@@ -103,12 +98,120 @@ public class ItemController {
         private String name;
         private Yn salesYn;
         private Long price;
+        private Long CategoryId;
+        private List<ItemOptionResponse> itemOptions;
 
         public GetItemResponse(ItemDto itemDto) {
             this.id = itemDto.getId();
             this.name = itemDto.getName();
             this.salesYn = itemDto.getSalesYn();
             this.price = itemDto.getPrice();
+            this.CategoryId = itemDto.getCategoryDto().getId();
+            this.itemOptions = itemDto.getItemOptions()
+                    .stream().map(ItemOptionResponse::new)
+                    .collect(Collectors.toList());
+        }
+
+        @Data
+        static class ItemOptionResponse{
+            private Long id;
+
+            private OptionType optionType;
+
+            private Long price;
+
+            private String name;
+
+            public ItemOptionResponse(ItemOptionDto itemOptionDto) {
+
+                this.id = itemOptionDto.getId();
+                this.optionType = itemOptionDto.getOptionType();
+                this.price = itemOptionDto.getPrice();
+                this.name = itemOptionDto.getName();
+            }
         }
     }
+
+    @PutMapping("/item")
+    public ResponseEntity<Result> putItem(@RequestBody @Valid ItemRequest itemRequest){
+
+        List<ItemOptionDto> itemOption = itemRequest.getRequiredOption().stream()
+                .map(ItemRequest.ItemOptionRequest::createItemOptionDto)
+                .collect(Collectors.toList());
+        itemOption.addAll(itemRequest.getOtherOption().stream()
+                .map(ItemRequest.ItemOptionRequest::createItemOptionDto)
+                .collect(Collectors.toList()));
+
+        itemService.putItem(itemRequest.getItemId()
+                , itemRequest.getItemName()
+                , itemRequest.getItemPrice()
+                , itemRequest.getCategoryId()
+                , itemOption);
+
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(Result.success());
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ItemRequest {
+        private Long itemId;
+        @NotNull
+        private String itemName;
+        @NotNull
+        private Long itemPrice;
+        @NotNull
+        private Long categoryId;
+        private List<ItemOptionRequest> requiredOption;
+        private List<ItemOptionRequest> otherOption;
+
+        @Data
+        @AllArgsConstructor
+        @NoArgsConstructor
+        @Builder
+        public static class ItemOptionRequest {
+            private Long id;
+            private String name;
+            private OptionType optionType;
+            private Long price;
+
+            public static ItemOptionDto createItemOptionDto(ItemOptionRequest itemOptionRequest){
+                return ItemOptionDto.builder()
+                        .id(itemOptionRequest.getId())
+                        .name(itemOptionRequest.getName())
+                        .price(itemOptionRequest.getPrice())
+                        .optionType(itemOptionRequest.getOptionType())
+                        .build();
+
+            }
+        }
+    }
+
+    @PostMapping("/item")
+    public ResponseEntity createItem( @RequestBody @Valid ItemRequest itemRequest){
+
+        Long storeId = 1L;
+
+        List<ItemOptionDto> itemOption = itemRequest.getRequiredOption().stream()
+                .map(ItemRequest.ItemOptionRequest::createItemOptionDto)
+                .collect(Collectors.toList());
+        itemOption.addAll(itemRequest.getOtherOption().stream()
+                .map(ItemRequest.ItemOptionRequest::createItemOptionDto)
+                .collect(Collectors.toList()));
+
+        itemService.createItem(storeId
+                , itemRequest.getItemName()
+                , itemRequest.getItemPrice()
+                , itemRequest.getCategoryId()
+                , itemOption);
+
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Result.success());
+
+    }
+
 }

@@ -26,7 +26,7 @@ public class ItemOption extends BaseEntity {
 
     private String name;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY , cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id")
     private Item item;
 
@@ -34,5 +34,12 @@ public class ItemOption extends BaseEntity {
     public void setItem(Item item) {
         this.item = item;
         item.getItemOptions().add(this);
+    }
+
+    public ItemOption(OptionType optionType, Long price, String name, Item item) {
+        this.optionType = optionType;
+        this.price = price;
+        this.name = name;
+        this.item = item;
     }
 }

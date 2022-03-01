@@ -56,11 +56,11 @@
 
 <script>
 import draggable from 'vuedraggable'
+import store from "@/api/store";
 import {
   mdiContentSave, mdiDelete,
   mdiPlus,
 } from '@mdi/js'
-import axios from "axios";
 
 export default {
   name: "Category",
@@ -115,32 +115,18 @@ export default {
         }
         data.categoryList.push(category)
       })
-      axios({
-        method:'put',
-        url:'/store-service/category',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
-        data: data,
-        responseType:'json'
-      })
-      .then(function (response) {
-        console.log(response)
-        vm.deletedList=[]
-        vm.getCategoryList()
+
+      store.putCategoryList(data)
+        .then(function () {
+          vm.deletedList=[]
+          vm.getCategoryList()
       });
 
     },
     getCategoryList:function(){
       var vm =this;
-      axios({
-        method:'get',
-        url:'/store-service/category',
-        responseType:'json'
-      })
+      store.getCategoryList()
       .then(function (response) {
-        console.log(response.data.data)
         vm.categoryList = response.data.data;
       });
     }

@@ -4,6 +4,7 @@ import com.justpickup.storeservice.domain.category.dto.CategoryDto;
 import com.justpickup.storeservice.domain.category.entity.Category;
 import com.justpickup.storeservice.domain.category.exception.NotFoundStoreException;
 import com.justpickup.storeservice.domain.category.repository.CategoryRepository;
+import com.justpickup.storeservice.domain.category.repository.CategoryRepositoryCustom;
 import com.justpickup.storeservice.domain.store.entity.Store;
 import com.justpickup.storeservice.domain.store.repository.StoreRepository;
 import com.justpickup.storeservice.global.exception.CustomException;
@@ -23,17 +24,18 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final CategoryRepositoryCustom categoryRepositoryCustom;
     private final StoreRepository storeRepository;
 
     public List<CategoryDto> getCategoryList(Long storeId){
 
-        return categoryRepository.findAllByStoreIdOrderByOrder(storeId)
+        return categoryRepositoryCustom.getCategoryList(storeId)
                 .stream()
                 .map(CategoryDto::new)
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void putCategoryList(Long storeId , List<CategoryDto> categoryDtoList , List<CategoryDto> deletedCategoryDtoList ){
 
         Store store = storeRepository.findById(storeId)

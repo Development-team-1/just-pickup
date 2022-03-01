@@ -22,11 +22,11 @@ public class CategoryDto {
     private Store store;
     private List<ItemDto> items;
 
+
     public CategoryDto(Category category) {
         this.id = category.getId();
         this.name = category.getName();
         this.order = category.getOrder();
-        this.store = category.getStore();
         this.items = category.getItems().stream()
                 .map(ItemDto::createItemDto)
                 .collect(Collectors.toList());

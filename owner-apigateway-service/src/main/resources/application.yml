@@ -14,6 +14,12 @@ spring:
 
   cloud:
     gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway Global Filter
+            preLogger: true
+            postLogger: true
       globalcors:
         cors-configurations:
           '[/**]':
@@ -24,6 +30,7 @@ spring:
               - DELETE
               - PUT
               - OPTIONS
+              - DELETE
             allowedHeaders: '*'
             allow-credentials: true
       routes:

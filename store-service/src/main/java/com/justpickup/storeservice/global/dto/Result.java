@@ -33,4 +33,12 @@ public class Result<T> {
                 .data(data)
                 .build();
     }
+
+    public static Result success(){
+        return Result.builder()
+                .code(Code.SUCCESS)
+                .message("성공")
+                .data(null)
+                .build();
+    }
 }
