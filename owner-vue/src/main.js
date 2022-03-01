@@ -3,7 +3,7 @@ import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import router from './router';
 import axios from "axios";
-import auth from "./api/auth.js"
+import auth from "./api/auth.js";
 
 axios.defaults.withCredentials = true;
 
@@ -20,26 +20,23 @@ axios.interceptors.response.use(
     return response;
   },
   async (error) => {
-      try {
-        const originalRequest = error.config;
-        if (error.response.status === 401) {
-          // access token 만료 시
-          if (error.response.data.code == "EXPIRED") {
-            const accessToken = await auth.requestReissue();
-
-            originalRequest.headers.Authorization = "Bearer " + accessToken;
-            return axios(originalRequest);
-          }
-          // 그외 에러일 시
-          alert("로그인 정보가 일치하지 않습니다.");
-          await router.replace('/login');
-          return;
+    const originalRequest = error.config;
+    if (error.response.status === 401) {
+      let code = error.response.data.code;
+      if (code === "EXPIRED") {
+        console.log("## expired");
+        try {
+          const accessToken = await auth.requestReissue();
+          originalRequest.headers.Authorization = "Bearer " + accessToken;
+          return axios(originalRequest);
+        } catch (reissueError) {
+          window.location.href = "http://localhost:8080";
+          alert("권한이 없습니다. 다시 로그인 해주세요");
         }
-      } catch (error) {
-          alert("로그인 정보가 일치하지 않습니다.");
-          await router.replace('/login');
-          return;
-      }
+       }
+      window.location.href = "http://localhost:8080";
+      alert("권한이 없습니다. 다시 로그인해주세요.");
+    }
     return Promise.reject(error);
   }
 );

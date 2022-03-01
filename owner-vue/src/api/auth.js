@@ -21,6 +21,6 @@ export default {
   requestCheckAccessToken() {
     axios.defaults.headers.common['Authorization'] =  "Bearer " + jwt.getToken();
 
-    return axios.get("http://localhost:8001/user-service/auth/check/accessToken");
+    return axios.get("http://localhost:8001/user-service/auth/check/access-token");
   }
 }

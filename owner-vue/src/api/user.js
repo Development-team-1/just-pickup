@@ -23,8 +23,6 @@ export default {
       return true;
     } catch (err) {
       console.log("Error = ", err);
-      alert("로그인 실패!");
-
       return false;
     }
 
