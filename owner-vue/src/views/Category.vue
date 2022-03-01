@@ -56,6 +56,7 @@
 
 <script>
 import draggable from 'vuedraggable'
+import store from "@/api/store";
 import {
   mdiContentSave, mdiDelete,
   mdiPlus,
@@ -114,41 +115,23 @@ export default {
         }
         data.categoryList.push(category)
       })
-      console.log(data)
 
-      this.$axios({
-        method:'put',
-        url:process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/category',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
-        data: data,
-        responseType:'json'
-      })
-      .then(function (response) {
-        console.log(response)
-        vm.deletedList=[]
-        vm.getCategoryList()
+      store.putCategoryList(data)
+        .then(function () {
+          vm.deletedList=[]
+          vm.getCategoryList()
       });
 
     },
     getCategoryList:function(){
       var vm =this;
-      console.log(process.env.OWNER_SERVICE_BASEURL)
-      this.$axios({
-        method:'get',
-        url: process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/category',
-        responseType:'json'
-      })
+      store.getCategoryList()
       .then(function (response) {
-        console.log(response.data.data)
         vm.categoryList = response.data.data;
       });
     }
   },
   mounted() {
-    alert()
     this.getCategoryList();
   }
 }

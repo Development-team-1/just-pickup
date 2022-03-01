@@ -72,6 +72,7 @@ import {
 } from '@mdi/js'
 // import axios from "axios";
 import MenuItem from "@/views/MenuItem";
+import store from "@/api/store";
 
 export default {
   name: "Menu",
@@ -170,41 +171,31 @@ export default {
         otherOption : []
       }
 
-      this.$axios({
-        method:'get',
-        url: process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/category',
-        responseType:'json'
-      })
-      .then(function (response) {
-        response.data.data.forEach(function (ele){
-          vm.modalData.categoryList.push(ele)
-        })
-      });
+      store.getCategoryList()
+        .then(function (response) {
+          response.data.data.forEach(function (ele){
+            vm.modalData.categoryList.push(ele)
+          })
+        });
     },
     editModalOpen:function(item){
       var vm = this
       this.getModalData();
-      // var vm =this;
-      this.$axios({
-        method:'get',
-        url: process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/item/'+item.id,
-        responseType:'json'
-      })
-      .then(function (response) {
-        var item = response.data.data;
-        vm.modalData.itemId = item.id;
-        vm.modalData.itemName = item.name;
-        vm.modalData.itemPrice = item.price;
-        vm.modalData.categoryId = item.categoryId;
-        item.itemOptions.forEach(function(ele){
 
-          console.log(ele)
-          if(ele.optionType === "REQUIRED")
-            vm.modalData.requiredOption.push(ele)
-          else
-            vm.modalData.otherOption.push(ele)
-        })
-      });
+      store.getItemById(item.id)
+        .then(function (response) {
+          var item = response.data.data;
+          vm.modalData.itemId = item.id;
+          vm.modalData.itemName = item.name;
+          vm.modalData.itemPrice = item.price;
+          vm.modalData.categoryId = item.categoryId;
+          item.itemOptions.forEach(function(ele){
+            if(ele.optionType === "REQUIRED")
+              vm.modalData.requiredOption.push(ele)
+            else
+              vm.modalData.otherOption.push(ele)
+          })
+        });
     },
     itemSave:function(){
       var method =''
@@ -214,16 +205,7 @@ export default {
       else
         method='post'
 
-      this.$axios({
-        method:method,
-        url: process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/item',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
-        data: itemData,
-        responseType:'json'
-      })
+      store.saveItem(method,itemData)
         .then(response => console.log(response))
         .catch(reason => console.log(reason))
 

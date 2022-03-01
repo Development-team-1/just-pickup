@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,11 +41,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto findItemByItemId(Long itemId) {
-        Item findItem = itemRepository.findById(itemId)
+        Item findItem = itemRepositoryCustom.findById(itemId)
                 .orElseThrow(() -> new NotExistItemException("존재하지 않는 아이템 입니다."));
 
         return ItemDto.createWithCategoryItemDtoAndItemOption(findItem);
     }
+
 
     @Override
     public Page<ItemDto> findItemList( Long storeId,String word, Pageable pageable) {
@@ -73,6 +75,7 @@ public class ItemServiceImpl implements ItemService {
 
         itemOptionDtos
                 .forEach(itemOptionDto -> {
+                    if(itemOptionDto.getId()==null) return;
                     if (itemOptionRepository.existsById(itemOptionDto.getId()))
                             itemOptionRepository.save(ItemOptionDto.createItemOption(itemOptionDto, item));
                 });
