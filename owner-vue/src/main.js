@@ -5,6 +5,7 @@ import router from './router'
 import axios from "axios";
 import customUtil from './util/customUtil'
 
+
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 Vue.prototype.$customUtil = customUtil;
@@ -16,4 +17,3 @@ new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')
-
