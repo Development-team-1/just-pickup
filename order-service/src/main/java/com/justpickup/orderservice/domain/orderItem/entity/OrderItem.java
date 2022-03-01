@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,11 +28,30 @@ public class OrderItem extends BaseEntity {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @OneToMany(mappedBy = "orderItem")
-    private List<OrderItemOption> orderItemOptions;
+    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL)
+    private List<OrderItemOption> orderItemOptions = new ArrayList<>();
 
     private Long price;
 
     private Long count;
 
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public void addOrderItemOption(OrderItemOption orderItemOption) {
+        this.orderItemOptions.add(orderItemOption);
+        orderItemOption.setOrderItem(this);
+    }
+
+    public static OrderItem of(Long itemId, Long price, Long count, OrderItemOption... orderItemOptions) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.itemId = itemId;
+        orderItem.price = price;
+        orderItem.count = count;
+        for (OrderItemOption orderItemOption : orderItemOptions) {
+            orderItem.addOrderItemOption(orderItemOption);
+        }
+        return orderItem;
+    }
 }
