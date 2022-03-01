@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,9 +70,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                 .stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
 
         String newAccessToken = jwtTokenProvider.createJwtAccessToken(userId, "/refreshToken", roles);
+        Date expiredTime = jwtTokenProvider.getExpiredTime(newAccessToken);
 
         return JwtTokenDto.builder()
                 .accessToken(newAccessToken)
+                .accessTokenExpiredDate(expiredTime)
                 .refreshToken(refreshToken)
                 .build();
     }

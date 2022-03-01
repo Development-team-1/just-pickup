@@ -4,13 +4,30 @@ import VueRouter from 'vue-router'
 import DashboardLayout from "@/views/Layout/DashboardLayout";
 import AuthLayout from "@/views/Layout/AuthLayout";
 
+import jwt from "../common/jwt.js";
+import auth from "../api/auth.js";
+
 Vue.use(VueRouter)
 
+const authCheck = async function (to, from, next) {
+  try {
+    if (jwt.isExpired()) {
+      // refresh 호출
+      await auth.requestReissue();
+    } else {
+      await auth.requestCheckAccessToken();
+    }
+  } catch (error) {
+    await router.replace("/login");
+  }
+  next();
+};
 const routes = [
   {
     path: '/dashboard',
     redirect: 'dashboard',
     component: DashboardLayout,
+    beforeEnter: authCheck,
     children: [
       {
         path: "/dashboard",

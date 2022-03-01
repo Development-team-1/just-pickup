@@ -18,11 +18,12 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -70,6 +71,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         String userId = user.getUsername();
 
         String accessToken = jwtTokenProvider.createJwtAccessToken(userId, request.getRequestURI(), roles);
+        Date expiredTime = jwtTokenProvider.getExpiredTime(accessToken);
         String refreshToken = jwtTokenProvider.createJwtRefreshToken();
 
         refreshTokenServiceImpl.updateRefreshToken(Long.valueOf(userId), jwtTokenProvider.getRefreshTokenId(refreshToken));
@@ -83,17 +85,11 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         response.addCookie(cookie);
 
         // body 설정
-        Map<String, String> tokens = Map.of(
-                "access_token", accessToken
+        Map<String, Object> tokens = Map.of(
+                "accessToken", accessToken,
+                "expiredTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(expiredTime)
         );
 
         new ObjectMapper().writeValue(response.getOutputStream(), Result.createSuccessResult(tokens));
-    }
-
-    @Override
-    protected void unsuccessfulAuthentication
-            (HttpServletRequest request, HttpServletResponse response, AuthenticationException failed)
-            throws IOException, ServletException {
-        log.warn("로그인 실패!!");
     }
 }
