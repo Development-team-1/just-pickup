@@ -23,7 +23,7 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "*"
+            allowedOrigins: "http://localhost:8080"
             allowedMethods:
               - GET
               - POST
@@ -32,6 +32,7 @@ spring:
               - OPTIONS
               - DELETE
             allowedHeaders: '*'
+            allow-credentials: true
       routes:
         - id: owner-frontend-service
           uri: lb://OWNER-FRONTEND-SERVICE
@@ -39,18 +40,22 @@ spring:
             - Path=/owner-frontend-service/**
           filters:
             - RewritePath=/owner-frontend-service/(?<segment>.*),/$\{segment}
+
         - id: order-service
           uri: lb://ORDER-SERVCIE
           predicates:
             - Path=/order-service/**
           filters:
             - RewritePath=/order-service/(?<segment>.*),/$\{segment}
+            - AuthorizationHeaderFilter
+
         - id: store-service
           uri: lb://STORE-SERVCIE
           predicates:
             - Path=/store-service/**
           filters:
             - RewritePath=/store-service/(?<segment>.*),/$\{segment}
+
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
@@ -61,7 +66,7 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user-service/refreshToken
+            - Path=/user-service/auth/reissue
             - Method=GET
           filters:
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
@@ -85,6 +90,7 @@ spring:
             - Path=/user-service/**
           filters:
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+            - AuthorizationHeaderFilter
 
 token:
   access-expired-time: 3600000

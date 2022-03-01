@@ -1,6 +1,7 @@
 package com.justpickup.userservice.domain.jwt.web;
 
-import com.justpickup.userservice.domain.jwt.service.RefreshTokenServiceImpl;
+import com.justpickup.userservice.domain.jwt.service.AccessTokenService;
+import com.justpickup.userservice.domain.jwt.service.RefreshTokenService;
 import com.justpickup.userservice.domain.user.dto.JwtTokenDto;
 import com.justpickup.userservice.global.dto.Result;
 import com.justpickup.userservice.global.utils.CookieProvider;
@@ -15,20 +16,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.HttpHeaders;
+import java.text.SimpleDateFormat;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/auth")
 @Slf4j
 public class AuthController {
 
-    private final RefreshTokenServiceImpl refreshTokenServiceImpl;
+    private final RefreshTokenService refreshTokenService;
+    private final AccessTokenService accessTokenService;
     private final CookieProvider cookieProvider;
 
-    @GetMapping("/refreshToken")
+    @GetMapping("/reissue")
     public ResponseEntity<Result> refreshToken(@RequestHeader("X-AUTH-TOKEN") String accessToken,
                                                @CookieValue("refresh-token") String refreshToken) {
-
-        JwtTokenDto jwtTokenDto = refreshTokenServiceImpl.refreshJwtToken(accessToken, refreshToken);
+        JwtTokenDto jwtTokenDto = refreshTokenService.refreshJwtToken(accessToken, refreshToken);
 
         ResponseCookie responseCookie = cookieProvider.createRefreshTokenCookie(refreshToken);
 
@@ -42,9 +45,12 @@ public class AuthController {
     @AllArgsConstructor
     static class RefreshTokenResponse {
         private String accessToken;
+        private String expiredTime;
 
         public RefreshTokenResponse(JwtTokenDto jwtTokenDto) {
             this.accessToken = jwtTokenDto.getAccessToken();
+            this.expiredTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                    .format(jwtTokenDto.getAccessTokenExpiredDate());
         }
     }
 
@@ -52,12 +58,21 @@ public class AuthController {
     public ResponseEntity<Result> logout(@RequestHeader("X-AUTH-TOKEN") String accessToken,
                                          @RequestHeader("REFRESH-TOKEN") String refreshToken) {
 
-        refreshTokenServiceImpl.logoutToken(accessToken);
+        refreshTokenService.logoutToken(accessToken);
 
         ResponseCookie refreshCookie = cookieProvider.removeRefreshTokenCookie();
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                 .body(Result.createErrorResult(""));
+    }
+
+    @GetMapping("/check/access-token")
+    public ResponseEntity<Result> checkAccessToken(@RequestHeader(name = "Authorization") String authorization) {
+
+        accessTokenService.checkAccessToken(authorization);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Result.createSuccessResult(null));
     }
 }

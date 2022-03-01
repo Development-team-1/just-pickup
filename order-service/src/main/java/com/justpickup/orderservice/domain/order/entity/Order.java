@@ -10,6 +10,7 @@ import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,11 +38,39 @@ public class Order extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Transaction transaction;
 
     @BatchSize(size = 100)
-    @OneToMany(mappedBy = "order")
-    private List<OrderItem> orderItems;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
+    public static Order of(Long userId, Long userCouponId, Long storeId, Long orderPrice,
+                              Transaction transaction, OrderItem... orderItems) {
+        Order order = new Order();
+        order.userId = userId;
+        order.userCouponId = userCouponId;
+        order.storeId = storeId;
+        order.orderPrice = orderPrice;
+
+        order.setTransaction(transaction);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+
+        order.usedPoint = 0L;
+        order.orderStatus = OrderStatus.PLACED;
+        order.orderTime = LocalDateTime.now();
+        return order;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+        transaction.setOrder(this);
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
+        this.orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
 }

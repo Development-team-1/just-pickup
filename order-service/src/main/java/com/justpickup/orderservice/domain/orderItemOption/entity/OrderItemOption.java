@@ -24,4 +24,12 @@ public class OrderItemOption extends BaseEntity {
 
     private Long itemOptionId;
 
+    public void setOrderItem(OrderItem orderItem) {
+        this.orderItem = orderItem;
+    }
+
+    public static OrderItemOption of() {
+        OrderItemOption orderItemOption = new OrderItemOption();
+        return orderItemOption;
+    }
 }

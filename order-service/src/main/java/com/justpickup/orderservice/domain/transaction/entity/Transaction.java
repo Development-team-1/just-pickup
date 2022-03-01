@@ -22,4 +22,13 @@ public class Transaction extends BaseEntity {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public static Transaction of() {
+        Transaction transaction = new Transaction();
+        return transaction;
+    }
+
 }
