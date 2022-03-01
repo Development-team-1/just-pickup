@@ -1,0 +1,56 @@
+/* Generating Color Pack*/
+.color-highlight {
+  color: #AA8E69 !important;
+}
+
+.bg-highlight {
+  background-color: #AA8E69 !important;
+  color: #FFF !important;
+}
+
+.border-highlight {
+  border-color: #AA8E69 !important;
+}
+
+.gradient-highlight {
+  background-image: linear-gradient(to bottom, #BAA286, #AA8E69) !important;
+}
+
+.footer-bar-2 .active-nav,
+.footer-bar-5 strong,
+.footer-bar-4 strong,
+.splide__pagination__page.is-active {
+  background-color: #AA8E69 !important;
+}
+
+.footer-bar-1 .active-nav i,
+.footer-bar-1 .active-nav span,
+.footer-bar-3 .active-nav i {
+  color: #AA8E69 !important;
+}
+
+.form-floating-over > .form-control:focus ~ label {
+  color: #AA8E69;
+}
+
+.form-floating-over > .form-control:not(:placeholder-shown) ~ label {
+  color: #AA8E69;
+}
+
+.form-floating-over > .form-select ~ label {
+  color: #AA8E69;
+}
+
+.color-highlight {
+  color: #AA8E69;
+}
+
+.bg-highlight {
+  background-color: #AA8E69;
+  color: #FFF !important;
+}
+
+.interest-check input:checked ~ label {
+  color: #FFF !important;
+  background-color: #AA8E69 !important;
+}
