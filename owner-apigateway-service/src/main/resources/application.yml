@@ -24,14 +24,14 @@ spring:
         cors-configurations:
           '[/**]':
             allowedOrigins: "*"
-            allowedHeaders: "*"
             allowedMethods:
-              - POST
               - GET
+              - POST
+              - DELETE
               - PUT
               - OPTIONS
               - DELETE
-#        add-to-simple-url-handler-mapping: true
+            allowedHeaders: '*'
       routes:
         - id: owner-frontend-service
           uri: lb://OWNER-FRONTEND-SERVICE
@@ -75,9 +75,15 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
+            - Path=/user-service/store-owner
+            - Method=POST
+          filters:
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
             - Path=/user-service/**
           filters:
-            - AuthorizationHeaderFilter
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
 
 token:

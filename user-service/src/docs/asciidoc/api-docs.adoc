@@ -69,3 +69,9 @@ domain-httpRequestCode-etc
 operation::customer-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 === 회원 조회 (존재하지 않는 회원)
 operation::customer-get-notExistUserException[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
+
+== 점주
+=== 회원가입 - 점주
+operation::storeOwner-post[snippets='curl-request,http-request,http-response,request-fields,response-fields']
+=== 회원가입 - 점주 : 중복 이메일
+operation::storeOwner-post-duplicateUserEmailException[snippets='curl-request,http-request,http-response,request-fields,response-fields']
