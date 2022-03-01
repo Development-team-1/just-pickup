@@ -44,9 +44,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             // JWT 토큰 판별
             String token = authorizationHeader.replace("Bearer", "");
 
-            if (!jwtTokenProvider.validateJwtToken(token)) {
-                return onError(exchange, "JWT token is not valid", HttpStatus.UNAUTHORIZED);
-            }
+            jwtTokenProvider.validateJwtToken(token);
 
             String subject = jwtTokenProvider.getUserId(token);
             if (false == jwtTokenProvider.getRoles(token).contains("StoreOwner")) {
