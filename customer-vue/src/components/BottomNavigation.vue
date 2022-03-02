@@ -1,5 +1,7 @@
 <template>
   <v-bottom-navigation
+      app
+      fixed
       grow
       :value="value"
       color="primary"

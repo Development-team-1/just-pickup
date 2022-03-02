@@ -1,5 +1,8 @@
 <template>
-  <v-app-bar app dense>
+  <v-app-bar
+      app
+      dense
+  >
     <v-app-bar-nav-icon>
       <v-icon>mdi-arrow-left</v-icon>
     </v-app-bar-nav-icon>
