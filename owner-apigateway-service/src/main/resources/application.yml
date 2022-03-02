@@ -46,14 +46,15 @@ spring:
           predicates:
             - Path=/order-service/**
           filters:
-            - RewritePath=/order-service/(?<segment>.*),/$\{segment}
             - AuthorizationHeaderFilter
+            - RewritePath=/order-service/(?<segment>.*),/$\{segment}
 
         - id: store-service
           uri: lb://STORE-SERVCIE
           predicates:
             - Path=/store-service/**
           filters:
+            - AuthorizationHeaderFilter
             - RewritePath=/store-service/(?<segment>.*),/$\{segment}
 
         - id: user-service

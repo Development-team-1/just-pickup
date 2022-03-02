@@ -70,8 +70,7 @@ import {
   mdiPlus,
 
 } from '@mdi/js'
-// import axios from "axios";
-import MenuItem from "@/views/MenuItem";
+import MenuItem from "@/components/MenuItem";
 import store from "@/api/store";
 
 export default {

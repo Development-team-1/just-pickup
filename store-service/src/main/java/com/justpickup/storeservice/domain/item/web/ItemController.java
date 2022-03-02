@@ -27,9 +27,10 @@ public class ItemController {
 
     @GetMapping("/item")
     public ResponseEntity<Result<GetItemResponse>> getItemList( @RequestParam String word,
-                                                               @PageableDefault(page = 0, size = 10) Pageable pageable){
+                                                               @PageableDefault(page = 0, size = 10) Pageable pageable,
+                                                                @RequestHeader(value = "user-id") String userId ){
 
-        Long storeId = 1L;
+        Long storeId = Long.parseLong(userId);
 
         Page<ItemDto> itemDtoList = itemService.findItemList(storeId,word,pageable);
         List<GetItemListResponse.Item> itemList = itemDtoList.stream()
@@ -191,9 +192,10 @@ public class ItemController {
     }
 
     @PostMapping("/item")
-    public ResponseEntity createItem( @RequestBody @Valid ItemRequest itemRequest){
+    public ResponseEntity createItem( @RequestBody @Valid ItemRequest itemRequest,
+                                      @RequestHeader(value = "user-id") String userId ){
 
-        Long storeId = 1L;
+        Long storeId = Long.parseLong(userId);
 
         List<ItemOptionDto> itemOption = itemRequest.getRequiredOption().stream()
                 .map(ItemRequest.ItemOptionRequest::createItemOptionDto)

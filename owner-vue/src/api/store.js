@@ -5,7 +5,7 @@ export default {
         return axios.get(process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/category');
     },
     putCategoryList(data){
-        return this.$axios({
+        return axios({
             method:'put',
             url:process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/category',
             headers: {

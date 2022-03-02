@@ -8,10 +8,6 @@ import auth from "./api/auth.js";
 axios.defaults.withCredentials = true;
 
 Vue.config.productionTip = false
-Vue.prototype.$axios = axios;
-Vue.prototype.$customUtil = customUtil;
-
-console.log(process.env)
 
 new Vue({
   vuetify,

@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import ItemOption from "@/views/ItemOption";
+import ItemOption from "@/components/ItemOption";
 export default {
   name: "MenuItem",
   components:{
