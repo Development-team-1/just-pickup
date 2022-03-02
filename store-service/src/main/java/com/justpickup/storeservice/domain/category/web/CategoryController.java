@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,9 +22,8 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/category")
-    public ResponseEntity getCategoryList( ){
-        // TODO: 2022-02-09 storeId hard coding 변경해야함
-        Long storeId = 1L;
+    public ResponseEntity getCategoryList(@RequestHeader(value = "user-id") String userId ){
+        Long storeId = Long.parseLong(userId);
         List<CategoryDto> categoryList = categoryService.getCategoryList(storeId);
 
         List<CategoryResponse> categoryResponseList = categoryList.stream()
