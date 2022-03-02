@@ -1,15 +1,17 @@
 package com.justpickup.userservice.domain.jwt.service;
 
-import com.justpickup.userservice.domain.user.dto.CustomerDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.userservice.domain.user.dto.OAuthAttributeDto;
 import com.justpickup.userservice.domain.user.entity.Customer;
 import com.justpickup.userservice.domain.user.repository.CustomerRepository;
-import com.justpickup.userservice.domain.user.repository.UserRepository;
-import com.justpickup.userservice.domain.user.service.UserService;
 import com.justpickup.userservice.domain.user.service.UserServiceImpl;
+import com.justpickup.userservice.global.dto.Result;
+import com.justpickup.userservice.global.utils.CookieProvider;
 import com.justpickup.userservice.global.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -20,11 +22,18 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,6 +46,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenService refreshTokenService;
     private final UserServiceImpl userServiceImpl;
+    private final CookieProvider cookieProvider;
 
     @Override
     @Transactional
@@ -54,27 +64,30 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         // OAuth2UserService
         OAuthAttributeDto attributeDto = OAuthAttributeDto.of(registrationId, userNameAttributeName,oAuth2User.getAttributes());
 
-
         Customer customer = saveCustomer(attributeDto);
-
-
-        // TODO: 2022/02/16 Response에 token 담아 보내기
 
         String userEmail = customer.getEmail();
 
-
         Collection<? extends GrantedAuthority> authorities = userServiceImpl.loadUserByUsername(userEmail).getAuthorities();
-        List<String> roles = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
 
-        String accessToken = jwtTokenProvider.createJwtAccessToken(userEmail, request.getRequestURI(), roles);
+        List<String> roles = authorities
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        Long customerId = customer.getId();
+
         String refreshToken = jwtTokenProvider.createJwtRefreshToken();
 
-        refreshTokenService.updateRefreshToken(customer.getId(), jwtTokenProvider.getRefreshTokenId(refreshToken));
+        refreshTokenService.updateRefreshToken(customerId, jwtTokenProvider.getRefreshTokenId(refreshToken));
 
-        response.setHeader("Access-token",accessToken);
-        response.setHeader("refresh-token",refreshToken);
+        // 쿠키 설정
+        ResponseCookie refreshTokenCookie = cookieProvider.createRefreshTokenCookie(refreshToken);
 
+        Cookie cookie = cookieProvider.of(refreshTokenCookie);
 
+        response.setContentType(APPLICATION_JSON_VALUE);
+        response.addCookie(cookie);
 
         return new DefaultOAuth2User(
                 authorities

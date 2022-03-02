@@ -1,3 +1,6 @@
 module.exports = {
-  transpileDependencies: true
+  transpileDependencies: true,
+  devServer: {
+    allowedHosts: 'all',
+  },
 }
