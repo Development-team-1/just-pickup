@@ -29,6 +29,8 @@ public class Store extends BaseEntity {
 
     private LocalDateTime businessEndTime;
 
+    private String name;
+
     private String phoneNumber;
 
     @Embedded
@@ -37,7 +39,7 @@ public class Store extends BaseEntity {
     @Embedded
     private Photo photo;
 
-    @OneToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "map_id")
     private Map map;
 
@@ -59,5 +61,14 @@ public class Store extends BaseEntity {
     public void addItem(Item item) {
         items.add(item);
         item.setStore(this);
+    }
+
+    public static Store of(Address address, Map map, Long userId, String name) {
+        Store store = new Store();
+        store.address = address;
+        store.map = map;
+        store.userId = userId;
+        store.name = name;
+        return store;
     }
 }
