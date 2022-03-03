@@ -26,7 +26,7 @@ public class StoreController {
 
     private final StoreService storeService;
 
-    @GetMapping("/searchStore")
+    @GetMapping("/search-store")
     public ResponseEntity<Result> searchStore(@Valid SearchStoreCondition condition,
                                               @PageableDefault(page = 0, size = 2) Pageable pageable) {
         SliceImpl<SearchStoreResult> searchStoreScroll = storeService.findSearchStoreScroll(condition, pageable);

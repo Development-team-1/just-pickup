@@ -10,6 +10,6 @@ export default {
         page: page
       }
     }
-    return axios.get("http://localhost:8000/store-service/searchStore", options);
+    return axios.get("http://localhost:8000/store-service/search-store", options);
   }
 }
