@@ -15,6 +15,25 @@ spring:
 
   cloud:
     gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway Global Filter
+            preLogger: true
+            postLogger: true
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://just-pickup.com:8080"
+            allowedMethods:
+              - GET
+              - POST
+              - DELETE
+              - PUT
+              - OPTIONS
+              - DELETE
+            allowedHeaders: '*'
+            allow-credentials: true
       routes:
         - id: owner-frontend-service
           uri: lb://CUSTOMER-FRONTEND-SERVICE
@@ -33,6 +52,7 @@ spring:
           predicates:
             - Path=/store-service/**
           filters:
+            - AuthorizationHeaderFilter
             - RewritePath=/store-service/(?<segment>.*),/$\{segment}
         - id: user-service
           uri: lb://USER-SERVICE
@@ -53,6 +73,13 @@ spring:
           predicates:
             - Path=/user-service/logout
             - Method=POST
+          filters:
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/auth/reissue
+            - Method=GET
           filters:
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
         - id: user-service
