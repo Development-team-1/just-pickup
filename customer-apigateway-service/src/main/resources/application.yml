@@ -1,6 +1,12 @@
 
 server:
   port: 8000
+  ssl:
+    enabled: true
+    key-alias: baeldung
+    key-store-password: 1q2w3e4r!
+    key-store: classpath:baeldung.p12
+    key-store-type: PKCS12
 
 eureka:
   client:
@@ -24,7 +30,7 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://just-pickup.com:8080"
+            allowedOrigins: "https://just-pickup.com:8080"
             allowedMethods:
               - GET
               - POST

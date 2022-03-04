@@ -106,7 +106,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
                 .collect(Collectors.toList()));
         Date expiredTime = jwtTokenProvider.getExpiredTime(accessToken);
 
-        response.sendRedirect("http://just-pickup.com:8080/auth?" +
+        response.sendRedirect("https://just-pickup.com:8080/auth?" +
                 "accessToken="+accessToken+
                 "&expiredTime="+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(expiredTime));
 
