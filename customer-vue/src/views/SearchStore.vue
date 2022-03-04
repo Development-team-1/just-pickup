@@ -33,7 +33,16 @@
           ></v-img>
           <v-card-title>{{ card.name }}</v-card-title>
           <v-card-text>
-            거리 : {{ card.distance }}
+            <v-row>
+              <div class="orange--text ms-4">
+                <v-icon color="orange" dense>mdi-heart</v-icon>
+                {{ card.favoriteCounts }}
+              </div>
+              <div class="grey--text ms-4">
+                <v-icon dense>mdi-map-marker</v-icon>
+                {{ card.distance }}
+              </div>
+            </v-row>
           </v-card-text>
         </v-card>
       </v-col>
@@ -132,9 +141,10 @@ export default {
 
       stores.forEach( (store) => {
         this.cards.push({
-          storeId: store.storeId,
+          storeId: store.id,
           name: store.name,
-          distance: store.distance
+          distance: store.distance,
+          favoriteCounts: store.favoriteCounts
         })
       });
     }
