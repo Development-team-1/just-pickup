@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <app-navigation></app-navigation>
-    <v-main style="background-color: #f2f2f2!important;">
-      <v-container class="px-8 py-8" style="background-color: white; height: 100%">
+    <v-main>
+      <v-container class="px-8 py-8">
         <router-view></router-view>
       </v-container>
     </v-main>
@@ -25,6 +25,11 @@ export default {
 
 <style scoped>
   .container {
-    max-width: 960px;
+    max-width: 768px;
+    background-color: white;
+    height: 100%;
+  }
+  main {
+    background-color: #f2f2f2!important;
   }
 </style>

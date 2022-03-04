@@ -1,6 +1,17 @@
 import axios from "axios";
 
 export default {
+    requestSearchStore(latitude, longitude, storeName, page) {
+      const options = {
+        params: {
+          latitude: latitude,
+          longitude: longitude,
+          storeName: storeName,
+          page: page
+        }
+      }
+      return axios.get("http://localhost:8000/store-service/search-store", options);
+    },
     getCategoryList(){
         return axios.get(process.env.VUE_APP_CUSTOMER_SERVICE_BASEURL+'/store-service/category/');
     },
