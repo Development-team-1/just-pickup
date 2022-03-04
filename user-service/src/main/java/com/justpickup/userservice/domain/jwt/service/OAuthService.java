@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -75,10 +76,20 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        Long customerId = customer.getId();
+        return new DefaultOAuth2User(
+                authorities
+                , attributeDto.getAttributes()
+                , attributeDto.getNameAttributeKey());
+
+    }
+
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
+        String userEmail = String.valueOf(((DefaultOAuth2User) authentication.getPrincipal()).getAttributes().get("email"));
+
 
         String refreshToken = jwtTokenProvider.createJwtRefreshToken();
-
+        Long customerId = customerRepository.findByEmail(userEmail).get().getId();
         refreshTokenService.updateRefreshToken(customerId, jwtTokenProvider.getRefreshTokenId(refreshToken));
 
         // 쿠키 설정
@@ -89,12 +100,18 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         response.setContentType(APPLICATION_JSON_VALUE);
         response.addCookie(cookie);
 
-        return new DefaultOAuth2User(
-                authorities
-                , attributeDto.getAttributes()
-                , attributeDto.getNameAttributeKey());
+        // body 설정
+        String accessToken = jwtTokenProvider.createJwtAccessToken(String.valueOf(customerId), request.getRequestURI(), authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList()));
+        Date expiredTime = jwtTokenProvider.getExpiredTime(accessToken);
+
+        response.sendRedirect("http://just-pickup.com:8080/auth?" +
+                "accessToken="+accessToken+
+                "&expiredTime="+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(expiredTime));
 
     }
+
 
     @Transactional
     public Customer saveCustomer(OAuthAttributeDto attributeDto){
