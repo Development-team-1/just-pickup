@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -31,10 +32,12 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(StoreController.class)
+@WebMvcTest(StoreCustomerApiController.class)
 @Import(TestConfig.class)
-@AutoConfigureRestDocs(uriHost = "127.0.0.1", uriPort = 8000)
-class StoreControllerTest {
+@AutoConfigureRestDocs(uriHost = "just-pickup.com", uriPort = 8000)
+class StoreCustomerApiControllerTest {
+
+    private final String url = "/api/customer/store";
 
     @Autowired
     MockMvc mockMvc;
@@ -58,7 +61,7 @@ class StoreControllerTest {
                 .willReturn(getWillReturnSearchStore(pageable));
 
         // WHEN
-        ResultActions actions = mockMvc.perform(get("/search-store")
+        ResultActions actions = mockMvc.perform(get(url + "/search")
                 .param("latitude", String.valueOf(condition.getLatitude()))
                 .param("longitude", String.valueOf(condition.getLongitude()))
                 .param("page", String.valueOf(pageable.getPageNumber()))
@@ -68,7 +71,7 @@ class StoreControllerTest {
         // THEN
         actions.andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("searchStore-get",
+                .andDo(document("api-customer-store-search",
                         requestParameters(
                                 parameterWithName("latitude").description("고객의 위도 [필수]"),
                                 parameterWithName("longitude").description("고객의 경도 [필수]"),
@@ -84,16 +87,13 @@ class StoreControllerTest {
                                 fieldWithPath("data.stores[*].favoriteCounts").description("매장 즐겨찾기 수"),
                                 fieldWithPath("data.hasNext").description("더보기 버튼 유무")
                         )
-                        ))
+                ))
         ;
     }
 
     private SliceImpl<SearchStoreResult> getWillReturnSearchStore(Pageable pageable) {
-        SearchStoreResult result_1 = new SearchStoreResult(1L, "이디야커피 마포오벨리스크점", 145.11980562222007);
-        SearchStoreResult result_2 = new SearchStoreResult(2L, "만랩커피 마포점", 150.97181089895466);
-        SearchStoreResult result_3 = new SearchStoreResult(3L, "커피온리 마포역점", 341.25696860337655);
-        return new SliceImpl<>(List.of(result_1, result_2, result_3), pageable,true);
+        SearchStoreResult result_1 = new SearchStoreResult(1L, "이디야커피 마포오벨리스크점", 145.11980562222007, 10L);
+        SearchStoreResult result_2 = new SearchStoreResult(2L, "만랩커피 마포점", 150.97181089895466, 5L);
+        return new SliceImpl<>(List.of(result_1, result_2), pageable,true);
     }
-
-
 }

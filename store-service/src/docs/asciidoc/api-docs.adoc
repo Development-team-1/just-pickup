@@ -79,6 +79,6 @@ operation::put-categoryList[snippets='curl-request,http-request,http-response,re
 
 == 매장
 === 매장 검색 조회
-operation::searchStore-get[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
+operation::api-customer-store-search[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
 
 
