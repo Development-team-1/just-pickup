@@ -52,11 +52,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("refresh-token");
 
         http.oauth2Login()
-            .defaultSuccessUrl("http://just-pickup.com:8080/")
             .userInfoEndpoint()
             .userService(oAuthService)
             .and()
-            .failureUrl("http://just-pickup.com:8080/login");
+            .failureUrl("http://just-pickup.com:8080/login")
+                .successHandler(oAuthService::onAuthenticationSuccess);
 
         http.addFilter(loginAuthenticationFilter);
 //        http.addFilterBefore(new HeaderAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

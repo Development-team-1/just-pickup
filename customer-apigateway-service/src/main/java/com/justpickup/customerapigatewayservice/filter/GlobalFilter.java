@@ -1,4 +1,4 @@
-package com.justpickup.ownerapigatewayservice.filter;
+package com.justpickup.customerapigatewayservice.filter;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
