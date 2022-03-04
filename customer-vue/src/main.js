@@ -4,6 +4,7 @@ import vuetify from "@/plugins/vuetify";
 import router from "./router/router.js";
 import axios from "axios";
 import auth from "@/api/auth";
+import jwt from "@/common/jwt";
 
 axios.defaults.withCredentials = true;
 Vue.config.productionTip = false
@@ -13,6 +14,12 @@ new Vue({
   router,
   render: h => h(App),
 }).$mount('#app')
+
+axios.interceptors.request.use(function (config) {
+  config.headers.Authorization = "Bearer " + jwt.getToken();
+  return config;
+});
+
 
 axios.interceptors.response.use(
     (response) => {
