@@ -10,6 +10,17 @@ public class SearchStoreResult {
     private Long storeId;
     private String storeName;
     private Double distanceMeter;
+    private Long favoriteCounts;
+
+    public SearchStoreResult(Long storeId, String storeName, Double distanceMeter) {
+        this.storeId = storeId;
+        this.storeName = storeName;
+        this.distanceMeter = distanceMeter;
+    }
+
+    public void setFavoriteCounts(Long favoriteCounts) {
+        this.favoriteCounts = favoriteCounts;
+    }
 
     public String convertDistanceToString() {
         // km 으로 표시
@@ -23,4 +34,5 @@ public class SearchStoreResult {
         // ex) 621m
         return new DecimalFormat("0").format(distanceMeter) + "m";
     }
+
 }
