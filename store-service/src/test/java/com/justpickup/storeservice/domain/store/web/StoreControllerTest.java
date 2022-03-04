@@ -81,6 +81,7 @@ class StoreControllerTest {
                                 fieldWithPath("data.stores[*].id").description("매장 고유번호"),
                                 fieldWithPath("data.stores[*].name").description("매장 이름"),
                                 fieldWithPath("data.stores[*].distance").description("고객과의 거리차이 m/km"),
+                                fieldWithPath("data.stores[*].favoriteCounts").description("매장 즐겨찾기 수"),
                                 fieldWithPath("data.hasNext").description("더보기 버튼 유무")
                         )
                         ))
