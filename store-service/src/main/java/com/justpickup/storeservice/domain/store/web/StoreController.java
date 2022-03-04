@@ -48,13 +48,15 @@ public class StoreController {
             private Long id;
             private String name;
             private String distance;
+            private Long favoriteCounts;
         }
 
         public SearchStoreResponse(List<SearchStoreResult> content, boolean hasNext) {
             this.stores = content.stream()
                     .map(result ->
                             new StoreDto(
-                                    result.getStoreId(), result.getStoreName(), result.convertDistanceToString())
+                                    result.getStoreId(), result.getStoreName(),
+                                    result.convertDistanceToString(), result.getFavoriteCounts())
                     )
                     .collect(Collectors.toList());
             this.hasNext = hasNext;
