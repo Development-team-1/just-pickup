@@ -10,6 +10,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +34,11 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public List<SearchStoreResult> findFavoriteStore(SearchStoreCondition condition, Long userId) {
-        return storeRepositoryCustom.findFavoriteStore(condition,userId);
+        List<SearchStoreResult> favoriteStores = storeRepositoryCustom.findFavoriteStore(condition, userId);
+        favoriteStores.forEach(result -> {
+            Long favoriteCounts = favoriteStoreCustom.countFavoriteStoreByStoreId(result.getStoreId());
+            result.setFavoriteCounts(favoriteCounts);
+        });
+        return favoriteStores;
     }
 }

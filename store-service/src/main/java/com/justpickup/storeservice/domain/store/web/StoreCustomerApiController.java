@@ -48,11 +48,13 @@ public class StoreCustomerApiController {
         private Long id;
         private String name;
         private String distance;
+        private Long favoriteCounts;
 
         public FavoriteStoreResponse(SearchStoreResult storeResult) {
             this.id = storeResult.getStoreId();
             this.name = storeResult.getStoreName();
             this.distance = storeResult.convertDistanceToString();
+            this.favoriteCounts = storeResult.getFavoriteCounts();
         }
     }
 
