@@ -146,12 +146,7 @@ export default {
         word: vm.word,
         page: vm.page-1
       }
-      this.$axios({
-        method:'get',
-        url:process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/item',
-        params : searchParam,
-        responseType:'json'
-      })
+      store.getMenu(searchParam)
       .then(function (response) {
         const page = response.data.data.page;
         vm.menus = response.data.data.itemList;
@@ -203,7 +198,6 @@ export default {
         method='put'
       else
         method='post'
-
       store.saveItem(method,itemData)
         .then(response => console.log(response))
         .catch(reason => console.log(reason))

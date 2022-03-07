@@ -1,5 +1,7 @@
 package com.justpickup.storeservice;
 
+import com.justpickup.storeservice.domain.favoritestore.entity.FavoriteStore;
+import com.justpickup.storeservice.domain.favoritestore.repository.FavoriteStoreRepository;
 import com.justpickup.storeservice.domain.map.entity.Map;
 import com.justpickup.storeservice.domain.store.entity.Store;
 import com.justpickup.storeservice.domain.store.repository.StoreRepository;
@@ -22,7 +24,7 @@ public class StoreServiceApplication {
     }
 
     @Bean
-    CommandLineRunner run(StoreRepository storeRepository) {
+    CommandLineRunner run(StoreRepository storeRepository, FavoriteStoreRepository favoriteStoreRepository) {
         return args -> {
             List<Store> stores = new ArrayList<>();
 
@@ -63,6 +65,14 @@ public class StoreServiceApplication {
             );
 
             storeRepository.saveAll(stores);
+
+            List<Long> userList = List.of(1L,2L,3L,4L,5L,6L,7L);
+            userList.forEach(userId -> {
+                stores.forEach(store -> {
+                    favoriteStoreRepository.save(FavoriteStore.of(userId, store));
+                });
+            });
+
         };
     }
 }
