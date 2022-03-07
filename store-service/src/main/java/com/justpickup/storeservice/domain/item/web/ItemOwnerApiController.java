@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,13 +28,16 @@ public class ItemOwnerApiController {
     private final ItemService itemService;
 
     @GetMapping("/item")
-    public ResponseEntity<Result<GetItemResponse>> getItemList( @RequestParam String word,
+    public ResponseEntity<Result<GetItemResponse>> getItemList(@RequestParam(required = false) Optional<String> word,
                                                                @PageableDefault Pageable pageable,
-                                                                @RequestHeader(value = "user-id") String userId ){
+                                                               @RequestHeader(value = "user-id") String userId ){
 
         Long storeId = Long.parseLong(userId);
 
-        Page<ItemDto> itemDtoList = itemService.findItemList(storeId,word,pageable);
+        Page<ItemDto> itemDtoList =
+                itemService.findItemList(storeId,
+                        word.orElse(""),
+                        pageable);
         List<GetItemListResponse.Item> itemList = itemDtoList.stream()
                 .map(GetItemListResponse.Item::new)
                 .collect(Collectors.toList());

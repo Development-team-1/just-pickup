@@ -2,12 +2,12 @@ import axios from "axios";
 
 export default {
     getCategoryList(){
-        return axios.get(process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/api/customer/category');
+        return axios.get(process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/api/owner/category');
     },
     putCategoryList(data){
         return axios({
             method:'put',
-            url:process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/api/customer/category',
+            url:process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/api/owner/category',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json;charset=UTF-8'
@@ -17,10 +17,10 @@ export default {
         })
     },
     getItemById(itemId){
-        return axios.get(process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/api/customer/item/'+itemId)
+        return axios.get(process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/api/owner/item/'+itemId)
     },
     saveItem(method, itemData){
-        const _url = process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/api/customer/item'+(method==='put'?+"/"+itemData.itemId:'')
+        const _url = process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/api/owner/item'+(method==='put'?+"/"+itemData.itemId:'')
         console.log(_url)
         return axios({
             method:method,
@@ -34,6 +34,6 @@ export default {
         })
     },
     getMenu(searchParam){
-        return axios.get(process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/api/customer/item',searchParam);
+        return axios.get(process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/api/owner/item',searchParam);
     },
 }

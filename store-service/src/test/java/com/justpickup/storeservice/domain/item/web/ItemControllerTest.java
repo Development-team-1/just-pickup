@@ -2,12 +2,11 @@ package com.justpickup.storeservice.domain.item.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.storeservice.config.TestConfig;
+import com.justpickup.storeservice.domain.favoritestore.repository.FavoriteStoreRepository;
 import com.justpickup.storeservice.domain.item.dto.ItemDto;
 import com.justpickup.storeservice.domain.item.exception.NotExistItemException;
 import com.justpickup.storeservice.domain.item.service.ItemService;
-import com.justpickup.storeservice.domain.itemoption.dto.ItemOptionDto;
-import com.justpickup.storeservice.domain.itemoption.entity.ItemOption;
-import com.justpickup.storeservice.domain.itemoption.entity.OptionType;
+import com.justpickup.storeservice.domain.store.repository.StoreRepository;
 import com.justpickup.storeservice.global.dto.Code;
 import com.justpickup.storeservice.global.entity.Yn;
 import org.junit.jupiter.api.DisplayName;
@@ -17,18 +16,12 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import javax.validation.constraints.NotNull;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -50,6 +43,12 @@ class ItemControllerTest {
 
     @MockBean
     ItemService itemService;
+
+    @MockBean
+    private StoreRepository storeRepository;
+
+    @MockBean
+    private FavoriteStoreRepository favoriteStoreRepository;
 
     @Test
     @DisplayName("상품 조회")
@@ -89,8 +88,7 @@ class ItemControllerTest {
                                 fieldWithPath("data.salesYn").description("화면 표시 여부 Y/N"),
                                 fieldWithPath("data.price").description("상품 가격")
                         )
-                ))
-        ;
+                ));
     }
 
     @Test
@@ -122,35 +120,6 @@ class ItemControllerTest {
                         )
                         ))
         ;
-    }
-
-    @Test
-    @DisplayName("메뉴 등록")
-    void created_item_success() throws Exception{
-        //given
-        String itemName = "테스트아이템";
-        Long itemPrice = 3000L;
-        Long categoryId = 1L;
-
-        List<ItemController.ItemRequest.ItemOptionRequest> requiredOption = List.of(new ItemController.ItemRequest.ItemOptionRequest(null, "HOT",OptionType.REQUIRED,null));
-        List<ItemController.ItemRequest.ItemOptionRequest> otherOption = List.of(new ItemController.ItemRequest.ItemOptionRequest(null, "샷 추가",OptionType.OTHER,null));
-
-
-        ItemController.ItemRequest itemRequest = new ItemController.ItemRequest(null,itemName,itemPrice,categoryId,requiredOption,otherOption);
-
-        String body = objectMapper.writeValueAsString(itemRequest);
-
-        //when
-        ResultActions perform = mockMvc.perform(post("/item")
-                .content(body)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        );
-
-        //then
-        ResultActions resultActions = perform.andExpect(status().isCreated())
-                .andDo(print());
-
     }
 
 
