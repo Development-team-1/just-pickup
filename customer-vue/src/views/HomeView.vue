@@ -13,18 +13,12 @@
     </v-row>
     <v-row justify="center">
       <v-col>
-        <div class="text-overline" >즐겨찾는 매장입니다.</div>
+        <div class="text-h5" >즐겨찾는 매장입니다.</div>
         <slide-store
           :store-list="favoriteStoreList"
         ></slide-store>
       </v-col>
     </v-row>
-    <v-overlay :value="isLoading">
-      <v-progress-circular
-          indeterminate
-          size="64"
-      ></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
@@ -39,10 +33,13 @@ export default {
   },
   data(){
     return{
-      isLoading: true,
       latitude:0,
       longitude:0,
-      favoriteStoreList:[],
+      favoriteStoreList:{
+        data:[],
+        isActive:'',
+
+      },
     }
   },
   async mounted() {
@@ -51,9 +48,9 @@ export default {
     this.longitude = location.longitude;
     storeApi.getFavoriteStore(this.latitude,this.longitude)
     .then(response =>{
-      this.favoriteStoreList = response.data.data;
+      this.favoriteStoreList.isActive = 'd-none'
+      this.favoriteStoreList.data = response.data.data;
     });
-    this.isLoading = false
   },
   methods:{
     getLocation: async function() {
