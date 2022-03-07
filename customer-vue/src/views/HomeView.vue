@@ -1,21 +1,31 @@
 <template>
-  <v-container
-      fill-height
-  >
-    <v-row>
-      <v-col>
-        <v-card>
-
-          <v-card-title>Hello</v-card-title>
-          <v-card-text>Nice to meet you</v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+  <v-container>
     <v-row justify="center">
       <v-col>
-        <div class="text-h5" >즐겨찾는 매장입니다.</div>
+        <div class="text-h5">
+          회원님과<br>
+          <b><span class="deep-orange--text">가까이 있는 매장</span></b>이에요!
+        </div>
+        <slide-store
+            :store-list="nearbyStores"
+            :id="'nearby'"
+        ></slide-store>
+      </v-col>
+    </v-row>
+
+    <v-divider
+        class="my-5"
+    ></v-divider>
+
+    <v-row justify="center">
+      <v-col>
+        <div class="text-h5" >
+          회원님이<br>
+          <b><span class="deep-orange--text">즐겨찾는 매장</span></b>이에요!
+        </div>
         <slide-store
           :store-list="favoriteStoreList"
+          :id="'favorite'"
         ></slide-store>
       </v-col>
     </v-row>
@@ -38,23 +48,25 @@ export default {
       favoriteStoreList:{
         data:[],
         isActive:'',
-
       },
+      nearbyStores: {
+        data: [],
+        isActive: ''
+      }
     }
   },
   async mounted() {
     const location = await this.getLocation();
     this.latitude = location.latitude;
     this.longitude = location.longitude;
-    storeApi.getFavoriteStore(this.latitude,this.longitude)
-    .then(response =>{
-      this.favoriteStoreList.isActive = 'd-none'
-      this.favoriteStoreList.data = response.data.data;
-    });
+
+    await this.requestFavoriteStore()
+
+    await this.requestNearbyStore();
+
   },
   methods:{
     getLocation: async function() {
-      console.log("initGeoLocation");
       return new Promise(function (resolve, reject) {
         if ('geolocation' in navigator) {
           navigator.geolocation.getCurrentPosition((position) => {
@@ -69,6 +81,32 @@ export default {
           reject();
         }
       });
+    },
+    requestFavoriteStore: async function() {
+      try {
+        const response = await storeApi.getFavoriteStore(this.latitude,this.longitude)
+        this.favoriteStoreList.isActive = 'd-none'
+        this.favoriteStoreList.data = response.data.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    requestNearbyStore: async function() {
+      try {
+        const response = await storeApi.requestNearbyStore(this.latitude, this.longitude, "", 0, 10);
+        const stores = response.data.data.stores;
+        stores.forEach(store => {
+          this.nearbyStores.data.push({
+            id: store.id,
+            name: store.name,
+            distance: store.distance,
+            favoriteCounts: store.favoriteCounts
+          });
+          this.nearbyStores.isActive = 'd-none';
+        })
+      } catch (error) {
+        console.log(error);
+      }
     },
   }
 }

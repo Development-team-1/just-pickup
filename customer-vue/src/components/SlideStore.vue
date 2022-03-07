@@ -6,7 +6,7 @@
       <v-slide-item
           :class="storeList.isActive"
           v-for="n in 3"
-          :key="n"
+          :key="id + n"
       >
         <v-skeleton-loader
             class="my-3 mx-3"
@@ -14,7 +14,7 @@
             height="250"
             width="165"
             type="card"
-            :key="n"
+            :key="id + n"
         ></v-skeleton-loader>
         </v-slide-item>
       <v-slide-item
@@ -31,11 +31,22 @@
           <v-img
               height="165"
               width="165"
-              src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+              :src="require('@/assets/store.jpeg')"
           ></v-img>
-          <v-card-subtitle style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{item.name}}</v-card-subtitle>
+          <v-card-subtitle style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+            <b>{{item.name}}</b>
+          </v-card-subtitle>
           <v-card-text>
-            거리 : {{item.distance}}
+            <v-row>
+              <div class="orange--text ms-4">
+                <v-icon color="orange" small>mdi-heart</v-icon>
+                {{ item.favoriteCounts }}
+              </div>
+              <div class="grey--text ms-4">
+                <v-icon small>mdi-map-marker</v-icon>
+                {{item.distance}}
+              </div>
+            </v-row>
           </v-card-text>
           </v-skeleton-loader>
         </v-card>
@@ -47,9 +58,7 @@
 <script>
 export default {
   name: "SlideStore",
-  props:{
-    storeList:Array,
-  },
+  props:["storeList", "id"],
 
 }
 </script>
