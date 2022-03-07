@@ -4,7 +4,7 @@
       <v-col>
         <div class="text-h5">
           회원님과<br>
-          <b><span class="deep-orange--text lighten-3">가까이 있는 매장</span></b>이에요!
+          <b><span class="deep-orange--text">가까이 있는 매장</span></b>이에요!
         </div>
         <slide-store
             :store-list="nearbyStores"
@@ -20,7 +20,7 @@
       <v-col>
         <div class="text-h5" >
           회원님이<br>
-          <b><span class="deep-orange--text lighten-3">즐겨찾는 매장</span></b>이에요!
+          <b><span class="deep-orange--text">즐겨찾는 매장</span></b>이에요!
         </div>
         <slide-store
           :store-list="favoriteStoreList"
