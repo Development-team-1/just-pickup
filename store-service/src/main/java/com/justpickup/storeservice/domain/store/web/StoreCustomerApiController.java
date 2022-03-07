@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.web.PageableDefault;
@@ -38,19 +37,19 @@ public class StoreCustomerApiController {
 
         List<SearchStoreResult> favoriteStore = storeService.findFavoriteStore(condition,Long.parseLong(userId));
 
-        List<StoreCustomerApiController.SearchStoreResponse> searchStoreResponse
-                = favoriteStore.stream().map(SearchStoreResponse::new).collect(Collectors.toList());
+        List<FavoriteStoreResponse> searchStoreResponse
+                = favoriteStore.stream().map(FavoriteStoreResponse::new).collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK).body(Result.createSuccessResult(searchStoreResponse));
     }
 
     @Data @NoArgsConstructor
-    static class SearchStoreResponse {
+    static class FavoriteStoreResponse {
         private Long id;
         private String name;
         private String distance;
 
-        public SearchStoreResponse(SearchStoreResult storeResult) {
+        public FavoriteStoreResponse(SearchStoreResult storeResult) {
             this.id = storeResult.getStoreId();
             this.name = storeResult.getStoreName();
             this.distance = storeResult.convertDistanceToString();
