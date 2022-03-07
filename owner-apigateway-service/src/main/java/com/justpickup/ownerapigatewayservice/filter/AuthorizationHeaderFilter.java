@@ -33,6 +33,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
+            log.info("AuthorizationHeaderFilter Start: request -> {}", exchange.getRequest());
 
             HttpHeaders headers = request.getHeaders();
             if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
@@ -55,6 +56,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
                     .header("user-id", subject)
                     .build();
 
+            log.info("AuthorizationHeaderFilter End");
             return chain.filter(exchange.mutate().request(newRequest).build());
         };
     }
