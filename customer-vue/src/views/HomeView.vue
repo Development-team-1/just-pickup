@@ -8,6 +8,7 @@
         </div>
         <slide-store
             :store-list="nearbyStores"
+            :id="'nearby'"
         ></slide-store>
       </v-col>
     </v-row>
@@ -24,6 +25,7 @@
         </div>
         <slide-store
           :store-list="favoriteStoreList"
+          :id="'favorite'"
         ></slide-store>
       </v-col>
     </v-row>

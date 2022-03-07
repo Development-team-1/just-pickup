@@ -6,7 +6,7 @@
       <v-slide-item
           :class="storeList.isActive"
           v-for="n in 3"
-          :key="n"
+          :key="id + n"
       >
         <v-skeleton-loader
             class="my-3 mx-3"
@@ -14,7 +14,7 @@
             height="250"
             width="165"
             type="card"
-            :key="n"
+            :key="id + n"
         ></v-skeleton-loader>
         </v-slide-item>
       <v-slide-item
@@ -58,7 +58,7 @@
 <script>
 export default {
   name: "SlideStore",
-  props:["storeList"],
+  props:["storeList", "id"],
 
 }
 </script>
