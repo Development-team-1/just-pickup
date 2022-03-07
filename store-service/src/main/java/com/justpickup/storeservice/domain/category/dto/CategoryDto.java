@@ -1,9 +1,8 @@
 package com.justpickup.storeservice.domain.category.dto;
 
 import com.justpickup.storeservice.domain.category.entity.Category;
-import com.justpickup.storeservice.domain.category.web.CategoryController;
+import com.justpickup.storeservice.domain.category.web.CategoryOwnerApiController;
 import com.justpickup.storeservice.domain.item.dto.ItemDto;
-import com.justpickup.storeservice.domain.item.entity.Item;
 import com.justpickup.storeservice.domain.store.entity.Store;
 import lombok.*;
 
@@ -32,19 +31,18 @@ public class CategoryDto {
                 .collect(Collectors.toList());
     }
 
-    public CategoryDto(CategoryController.PutCategoryRequest.Category category) {
+    public CategoryDto(CategoryOwnerApiController.PutCategoryRequest.Category category) {
         this.id = category.getCategoryId();
         this.name = category.getName();
         this.order = category.getOrder();
     }
 
     public static Category createCategory(CategoryDto categoryDto){
-        Category category = Category.createCategory(
+        return Category.createCategory(
                 categoryDto.getId()
                 ,categoryDto.getName()
                 , categoryDto.getOrder()
                 , categoryDto.getStore());
-        return category;
     }
 
     public void setStore(Store store){

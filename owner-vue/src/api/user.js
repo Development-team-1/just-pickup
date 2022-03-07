@@ -12,7 +12,7 @@ export default {
     }
 
     try {
-      const response = await axios.post("http://localhost:8001/user-service/login", user);
+      const response = await axios.post(process.env.VUE_APP_OWNER_SERVICE_BASEURL+"/user-service/login", user);
       const data = response.data.data;
 
       jwt.saveToken(data.accessToken);
