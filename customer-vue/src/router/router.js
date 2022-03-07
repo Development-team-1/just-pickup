@@ -28,7 +28,12 @@ const routes = [
         path: "/search",
         name: 'search-store',
         component: () => import('../views/SearchStore')
-      }
+      },
+      {
+        path: "/history",
+        name: 'order-history',
+        component: () => import('../views/OrderHistory')
+      },
     ]
   },
   {

@@ -29,19 +29,17 @@ axios.interceptors.response.use(
       const originalRequest = error.config;
       if (error.response.status === 401) {
         let code = error.response.data.code;
-        if (code === "EXPIRED") {
-          console.log("## expired");
-          try {
+        try {
+          if (code === "EXPIRED") {
             const accessToken = await auth.requestReissue();
             originalRequest.headers.Authorization = "Bearer " + accessToken;
             return axios(originalRequest);
-          } catch (reissueError) {
-            window.location.href = process.env.VUE_APP_BASEURL+"/login";
-            alert("권한이 없습니다. 다시 로그인 해주세요");
           }
+        } catch (error2) {
+          window.location.href = process.env.VUE_APP_BASEURL+"/login";
+          alert("권한이 없습니다. 다시 로그인 해주세요");
+          return Promise.reject(error2);
         }
-        window.location.href = process.env.VUE_APP_BASEURL+"/login";
-        alert("권한이 없습니다. 다시 로그인해주세요.");
       }
       return Promise.reject(error);
     }
