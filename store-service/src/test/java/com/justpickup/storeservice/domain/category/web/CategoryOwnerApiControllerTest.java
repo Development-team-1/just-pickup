@@ -1,6 +1,5 @@
 package com.justpickup.storeservice.domain.category.web;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.storeservice.config.TestConfig;
 import com.justpickup.storeservice.domain.category.dto.CategoryDto;
@@ -15,7 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -25,15 +23,14 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 
-@WebMvcTest(CategoryController.class)
+@WebMvcTest(CategoryOwnerApiController.class)
 @Import(TestConfig.class)
 @AutoConfigureRestDocs(uriHost = "127.0.0.1",uriPort = 8001)
-class CategoryControllerTest {
+class CategoryOwnerApiControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -101,30 +98,30 @@ class CategoryControllerTest {
 
         //given
         Long storeId = 1L;
-        List<CategoryController.PutCategoryRequest.Category> categoryList = new ArrayList<>();
-        categoryList.add(CategoryController.PutCategoryRequest.Category.builder()
+        List<CategoryOwnerApiController.PutCategoryRequest.Category> categoryList = new ArrayList<>();
+        categoryList.add(CategoryOwnerApiController.PutCategoryRequest.Category.builder()
                 .categoryId(10L)
                 .name("카테고리1")
                 .order(2)
                 .build());
 
-        categoryList.add(CategoryController.PutCategoryRequest.Category.builder()
+        categoryList.add(CategoryOwnerApiController.PutCategoryRequest.Category.builder()
                 .categoryId(11L)
                 .name("카테고리2")
                 .order(1)
                 .build());
 
-        List<CategoryController.PutCategoryRequest.Category> deletedList = new ArrayList<>();
+        List<CategoryOwnerApiController.PutCategoryRequest.Category> deletedList = new ArrayList<>();
 
-        deletedList.add(CategoryController.PutCategoryRequest.Category.builder()
+        deletedList.add(CategoryOwnerApiController.PutCategoryRequest.Category.builder()
                 .categoryId(11L)
                 .name("Non Coffee")
                 .order(3)
                 .build());
 
 
-        CategoryController.PutCategoryRequest putCategoryRequest =
-                CategoryController.PutCategoryRequest.builder()
+        CategoryOwnerApiController.PutCategoryRequest putCategoryRequest =
+                CategoryOwnerApiController.PutCategoryRequest.builder()
                         .storeId(storeId)
                         .categoryList(categoryList)
                         .deletedList(deletedList)

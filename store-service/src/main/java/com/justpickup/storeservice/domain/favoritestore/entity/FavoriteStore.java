@@ -2,9 +2,7 @@ package com.justpickup.storeservice.domain.favoritestore.entity;
 
 import com.justpickup.storeservice.domain.store.entity.Store;
 import com.justpickup.storeservice.global.entity.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -25,4 +23,11 @@ public class FavoriteStore extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
+
+    public static FavoriteStore of(Long userId , Store store){
+        FavoriteStore favoriteStore = new FavoriteStore();
+        favoriteStore.userId = userId;
+        favoriteStore.store = store;
+        return favoriteStore;
+    }
 }
