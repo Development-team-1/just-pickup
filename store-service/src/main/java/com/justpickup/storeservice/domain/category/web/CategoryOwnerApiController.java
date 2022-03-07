@@ -48,9 +48,11 @@ public class CategoryOwnerApiController {
             this.categoryId = categoryDto.getId();
             this.name= categoryDto.getName();
             this.order= categoryDto.getOrder();
-            this.items = categoryDto.getItems().stream()
+            this.items = categoryDto.getItems()!=null
+                    ?categoryDto.getItems().stream()
                     .map(ItemResponse::new)
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toList())
+                    :null;
         }
 
         @Data

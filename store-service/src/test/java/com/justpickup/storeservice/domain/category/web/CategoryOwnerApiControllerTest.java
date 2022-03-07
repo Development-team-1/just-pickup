@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.storeservice.config.TestConfig;
 import com.justpickup.storeservice.domain.category.dto.CategoryDto;
 import com.justpickup.storeservice.domain.category.service.CategoryService;
+import com.justpickup.storeservice.domain.favoritestore.repository.FavoriteStoreRepository;
+import com.justpickup.storeservice.domain.item.dto.ItemDto;
+import com.justpickup.storeservice.domain.store.repository.StoreRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,6 +25,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -41,6 +45,13 @@ class CategoryOwnerApiControllerTest {
     @MockBean
     private CategoryService categoryService;
 
+    @MockBean
+    private StoreRepository storeRepository;
+
+    @MockBean
+    private FavoriteStoreRepository favoriteStoreRepository;
+
+
     @Test
     @DisplayName("카테고리리스트_가져오기_성공")
     void getCategoryList_success() throws Exception {
@@ -51,21 +62,25 @@ class CategoryOwnerApiControllerTest {
         categoryDtoList.add(CategoryDto.builder()
                 .id(10L)
                 .name("카테고리1")
+                .items(List.of(new ItemDto(1L,"아메리카노",null,5000L)
+                        ,new ItemDto(1L,"카페라테",null,5000L)))
                 .order(1)
                 .build());
 
         categoryDtoList.add(CategoryDto.builder()
                 .id(11L)
                 .name("카테고리2")
+                .items(List.of(new ItemDto(1L,"비스킷",null,5000L)
+                        ,new ItemDto(1L,"와플",null,5000L)))
                 .order(2)
                 .build());
 
-        BDDMockito.given(categoryService.getCategoryList(1L)).willReturn(categoryDtoList);
+        given(categoryService.getCategoryList(any())).willReturn(categoryDtoList);
         //when
 
-        ResultActions actions = mockMvc.perform(MockMvcRequestBuilders
-                .get("/category")
+        ResultActions actions = mockMvc.perform(MockMvcRequestBuilders.get("/api/owner/category")
                 .param("storeId",String.valueOf(storeId))
+                .header("user-id","2")
         );
 
         //then
@@ -85,7 +100,9 @@ class CategoryOwnerApiControllerTest {
                                 fieldWithPath("message").description("메시지"),
                                 fieldWithPath("data[*].categoryId").description("카테고리 고유 번호"),
                                 fieldWithPath("data[*].name").description("카테고리 명"),
-                                fieldWithPath("data[*].order").description("순서")
+                                fieldWithPath("data[*].order").description("순서"),
+                                fieldWithPath("data[*].items[*].id").description("아이템 고유번호"),
+                                fieldWithPath("data[*].items[*].name").description("아이템 명")
                         )
                         ));
 
@@ -130,7 +147,7 @@ class CategoryOwnerApiControllerTest {
         //when
         ResultActions actions = mockMvc.perform(
                 MockMvcRequestBuilders
-                        .put("/category")
+                        .put("/api/owner//category")
                         .content(objectMapper.writeValueAsString(putCategoryRequest) )
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)

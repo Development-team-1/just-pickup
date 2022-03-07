@@ -25,64 +25,6 @@ public class ItemController {
 
     private final ItemService itemService;
 
-    @GetMapping("/item")
-    public ResponseEntity<Result<GetItemResponse>> getItemList( @RequestParam String word,
-                                                               @PageableDefault(page = 0, size = 10) Pageable pageable,
-                                                                @RequestHeader(value = "user-id") String userId ){
-
-        Long storeId = Long.parseLong(userId);
-
-        Page<ItemDto> itemDtoList = itemService.findItemList(storeId,word,pageable);
-        List<GetItemListResponse.Item> itemList = itemDtoList.stream()
-                .map(GetItemListResponse.Item::new)
-                .collect(Collectors.toList());
-
-        GetItemListResponse getItemResponse = new GetItemListResponse(
-                itemList,
-                itemDtoList.getNumber(),
-                itemDtoList.getTotalPages()
-        );
-
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body((Result<GetItemResponse>)Result.createSuccessResult(getItemResponse));
-    }
-
-
-    @Data @NoArgsConstructor @AllArgsConstructor
-    static class GetItemListResponse {
-        private List<Item> itemList;
-        private Page page;
-
-        public GetItemListResponse(List<Item> itemList, int startPage,int totalPage) {
-            this.itemList = itemList;
-            this.page = new Page(startPage,totalPage);
-        }
-
-        @Data
-        static class Item{
-            private Long id;
-            private String name;
-            private Yn salesYn;
-            private Long price;
-            private String categoryName;
-
-            public Item(ItemDto itemDto) {
-                this.id = itemDto.getId();
-                this.name = itemDto.getName();
-                this.salesYn = itemDto.getSalesYn();
-                this.price = itemDto.getPrice();
-                this.categoryName = itemDto.getCategoryDto().getName();
-            }
-        }
-
-        @Data @AllArgsConstructor
-        static class Page {
-            int startPage;
-            int totalPage;
-        }
-    }
-
 
     @GetMapping("/item/{itemId}")
     public ResponseEntity getItem(@PathVariable("itemId") Long itemId) {
@@ -99,121 +41,14 @@ public class ItemController {
         private String name;
         private Yn salesYn;
         private Long price;
-        private Long CategoryId;
-        private List<ItemOptionResponse> itemOptions;
 
         public GetItemResponse(ItemDto itemDto) {
             this.id = itemDto.getId();
             this.name = itemDto.getName();
             this.salesYn = itemDto.getSalesYn();
             this.price = itemDto.getPrice();
-            this.CategoryId = itemDto.getCategoryDto().getId();
-            this.itemOptions = itemDto.getItemOptions()
-                    .stream().map(ItemOptionResponse::new)
-                    .collect(Collectors.toList());
-        }
-
-        @Data
-        static class ItemOptionResponse{
-            private Long id;
-
-            private OptionType optionType;
-
-            private Long price;
-
-            private String name;
-
-            public ItemOptionResponse(ItemOptionDto itemOptionDto) {
-
-                this.id = itemOptionDto.getId();
-                this.optionType = itemOptionDto.getOptionType();
-                this.price = itemOptionDto.getPrice();
-                this.name = itemOptionDto.getName();
-            }
         }
     }
 
-    @PutMapping("/item")
-    public ResponseEntity<Result> putItem(@RequestBody @Valid ItemRequest itemRequest){
-
-        List<ItemOptionDto> itemOption = itemRequest.getRequiredOption().stream()
-                .map(ItemRequest.ItemOptionRequest::createItemOptionDto)
-                .collect(Collectors.toList());
-        itemOption.addAll(itemRequest.getOtherOption().stream()
-                .map(ItemRequest.ItemOptionRequest::createItemOptionDto)
-                .collect(Collectors.toList()));
-
-        itemService.putItem(itemRequest.getItemId()
-                , itemRequest.getItemName()
-                , itemRequest.getItemPrice()
-                , itemRequest.getCategoryId()
-                , itemOption);
-
-
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(Result.success());
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class ItemRequest {
-        private Long itemId;
-        @NotNull
-        private String itemName;
-        @NotNull
-        private Long itemPrice;
-        @NotNull
-        private Long categoryId;
-        private List<ItemOptionRequest> requiredOption;
-        private List<ItemOptionRequest> otherOption;
-
-        @Data
-        @AllArgsConstructor
-        @NoArgsConstructor
-        @Builder
-        public static class ItemOptionRequest {
-            private Long id;
-            private String name;
-            private OptionType optionType;
-            private Long price;
-
-            public static ItemOptionDto createItemOptionDto(ItemOptionRequest itemOptionRequest){
-                return ItemOptionDto.builder()
-                        .id(itemOptionRequest.getId())
-                        .name(itemOptionRequest.getName())
-                        .price(itemOptionRequest.getPrice())
-                        .optionType(itemOptionRequest.getOptionType())
-                        .build();
-
-            }
-        }
-    }
-
-    @PostMapping("/item")
-    public ResponseEntity createItem( @RequestBody @Valid ItemRequest itemRequest,
-                                      @RequestHeader(value = "user-id") String userId ){
-
-        Long storeId = Long.parseLong(userId);
-
-        List<ItemOptionDto> itemOption = itemRequest.getRequiredOption().stream()
-                .map(ItemRequest.ItemOptionRequest::createItemOptionDto)
-                .collect(Collectors.toList());
-        itemOption.addAll(itemRequest.getOtherOption().stream()
-                .map(ItemRequest.ItemOptionRequest::createItemOptionDto)
-                .collect(Collectors.toList()));
-
-        itemService.createItem(storeId
-                , itemRequest.getItemName()
-                , itemRequest.getItemPrice()
-                , itemRequest.getCategoryId()
-                , itemOption);
-
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Result.success());
-
-    }
 
 }
