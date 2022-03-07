@@ -27,7 +27,7 @@
           tile
           size="100"
       >
-        <v-img src="https://cdn.vuetifyjs.com/images/cards/halcyon.png"></v-img>
+        <v-img :src="require('@/assets/store.jpeg')"></v-img>
       </v-list-item-avatar>
 
     </v-list-item>

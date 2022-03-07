@@ -29,7 +29,7 @@
         <v-card v-bind:data-id="card.storeId">
           <v-img
               height="180"
-              src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+              :src="require('@/assets/store.jpeg')"
           ></v-img>
           <v-card-title>{{ card.name }}</v-card-title>
           <v-card-text>
@@ -116,7 +116,7 @@ export default {
       this.isLoading = true;
       try {
         this.page = 0;
-        const response = await storeApi.requestSearchStore(this.latitude, this.longitude, this.storeName, this.page);
+        const response = await storeApi.requestNearbyStore(this.latitude, this.longitude, this.storeName, this.page);
         this.cards = [];
         this.renderCard(response.data);
       } catch (error) {
@@ -128,7 +128,7 @@ export default {
       this.isLoading = true;
       try {
         this.page += 1;
-        const response = await storeApi.requestSearchStore(this.latitude, this.longitude, this.storeName, this.page);
+        const response = await storeApi.requestNearbyStore(this.latitude, this.longitude, this.storeName, this.page);
         this.renderCard(response.data);
       } catch (error) {
         console.log(error);

@@ -1,13 +1,14 @@
 import axios from "axios";
 
 export default {
-    requestSearchStore(latitude, longitude, storeName, page) {
+    requestNearbyStore(latitude, longitude, storeName, page, size) {
       const options = {
         params: {
           latitude: latitude,
           longitude: longitude,
           storeName: storeName,
-          page: page
+          page: page,
+          size: size
         }
       }
       return axios.get(process.env.VUE_APP_STORE_API_URL + '/store/search', options);
