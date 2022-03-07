@@ -24,6 +24,8 @@ public class OrderDto {
 
     private Long orderPrice;
 
+    private Long storeId;
+
     private LocalDateTime orderTime;
 
     private Long usedPoint;
@@ -35,13 +37,14 @@ public class OrderDto {
     private List<OrderItemDto> orderItemDtoList;
 
     @Builder
-    public OrderDto(Long id, Long userId, Long userCouponId, Long orderPrice, LocalDateTime orderTime,
+    public OrderDto(Long id, Long userId, Long userCouponId, Long orderPrice, LocalDateTime orderTime, Long storeId,
                     Long usedPoint, OrderStatus orderStatus, List<OrderItemDto> orderItemDtoList) {
         this.id = id;
         this.userId = userId;
         this.userCouponId = userCouponId;
         this.orderPrice = orderPrice;
         this.orderTime = orderTime;
+        this.storeId = storeId;
         this.usedPoint = usedPoint;
         this.orderStatus = orderStatus;
         this.orderItemDtoList = orderItemDtoList;
@@ -55,6 +58,7 @@ public class OrderDto {
                 .userCouponId(order.getUserCouponId())
                 .orderPrice(order.getOrderPrice())
                 .orderTime(order.getOrderTime())
+                .storeId(order.getStoreId())
                 .usedPoint(order.getUsedPoint())
                 .orderStatus(order.getOrderStatus())
                 .build();
@@ -72,6 +76,7 @@ public class OrderDto {
                 .userCouponId(order.getUserCouponId())
                 .orderPrice(order.getOrderPrice())
                 .orderTime(order.getOrderTime())
+                .storeId(order.getStoreId())
                 .usedPoint(order.getUsedPoint())
                 .orderStatus(order.getOrderStatus())
                 .orderItemDtoList(orderItemDtoList)

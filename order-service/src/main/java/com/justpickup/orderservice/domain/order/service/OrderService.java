@@ -5,11 +5,12 @@ import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
 import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.SliceImpl;
 
 import java.util.List;
 
 public interface OrderService {
     List<OrderDto> findOrderMain(OrderSearchCondition condition, Long storeId);
-
     Page<OrderDto> findPrevOrderMain(PrevOrderSearch search, Pageable pageable, Long storeId);
+    SliceImpl<OrderDto> findOrderHistory(Pageable pageable, Long userId);
 }
