@@ -41,6 +41,14 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto findItemByItemId(Long itemId) {
+        Item findItem = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotExistItemException("존재하지 않는 아이템 입니다."));
+
+        return ItemDto.createWithCategoryItemDtoAndItemOption(findItem);
+    }
+
+    @Override
+    public ItemDto findFullItemByItemId(Long itemId) {
         Item findItem = itemRepositoryCustom.findById(itemId)
                 .orElseThrow(() -> new NotExistItemException("존재하지 않는 아이템 입니다."));
 
