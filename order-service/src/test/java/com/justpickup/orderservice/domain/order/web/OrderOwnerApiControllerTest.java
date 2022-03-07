@@ -6,6 +6,7 @@ import com.justpickup.orderservice.domain.order.dto.OrderDto;
 import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
 import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
+import com.justpickup.orderservice.domain.order.repository.OrderRepository;
 import com.justpickup.orderservice.domain.order.service.OrderService;
 import com.justpickup.orderservice.domain.order.validator.PrevOrderSearchValidator;
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
@@ -28,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -39,10 +41,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(OrderController.class)
+@WebMvcTest(OrderOwnerApiController.class)
 @Import(TestConfig.class)
-@AutoConfigureRestDocs(uriHost = "127.0.0.1", uriPort = 8001)
-class OrderControllerTest {
+@AutoConfigureRestDocs(uriHost = "http://just-pickup.com", uriPort = 8001)
+class OrderOwnerApiControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
@@ -56,8 +58,13 @@ class OrderControllerTest {
     @SpyBean
     PrevOrderSearchValidator prevOrderSearchValidator;
 
+    @MockBean
+    OrderRepository orderRepository;
+
+    private final String url = "/api/owner/order";
+
     @Test
-    @DisplayName("점주 서비스 - 주문 페이지")
+    @DisplayName("[API] [GET] 점주 서비스 - 주문 페이지")
     void getOrderMain() throws Exception {
         // GIVEN
         String orderDate = "2022-02-03";
@@ -70,7 +77,8 @@ class OrderControllerTest {
                 .willReturn(getOrderMainDtoList());
 
         // WHEN
-        ResultActions actions = mockMvc.perform(get("/orderMain")
+
+        ResultActions actions = mockMvc.perform(get(url + "/order-main")
                 .param("orderDate", orderDate)
                 .param("lastOrderId", String.valueOf(lastOrderId))
         );
@@ -85,35 +93,35 @@ class OrderControllerTest {
                 .andExpect(jsonPath("data[*].orderTime").exists())
                 .andDo(print())
                 .andDo(document("orderMain-get",
-                            requestParameters(
-                                    parameterWithName("orderDate").description("주문 날짜 YYYY-MM-DD"),
-                                    parameterWithName("lastOrderId").optional().description("페이지의 마지막 주문 고유 번호")
-                            ),
-                            responseFields(
-                                    fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),
-                                    fieldWithPath("message").description("메시지"),
-                                    fieldWithPath("data[*].orderId").description("주문 고유 번호"),
-                                    fieldWithPath("data[*].userId").description("고객 고유 번호"),
-                                    fieldWithPath("data[*].userName").description("고객 이름"),
-                                    fieldWithPath("data[*].orderItemResponses[*].orderItemId").description("장바구니 고유번호"),
-                                    fieldWithPath("data[*].orderItemResponses[*].itemId").description("상품 고유번호"),
-                                    fieldWithPath("data[*].orderItemResponses[*].itemName").description("상품 이름"),
-                                    fieldWithPath("data[*].orderStatus").description("주문 상태"),
-                                    fieldWithPath("data[*].orderTime").description("주문 시간")
-                            )
-                        ))
+                        requestParameters(
+                                parameterWithName("orderDate").description("주문 날짜 YYYY-MM-DD"),
+                                parameterWithName("lastOrderId").optional().description("페이지의 마지막 주문 고유 번호")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),
+                                fieldWithPath("message").description("메시지"),
+                                fieldWithPath("data[*].orderId").description("주문 고유 번호"),
+                                fieldWithPath("data[*].userId").description("고객 고유 번호"),
+                                fieldWithPath("data[*].userName").description("고객 이름"),
+                                fieldWithPath("data[*].orderItemResponses[*].orderItemId").description("장바구니 고유번호"),
+                                fieldWithPath("data[*].orderItemResponses[*].itemId").description("상품 고유번호"),
+                                fieldWithPath("data[*].orderItemResponses[*].itemName").description("상품 이름"),
+                                fieldWithPath("data[*].orderStatus").description("주문 상태"),
+                                fieldWithPath("data[*].orderTime").description("주문 시간")
+                        )
+                ))
         ;
     }
 
     @Test
-    @DisplayName("점주 서비스 - 주문 페이지 (잘못된 파라미터 형식)")
+    @DisplayName("[API] [GET] 점주 서비스 - 주문 페이지 (잘못된 파라미터 형식)")
     void getOrderMainBadRequestException() throws Exception {
         // GIVEN
         String orderDate = "20220203";
         Long lastOrderId = 7L;
 
         // WHEN
-        ResultActions actions = mockMvc.perform(get("/orderMain")
+        ResultActions actions = mockMvc.perform(get(url + "/order-main")
                 .param("orderDate", orderDate)
                 .param("lastOrderId", String.valueOf(lastOrderId))
         );
@@ -125,15 +133,15 @@ class OrderControllerTest {
                 .andExpect(jsonPath("data").isEmpty())
                 .andDo(print())
                 .andDo(document("orderMain-get-badParameterException",
-                        requestParameters(
-                                parameterWithName("orderDate").description("주문 날짜 YYYY-MM-DD"),
-                                parameterWithName("lastOrderId").optional().description("페이지의 마지막 주문 고유 번호")
-                        ),
-                        responseFields(
-                                fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),
-                                fieldWithPath("message").description("메시지"),
-                                fieldWithPath("data").description("데이터")
-                        )
+                                requestParameters(
+                                        parameterWithName("orderDate").description("주문 날짜 YYYY-MM-DD"),
+                                        parameterWithName("lastOrderId").optional().description("페이지의 마지막 주문 고유 번호")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),
+                                        fieldWithPath("message").description("메시지"),
+                                        fieldWithPath("data").description("데이터")
+                                )
                         )
                 )
         ;
@@ -182,7 +190,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("점주 서비스 - 지난 주문 페이지")
+    @DisplayName("[API] [GET] 점주 서비스 - 지난 주문 페이지")
     void getPrevOrder() throws Exception {
         // GIVEN
         LocalDate startDate = LocalDate.of(2022, 2, 3);
@@ -197,7 +205,7 @@ class OrderControllerTest {
                 );
 
         // WHEN
-        ResultActions actions = mockMvc.perform(get("/prevOrder")
+        ResultActions actions = mockMvc.perform(get(url + "/prev-order")
                 .param("startDate", startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .param("endDate", endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .param("page", page)
@@ -236,12 +244,12 @@ class OrderControllerTest {
                                 fieldWithPath("data.page.startPage").description("현재 페이지 (0부터 시작)"),
                                 fieldWithPath("data.page.totalPage").description("총 페이지 개수")
                         )
-                        ))
+                ))
         ;
     }
 
     @Test
-    @DisplayName("점주 서비스 - 지난 주문 페이지 (파라미터 오류)")
+    @DisplayName("[API] [GET] 점주 서비스 - 지난 주문 페이지 (파라미터 오류)")
     void getPrevOrderBindException() throws Exception {
         // GIVEN
         LocalDate startDate = LocalDate.of(2023, 2, 3);
@@ -251,7 +259,7 @@ class OrderControllerTest {
         PrevOrderSearch search = new PrevOrderSearch(startDate, endDate);
 
         // THEN
-        ResultActions actions = mockMvc.perform(get("/prevOrder")
+        ResultActions actions = mockMvc.perform(get(url + "/prev-order")
                 .param("startDate", startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .param("endDate", endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .param("page", page)
@@ -274,7 +282,7 @@ class OrderControllerTest {
                                 fieldWithPath("message").description("메시지"),
                                 fieldWithPath("data").description("데이터")
                         )
-                        ))
+                ))
         ;
     }
 }
