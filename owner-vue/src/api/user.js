@@ -2,7 +2,7 @@ import jwt from '../common/jwt.js';
 
 export default {
   requestRegisterUser(user) {
-    return axios.post("http://localhost:8001/user-service/store-owner", user);
+    return axios.post(process.env.VUE_APP_USER_URL + "/store-owner", user);
   },
 
   async requestLoginUser(email, password) {
@@ -12,7 +12,7 @@ export default {
     }
 
     try {
-      const response = await axios.post("http://localhost:8001/user-service/login", user);
+      const response = await axios.post( process.env.VUE_APP_USER_URL +"/login", user);
       const data = response.data.data;
 
       jwt.saveToken(data.accessToken);

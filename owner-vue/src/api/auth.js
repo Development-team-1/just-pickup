@@ -9,7 +9,7 @@ export default {
       }
     }
 
-    const res = await axios.get("http://localhost:8001/user-service/auth/reissue", config);
+    const res = await axios.get(process.env.VUE_APP_USER_AUTH_URL + "/reissue", config);
 
     const accessToken = res.data.data.accessToken;
     jwt.saveToken(accessToken);
@@ -21,6 +21,6 @@ export default {
   requestCheckAccessToken() {
     axios.defaults.headers.common['Authorization'] =  "Bearer " + jwt.getToken();
 
-    return axios.get("http://localhost:8001/user-service/auth/check/access-token");
+    return axios.get( process.env.VUE_APP_USER_AUTH_URL +"/check/access-token");
   }
 }
