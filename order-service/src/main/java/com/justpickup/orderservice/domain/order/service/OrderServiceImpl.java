@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
                         .collect(Collectors.toList());
 
         // 사용자명 및 아이템 이름 가져오기
-        getUserNameAndItemName(orderDtoList);
+//        getUserNameAndItemName(orderDtoList);
 
         return orderDtoList;
     }
@@ -57,9 +58,23 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
 
         // 사용자명 및 아이템 이름 가져오기
-        getUserNameAndItemName(orderDtoList);
+//        getUserNameAndItemName(orderDtoList);
 
         return PageableExecutionUtils.getPage(orderDtoList, pageable, orderPage::getTotalElements);
+    }
+
+    @Override
+    public SliceImpl<OrderDto> findOrderHistory(Pageable pageable, Long userId) {
+        SliceImpl<Order> orderHistory = orderRepositoryCustom.findOrderHistory(pageable, userId);
+
+        List<OrderDto> contents = orderHistory.getContent()
+                .stream()
+                .map(OrderDto::createFullField)
+                .collect(Collectors.toList());
+
+        // TODO: 2022/03/07 Feign Client 통신
+
+        return new SliceImpl<>(contents, pageable, orderHistory.hasNext());
     }
 
     private void getUserNameAndItemName(List<OrderDto> orderDtoList) {

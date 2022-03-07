@@ -6,25 +6,9 @@
       :value="value"
       color="primary"
   >
-    <v-btn>
-      <span>홈</span>
-      <v-icon>mdi-home-outline</v-icon>
-    </v-btn>
-    <v-btn>
-      <span>검색</span>
-      <v-icon>mdi-magnify</v-icon>
-    </v-btn>
-    <v-btn>
-      <span>즐겨찾기</span>
-      <v-icon>mdi-cards-heart-outline</v-icon>
-    </v-btn>
-    <v-btn>
-      <span>주문내역</span>
-      <v-icon>mdi-clipboard-check-outline</v-icon>
-    </v-btn>
-    <v-btn>
-      <span>마이페이지</span>
-      <v-icon>mdi-account-outline</v-icon>
+    <v-btn v-for="(item, index) in links" v-bind:key="index" @click="clickGo(index, item.url)">
+      <span>{{ item.name }}</span>
+      <v-icon>{{ item.icon }}</v-icon>
     </v-btn>
   </v-bottom-navigation>
 </template>
@@ -34,7 +18,20 @@ export default {
   name: "BottomNavigation",
   data: function() {
     return {
-      value: 0
+      value: 0,
+      links: [
+        {name: "홈", url: "/", icon: "mdi-home-outline"},
+        {name: "검색", url: "/search", icon: "mdi-magnify"},
+        {name: "즐겨찾기", url: "/", icon: "mdi-cards-heart-outline"},
+        {name: "주문내역", url: "/history", icon: "mdi-clipboard-check-outline"},
+        {name: "마이페이지", url: "/", icon: "mdi-account-outline"}
+      ]
+    }
+  },
+  methods: {
+    clickGo: function (index, url) {
+      this.value = index;
+      this.$router.push(url);
     }
   }
 }

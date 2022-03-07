@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
@@ -79,5 +80,28 @@ public class OrderRepositoryCustom {
                 .fetch();
 
         return PageableExecutionUtils.getPage(orders, pageable, () -> count);
+    }
+
+    // Customer History
+    public SliceImpl<Order> findOrderHistory(Pageable pageable, Long userId) {
+        List<Order> contents = queryFactory
+                .selectFrom(order)
+                .join(order.transaction).fetchJoin()
+                .where(
+                        order.userId.eq(userId)
+                )
+                .orderBy(order.orderTime.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
+                .distinct()
+                .fetch();
+
+        boolean hasNext = false;
+        if (contents.size() > pageable.getPageSize()) {
+            contents.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(contents, pageable, hasNext);
     }
 }
