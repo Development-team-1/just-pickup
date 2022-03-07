@@ -42,4 +42,14 @@ export default {
             responseType:'json'
         })
     },
+    getFavoriteStore(latitude, longitude,){
+        const options = {
+            params: {
+                latitude: latitude,
+                longitude: longitude,
+            }
+        }
+        return axios.get(process.env.VUE_APP_CUSTOMER_SERVICE_BASEURL+'/store-service/api/customer/store/favorite',options)
+    },
+
 }

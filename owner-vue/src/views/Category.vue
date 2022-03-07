@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-subheader class="py-0 d-flex justify-space-between rounded-lg">
-      <h3>Category List</h3>
+      <div class="text-subtitle-1">Category List</div>
       <div style="text-align: right">
         <span class="group pa-2">
           <v-btn

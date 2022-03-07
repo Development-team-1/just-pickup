@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import jwt from "@/common/jwt";
+import auth from "@/api/auth";
 
 import HomeLayout from '../views/Layout/HomeLayout.vue';
 const ACCESS_TOKEN_NAME = "accessToken";
@@ -7,9 +9,21 @@ const EXPIRED_TIME_NAME = "expiredTime";
 
 Vue.use(VueRouter);
 
-const auth = async function (to, from, next) {
-  localStorage.setItem(ACCESS_TOKEN_NAME, to.query.accessToken);
-  localStorage.setItem(EXPIRED_TIME_NAME, to.query.expiredTime)
+const authCheck = async function (to, from, next) {
+  if(to.path==="/login"){
+    next();
+    return;
+  }
+  try {
+    if (jwt.isExpired()) {
+      // refresh 호출
+      await auth.requestReissue();
+    } else {
+      await auth.requestCheckAccessToken();
+    }
+  } catch (error) {
+    await router.replace("/login");
+  }
   next();
 };
 
@@ -17,6 +31,7 @@ const routes = [
   {
     path: '/',
     redirect: 'home',
+    beforeEnter: authCheck,
     component: HomeLayout,
     children: [
       {
@@ -28,25 +43,23 @@ const routes = [
         path: "/search",
         name: 'search-store',
         component: () => import('../views/SearchStore')
-      }
-    ]
-  },
-  {
-    path: '/login',
-    redirect: 'login',
-    component: HomeLayout,
-    children: [
+      },
       {
-        path: "/login",
+        path: '/login',
         name: 'login',
         component: () => import('../views/LoginPage')
-      }
+      },
     ]
   },
+
   {
     path: '/auth',
     name: 'auth',
-    beforeEnter: auth,
+    beforeEnter: async function (to, from, next) {
+      localStorage.setItem(ACCESS_TOKEN_NAME, to.query.accessToken);
+      localStorage.setItem(EXPIRED_TIME_NAME, to.query.expiredTime)
+      next();
+    },
     component: () => import('../views/Layout/AuthSuccess.vue')
 
   },

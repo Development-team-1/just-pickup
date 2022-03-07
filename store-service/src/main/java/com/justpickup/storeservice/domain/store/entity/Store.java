@@ -1,6 +1,7 @@
 package com.justpickup.storeservice.domain.store.entity;
 
 import com.justpickup.storeservice.domain.category.entity.Category;
+import com.justpickup.storeservice.domain.favoritestore.entity.FavoriteStore;
 import com.justpickup.storeservice.domain.item.entity.Item;
 import com.justpickup.storeservice.domain.map.entity.Map;
 import com.justpickup.storeservice.global.entity.Address;
@@ -52,6 +53,8 @@ public class Store extends BaseEntity {
     @OneToMany(mappedBy = "store")
     private List<Item> items;
 
+    @OneToMany(mappedBy = "store")
+    private List<FavoriteStore> favoriteStores;
     // == 연관관계 편의 메소드 == //
     public void addCategory(Category category) {
         categories.add(category);
