@@ -30,11 +30,11 @@ axios.interceptors.response.use(
           originalRequest.headers.Authorization = "Bearer " + accessToken;
           return axios(originalRequest);
         } catch (reissueError) {
-          window.location.href = "http://localhost:8080";
+          window.location.href = "/";
           alert("권한이 없습니다. 다시 로그인 해주세요");
         }
        }
-      window.location.href = "http://localhost:8080";
+      window.location.href = "/";
       alert("권한이 없습니다. 다시 로그인해주세요.");
     }
     return Promise.reject(error);

@@ -37,8 +37,8 @@ export default {
   name: "LoginUser",
   data: function() {
     return {
-      email: 'owner@gmail.com',
-      password: '1234'
+      email: '',
+      password: ''
     }
   },
   methods: {

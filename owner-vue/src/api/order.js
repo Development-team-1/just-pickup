@@ -9,7 +9,7 @@ export default {
                 page: page
             }
         }
-        return axios.get("http://localhost:8001/order-service/prevOrder", options);
+        return axios.get( process.env.VUE_APP_ORDER_URL + "/order/prev-order", options);
     },
     requestOrder(orderDate, lastOrderId) {
         const options = {
@@ -18,6 +18,6 @@ export default {
                 lastOrderId: lastOrderId
             }
         }
-        return axios.get("http://localhost:8001/order-service/orderMain", options);
+        return axios.get(process.env.VUE_APP_ORDER_URL + "/order/order-main", options);
     }
 }

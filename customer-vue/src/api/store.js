@@ -10,7 +10,7 @@ export default {
           page: page
         }
       }
-      return axios.get(process.env.VUE_APP_CUSTOMER_SERVICE_BASEURL+"/store-service/search-store", options);
+      return axios.get(process.env.VUE_APP_STORE_API_URL + '/store/search', options);
     },
     getCategoryList(){
         return axios.get(process.env.VUE_APP_CUSTOMER_SERVICE_BASEURL+'/store-service/category/');
