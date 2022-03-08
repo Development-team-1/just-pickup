@@ -6,6 +6,11 @@ import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
 import com.justpickup.orderservice.domain.order.entity.Order;
 import com.justpickup.orderservice.domain.order.repository.OrderRepository;
 import com.justpickup.orderservice.domain.order.repository.OrderRepositoryCustom;
+import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
+import com.justpickup.orderservice.domain.orderItem.entity.OrderItem;
+import com.justpickup.orderservice.domain.orderItem.repository.OrderItemRepository;
+import com.justpickup.orderservice.domain.orderItemOption.entity.OrderItemOption;
+import com.justpickup.orderservice.domain.orderItemOption.repository.OrderItemOptionRepository;
 import com.justpickup.orderservice.global.client.store.GetItemResponse;
 import com.justpickup.orderservice.global.client.store.StoreClient;
 import com.justpickup.orderservice.global.client.user.GetCustomerResponse;
@@ -20,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +35,8 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderItemRepository  orderItemRepository;
+    private final OrderItemOptionRepository orderItemOptionRepository;
     private final OrderRepositoryCustom orderRepositoryCustom;
     private final StoreClient storeClient;
     private final UserClient userClient;
@@ -90,5 +98,32 @@ public class OrderServiceImpl implements OrderService {
                         orderItemDto.setItemName(getItemResponse.getName());
                     });
         });
+    }
+
+    @Override
+    @Transactional
+    public void addItemToBasket(OrderItemDto orderItemDto,Long storeId, Long userId) {
+        orderItemDto.getCount();
+
+        //orderItemOption Entity를 생성한다.
+        List<OrderItemOption> orderItemOptions = orderItemDto.getOrderItemOptionDtoList()
+                .stream().map(orderItemOptionDto -> OrderItemOption.of(orderItemDto.getId()))
+                .collect(Collectors.toList());
+
+        //orderItem을 Entity를 생성한다.
+        OrderItem orderItem = OrderItem.of(orderItemDto.getItemId()
+                , orderItemDto.getPrice()
+                , orderItemDto.getCount()
+                ,orderItemOptions);
+
+        //HARD_CODE
+        Long userCouponId=0L;
+
+        Optional<Order> optionalOrder = orderRepository.findByUserId(userId);
+        if(optionalOrder.isPresent()){
+            optionalOrder.get().addOrderItem(orderItem);
+        }else{
+            orderRepository.save(Order.of(userId,userCouponId,storeId,orderItemDto.getPrice(),orderItem));
+        }
     }
 }

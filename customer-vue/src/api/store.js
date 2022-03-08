@@ -29,7 +29,7 @@ export default {
         })
     },
     getItemById(itemId){
-        return axios.get(process.env.VUE_APP_CUSTOMER_SERVICE_BASEURL+'/store-service/item/'+itemId)
+        return axios.get(process.env.VUE_APP_STORE_API_URL+'/item/'+itemId)
     },
     saveItem(method, itemData){
         return axios({

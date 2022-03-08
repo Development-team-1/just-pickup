@@ -5,6 +5,7 @@ import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.order.service.OrderService;
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
 import com.justpickup.orderservice.global.dto.Result;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -89,4 +87,37 @@ public class OrderCustomerApiController {
             }
         }
     }
+
+    /**
+     * order
+     */
+
+    @PostMapping("item")
+    public ResponseEntity addItemToBasket( @RequestBody RequestItem requestItem,
+                                           @RequestHeader(value = "user-id") String userId){
+        OrderItemDto orderItemDto = OrderItemDto.of(-1L,
+                requestItem.itemId,
+                requestItem.getPrice(),
+                requestItem.getCount(),
+                requestItem.getItemOptionIds());
+        orderService.addItemToBasket(orderItemDto,requestItem.getStoreId() ,Long.parseLong(userId));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(Result.createSuccessResult(null));
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RequestItem{
+        private Long itemId;
+        private Long storeId;
+        private Long price;
+        private Long count;
+        private List<Long> itemOptionIds ;
+
+    }
+
+
+
+
 }

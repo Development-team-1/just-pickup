@@ -61,6 +61,11 @@ const routes = [
       },
     ]
   },
+  {
+    path: "/item/:storeId/:itemId",
+    name: 'itemDetail',
+    component: () => import('../views/ItemDetail')
+  },
 
   {
     path: '/auth',
