@@ -16,7 +16,7 @@
             type="card"
             :key="id + n"
         ></v-skeleton-loader>
-        </v-slide-item>
+      </v-slide-item>
       <v-slide-item
           v-for="item in storeList.data"
           :key="item.id"

@@ -50,6 +50,11 @@ const routes = [
         component: () => import('../views/OrderHistory')
       },
       {
+        path: "/favorite",
+        name: 'favorite-store',
+        component: () => import('../views/FavoriteStore')
+      },
+      {
         path: '/login',
         name: 'login',
         component: () => import('../views/LoginPage')
