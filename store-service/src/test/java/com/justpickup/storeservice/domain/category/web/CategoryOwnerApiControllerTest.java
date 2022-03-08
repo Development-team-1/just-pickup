@@ -45,17 +45,9 @@ class CategoryOwnerApiControllerTest {
     @MockBean
     private CategoryService categoryService;
 
-    @MockBean
-    private StoreRepository storeRepository;
-
-    @MockBean
-    private FavoriteStoreRepository favoriteStoreRepository;
-
-
     @Test
     @DisplayName("카테고리리스트_가져오기_성공")
     void getCategoryList_success() throws Exception {
-
         //given
         Long storeId = 1L;
         List<CategoryDto> categoryDtoList = new ArrayList<>();
@@ -107,7 +99,6 @@ class CategoryOwnerApiControllerTest {
                         ));
 
     }
-
 
     @Test
     @DisplayName("카테고리리스트_수정_성공")

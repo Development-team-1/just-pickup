@@ -1,11 +1,14 @@
 package com.justpickup.storeservice.domain.store.dto;
 
 import com.justpickup.storeservice.domain.store.entity.Store;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
+@Builder
 public class StoreDto {
-
     private Long id;
     private String name;
     private String phoneNumber;

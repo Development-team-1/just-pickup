@@ -1,15 +1,14 @@
 package com.justpickup.storeservice.domain.itemoption.repository;
 
-import com.justpickup.storeservice.domain.item.entity.Item;
-import com.justpickup.storeservice.domain.item.entity.QItem;
 import com.justpickup.storeservice.domain.itemoption.entity.ItemOption;
 import com.justpickup.storeservice.domain.itemoption.entity.QItemOption;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
+import static com.justpickup.storeservice.domain.item.entity.QItem.item;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,7 +20,9 @@ public class ItemOptionRepositoryCustom {
 
         return queryFactory.selectFrom(QItemOption.itemOption)
                 .join(QItemOption.itemOption.item)
-                .on(QItem.item.id.eq(itemId))
+                .on(item.id.eq(itemId))
                 .fetch();
     }
+    
+
 }
