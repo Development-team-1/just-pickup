@@ -11,11 +11,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
+import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -45,8 +43,8 @@ public class Item extends BaseEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @OneToMany(mappedBy = "item" ,cascade = {REMOVE,PERSIST} )
-    private List<ItemOption> itemOptions;
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    private List<ItemOption> itemOptions = new ArrayList<>();
 
     // == 연관관계 편의 메소드 ==//
     public void addItemOption(ItemOption itemOption) {
@@ -71,19 +69,15 @@ public class Item extends BaseEntity {
     }
 
     // == 생성 메소드 == //
-    public static Item createdItem(Category category, Store store, List<ItemOption> itemOptions) {
+    public static Item of(String name, Long price, Category category, Store store, List<ItemOption> itemOptions) {
         Item item = new Item();
-        item.setCategory(category);
-        item.setStore(store);
-        itemOptions.forEach(item::addItemOption);
-        return item;
-    }
-
-    public static Item createdFullItem(Category category, Store store, List<ItemOption> itemOptions, String name , Long price) {
-        Item item = new Item();
-        item.setItemNameAndPriceAndCategory( name, price ,category);
-        item.setStore(store);
-        itemOptions.forEach(item::addItemOption);
+        item.name = name;
+        item.price = price;
+        item.category = category;
+        item.store = store;
+        for (ItemOption itemOption : itemOptions) {
+            item.addItemOption(itemOption);
+        }
         return item;
     }
 }

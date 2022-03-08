@@ -96,7 +96,6 @@ public class ItemServiceImpl implements ItemService {
                               Long itemPrice,
                               Long categoryId,
                               List<ItemOptionDto> itemOptionDtos) {
-
         //find Store
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NotExistItemException("존재하지 않는 매장 입니다."));
@@ -105,11 +104,15 @@ public class ItemServiceImpl implements ItemService {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotExistItemException("존재하지 않는 카테고리 입니다."));
 
-        //create Item
-        Item item = Item.createdFullItem(category,store,new ArrayList<>() ,itemName, itemPrice);
+        List<ItemOption> itemOptions = itemOptionDtos
+                .stream()
+                .map(itemOptionDto -> {
+                    return ItemOption.of(itemOptionDto.getOptionType(), itemOptionDto.getName());
+                })
+                .collect(Collectors.toList());
 
-        //add ItemOption
-        itemOptionDtos.forEach((itemOptionDto ->
-                itemOptionRepository.save(ItemOptionDto.createItemOption(itemOptionDto, item))));
+        Item createdItem = Item.of(itemName, itemPrice, category, store, itemOptions);
+
+        itemRepository.save(createdItem);
     }
 }

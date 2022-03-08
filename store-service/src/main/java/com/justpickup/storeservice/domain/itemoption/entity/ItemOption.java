@@ -22,8 +22,6 @@ public class ItemOption extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OptionType optionType;
 
-    private Long price;
-
     private String name;
 
     @ManyToOne(fetch = LAZY , cascade = CascadeType.ALL)
@@ -36,10 +34,16 @@ public class ItemOption extends BaseEntity {
         item.getItemOptions().add(this);
     }
 
-    public ItemOption(OptionType optionType, Long price, String name, Item item) {
+    public ItemOption(OptionType optionType, String name, Item item) {
         this.optionType = optionType;
-        this.price = price;
         this.name = name;
         this.item = item;
+    }
+
+    public static ItemOption of(OptionType type, String name) {
+        ItemOption itemOption = new ItemOption();
+        itemOption.optionType = type;
+        itemOption.name = name;
+        return itemOption;
     }
 }
