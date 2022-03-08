@@ -52,7 +52,7 @@ public class ItemDto {
                 .build();
     }
 
-    public static ItemDto createWithCategoryItemDto(Item item) {
+    public static ItemDto createWithCategory(Item item) {
         return ItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -78,10 +78,5 @@ public class ItemDto {
                         .collect(Collectors.toList()))
                 .build();
     }
-
-    // TODO: 2022/02/03 queryDsl 쿼리 생성 시 구현 필요
-//    public static ItemDto createFullItemDto(Item item) {
-//        return null
-//    }
 
 }
