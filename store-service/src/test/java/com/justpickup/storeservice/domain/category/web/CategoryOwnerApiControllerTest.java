@@ -75,7 +75,7 @@ class CategoryOwnerApiControllerTest {
                 .order(2)
                 .build());
 
-        given(categoryService.getCategoryList(any())).willReturn(categoryDtoList);
+        given(categoryService.getCategoriesWithItem(any())).willReturn(categoryDtoList);
         //when
 
         ResultActions actions = mockMvc.perform(MockMvcRequestBuilders.get("/api/owner/category")

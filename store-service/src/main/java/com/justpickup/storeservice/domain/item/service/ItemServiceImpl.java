@@ -20,9 +20,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,7 +59,7 @@ public class ItemServiceImpl implements ItemService {
 
         Page<Item> itemList = itemRepositoryCustom.findItem(storeId,word,pageable);
         return PageableExecutionUtils.getPage(itemList.stream()
-                .map(ItemDto::createWithCategoryItemDto)
+                .map(ItemDto::createWithCategory)
                 .collect(Collectors.toList()),pageable,itemList::getTotalElements);
     }
 
@@ -106,9 +104,7 @@ public class ItemServiceImpl implements ItemService {
 
         List<ItemOption> itemOptions = itemOptionDtos
                 .stream()
-                .map(itemOptionDto -> {
-                    return ItemOption.of(itemOptionDto.getOptionType(), itemOptionDto.getName());
-                })
+                .map(itemOptionDto -> ItemOption.of(itemOptionDto.getOptionType(), itemOptionDto.getName()))
                 .collect(Collectors.toList());
 
         Item createdItem = Item.of(itemName, itemPrice, category, store, itemOptions);

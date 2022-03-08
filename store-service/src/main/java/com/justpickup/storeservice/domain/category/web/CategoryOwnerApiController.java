@@ -24,7 +24,7 @@ public class CategoryOwnerApiController {
     @GetMapping("/category")
     public ResponseEntity getCategoryList(@RequestHeader(value = "user-id") String userId ){
         Long storeId = Long.parseLong(userId);
-        List<CategoryDto> categoryList = categoryService.getCategoryList(storeId);
+        List<CategoryDto> categoryList = categoryService.getCategoriesWithItem(storeId);
 
         List<CategoryResponse> categoryResponseList = categoryList.stream()
                 .map(CategoryResponse::new)
