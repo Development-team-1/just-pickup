@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.notificationservice.config.TestConfig;
 import com.justpickup.notificationservice.domain.notification.dto.FindNotificationDto;
 import com.justpickup.notificationservice.domain.notification.service.NotificationService;
+import com.justpickup.notificationservice.domain.notification.web.NotificationController.PatchNotificationRequest;
 import com.justpickup.notificationservice.global.dto.Code;
 import com.justpickup.notificationservice.global.dto.Yn;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,8 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -25,8 +28,10 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -92,5 +97,40 @@ class NotificationControllerTest {
             returnList.add(FindNotificationDto.of(id, userId, id + "번 메시지 예시입니다.", "제목" + id, Yn.N, LocalDateTime.now()));
         }
         return returnList;
+    }
+
+    @Test
+    @DisplayName("[API] 알림 수정")
+    void patchNotification() throws Exception {
+        // GIVEN
+        long notificationId = 1L;
+        PatchNotificationRequest request = new PatchNotificationRequest(true);
+        String requestBody = objectMapper.writeValueAsString(request);
+
+        // WHEN
+        ResultActions actions = mockMvc.perform(
+                patch(url + "/{notificationId}", String.valueOf(notificationId))
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        // THEN
+        actions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("notification-patch",
+                        pathParameters(
+                                parameterWithName("notificationId").description("알림 고유번호")
+                        ),
+                        requestFields(
+                                fieldWithPath("read").description("읽음 여부")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").description("결과코드 SUCCESS/ERROR"),
+                                fieldWithPath("message").description("메시지"),
+                                fieldWithPath("data").description("데이터")
+                        )
+                        ))
+        ;
     }
 }

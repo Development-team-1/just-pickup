@@ -4,6 +4,7 @@ import com.justpickup.notificationservice.domain.notification.dto.FindNotificati
 import com.justpickup.notificationservice.domain.notification.dto.UpdateNotificationDto;
 import com.justpickup.notificationservice.domain.notification.service.NotificationService;
 import com.justpickup.notificationservice.global.dto.Result;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +70,7 @@ public class NotificationController {
         return ResponseEntity.ok(Result.createSuccessResult(null));
     }
 
-    @Data @NoArgsConstructor
+    @Data @NoArgsConstructor @AllArgsConstructor
     static class PatchNotificationRequest {
         private boolean read;
     }

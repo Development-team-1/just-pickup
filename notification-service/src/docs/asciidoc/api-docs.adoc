@@ -1,0 +1,72 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+[[overview]]
+= 개요
+
+[[overview-http-verbs]]
+== HTTP 동사
+
+본 REST API에서 사용하는 HTTP 동사(verbs)는 가능한한 표준 HTTP와 REST 규약을 따릅니다.
+
+|===
+| 동사 | 용례
+
+| `GET`
+| 리소스를 가져올 때 사용
+
+| `POST`
+| 새 리소스를 만들 때 사용
+
+| `PUT`
+| 기존 리소스를 수정할 때 사용
+
+| `PATCH`
+| 기존 리소스의 일부를 수정할 때 사용
+
+| `DELETE`
+| 기존 리소스를 삭제할 떄 사용
+|===
+
+[[overview-http-status-codes]]
+== HTTP 상태 코드
+
+본 REST API에서 사용하는 HTTP 상태 코드는 가능한 표준 HTTP와 REST 규약을 따릅니다.
+
+|===
+| 상태 코드 | 용례
+
+| `200 OK`
+| 요청을 성공적으로 처리함
+
+| `201 Created`
+| 새 리소스를 성공적으로 생성함. 응답의 `Location` 헤더에 해당 리소스의 URI가 담겨있다.
+
+| `204 No Content`
+| 기존 리소스를 성공적으로 수정함.
+
+| `400 Bad Request`
+| 잘못된 요청을 보낸 경우. 응답 본문에 더 오류에 대한 정보가 담겨있다.
+
+| `404 Not Found`
+| 요청한 리소스가 없음.
+
+| `409 Conflict`
+| 클라이언트의 요청이 서버의 상태와 충돌이 발생한 경우.
+|===
+
+[[snippets-write-convention]]
+== snippets 작성 컨벤션
+domain-httpRequestCode-etc
+
+== 알림
+=== 알림 조회 - 회원 고유번호
+operation::notification-get[snippets='curl-request,http-request,http-response,request-headers,response-fields']
+=== 알림 수정
+operation::notification-patch[snippets='curl-request,http-request,http-response,path-parameters,request-fields,response-fields']
+
