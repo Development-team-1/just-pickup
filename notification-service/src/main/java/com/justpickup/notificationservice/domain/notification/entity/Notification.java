@@ -40,11 +40,7 @@ public class Notification extends BaseEntity {
         return notification;
     }
 
-    public void modifyReadY() {
-        this.readYn = Yn.Y;
-    }
-
-    public void modifyReadN() {
-        this.readYn = Yn.N;
+    public void modifyReadYn(Yn readYn) {
+        this.readYn = readYn;
     }
 }

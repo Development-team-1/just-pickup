@@ -1,6 +1,7 @@
 package com.justpickup.notificationservice.domain.notification.web;
 
 import com.justpickup.notificationservice.domain.notification.dto.FindNotificationDto;
+import com.justpickup.notificationservice.domain.notification.dto.UpdateNotificationDto;
 import com.justpickup.notificationservice.domain.notification.service.NotificationService;
 import com.justpickup.notificationservice.global.dto.Result;
 import lombok.Data;
@@ -55,5 +56,21 @@ public class NotificationController {
                 this.time = dto.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
             }
         }
+    }
+
+    @PatchMapping("/{notificationId}")
+    public ResponseEntity<Result> patchNotification(@PathVariable("notificationId") Long notificationId,
+                                                    @RequestBody PatchNotificationRequest notificationRequest) {
+
+        UpdateNotificationDto dto = UpdateNotificationDto.of(notificationId, notificationRequest.isRead());
+
+        notificationService.updateNotification(dto);
+
+        return ResponseEntity.ok(Result.createSuccessResult(null));
+    }
+
+    @Data @NoArgsConstructor
+    static class PatchNotificationRequest {
+        private boolean read;
     }
 }
