@@ -98,7 +98,7 @@ public class OrderCustomerApiController {
     public ResponseEntity addItemToBasket( @RequestBody RequestItem requestItem,
                                            @RequestHeader(value = "user-id") String userId){
         OrderItemDto orderItemDto = OrderItemDto.of(-1L,
-                requestItem.itemId,
+                requestItem.getItemId(),
                 requestItem.getPrice(),
                 requestItem.getCount(),
                 requestItem.getItemOptionIds().stream().map(OrderItemOptionDto::new).collect(Collectors.toList()));
@@ -120,17 +120,17 @@ public class OrderCustomerApiController {
     }
 
     @GetMapping("/orders")
-    public ResponseEntity getOrder(@RequestHeader(value = "user-id") String userId){
+    public ResponseEntity fetchOrder(@RequestHeader(value = "user-id") String userId){
         FetchOrderDto fetchOrderDto = orderService.fetchOrder(Long.parseLong(userId));
-        ResponseOrder responseOrder = new ResponseOrder(fetchOrderDto);
+        FetchOrderResponse fetchOrderResponse = new FetchOrderResponse(fetchOrderDto);
 
-        return ResponseEntity.ok(Result.createSuccessResult(responseOrder));
+        return ResponseEntity.ok(Result.createSuccessResult(fetchOrderResponse));
     }
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ResponseOrder{
+    public static class FetchOrderResponse {
         private Long storeId;
         private List<_OrderItemDto> _orderItemDtos;
         private Long totalPrice;
@@ -142,6 +142,7 @@ public class OrderCustomerApiController {
             private Long itemId;
             private List<Long> itemOptionIds;
             private Long price;
+            private Long count;
 
             public _OrderItemDto(OrderItemDto orderItemDto) {
 
@@ -151,10 +152,11 @@ public class OrderCustomerApiController {
                         .map(OrderItemOptionDto::getId)
                         .collect(Collectors.toList());
                 this.price = orderItemDto.getPrice();
+                this.count = orderItemDto.getCount();
             }
         }
 
-        public ResponseOrder(FetchOrderDto fetchOrderDto){
+        public FetchOrderResponse(FetchOrderDto fetchOrderDto){
             this.storeId = fetchOrderDto.getStoreId();
             this._orderItemDtos = fetchOrderDto.getOrderItemDtoList().stream()
                     .map(_OrderItemDto::new)

@@ -82,3 +82,8 @@ operation::prevOrder-get-BindException[snippets='curl-request,http-request,http-
 == Just Pick-up
 === 주문 내역 페이지
 operation::api-customer-order-history[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
+
+
+
+
+operation::add-item-to-basket[snippets='curl-request,http-request,http-response,request-headers,request-body,request-fields']

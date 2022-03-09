@@ -40,7 +40,7 @@
                 append-outer-icon="mdi-plus"
                 prepend-icon="mdi-minus"
                 filled
-                type="number"
+                hide-details
                 @click:append-outer="addItemCount(1)"
                 @click:prepend="addItemCount(-1)"
             />
@@ -91,7 +91,6 @@ export default {
   name: "ItemDetail",
   async beforeMount() {
     console.log(this.$route.params)
-    this.storeId = this.$route.params.storeId
     this.itemId = this.$route.params.itemId
     this.setItem.storeId = this.storeId;
     await this.getItemData()
@@ -102,7 +101,7 @@ export default {
     },
     otherGroup:function(){
       return this.parseGroup('OTHER')
-    }
+    },
   },
   data: function() {
     return {
@@ -123,12 +122,14 @@ export default {
   },
   methods: {
     getItemData: async function (){
-      storeApi.getItemById(this.itemId)
+      storeApi.fetchItem(this.itemId)
       .then(response=>{
         console.log(response)
-        this.itemData = response.data.data;
-        this.setItem.itemId = this.itemData.id;
-        this.setItem.price = this.itemData.price;
+        this.itemData = response.data.data
+        this.setItem.itemId = this.itemData.id
+        this.setItem.price = this.itemData.price
+        this.storeId = this.itemData.storeId
+        this.setItem.storeId = this.itemData.storeId
       })
       .catch(error=>{
         console.log(error)

@@ -19,21 +19,22 @@
               <v-list-item-title class="text-h5 mb-3">
                 {{ orderItem.itemId }}
               </v-list-item-title>
+              <v-list-item-subtitle class="mb-5">
+               수량 : {{ orderItem.count }}
+              </v-list-item-subtitle>
               <div class="text-body-1 mb-5">
                 {{ orderItem.itemOptionIds.join(', ')}}
               </div>
               <div class="text--primary">
-                합계 : <b> {{ orderItem.price }} 원</b>
+                합계 : <b> {{ orderItem.count * orderItem.price }} 원</b>
               </div>
             </v-list-item-content>
-
             <v-list-item-avatar
                 tile
                 size="100"
             >
               <v-img :src="require('@/assets/store.jpeg')"></v-img>
             </v-list-item-avatar>
-
           </v-list-item>
 
           <v-card-actions class="pb-2">
@@ -76,6 +77,7 @@ export default {
           itemId:Number,
           itemOptionIds:Array,
           price:Number,
+          count:Number,
         }],
         totalPrice:Number,
 

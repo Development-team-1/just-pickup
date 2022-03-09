@@ -75,7 +75,7 @@ public class Order extends BaseEntity {
         order.addOrderItem(orderItem);
 
         order.usedPoint = 0L;
-        order.orderStatus = OrderStatus.PLACED;
+        order.orderStatus = OrderStatus.PENDING;
         order.orderTime = LocalDateTime.now();
         return order;
     }
@@ -87,8 +87,13 @@ public class Order extends BaseEntity {
 
     public Order addOrderItem(OrderItem orderItem) {
         this.orderItems.add(orderItem);
-        this.orderPrice += orderItem.getPrice();
+        this.orderPrice += (orderItem.getPrice()*orderItem.getCount());
         orderItem.setOrder(this);
+        return this;
+    }
+
+    public Order setOrderStatus(OrderStatus orderStatus){
+        this.orderStatus = orderStatus;
         return this;
     }
 }

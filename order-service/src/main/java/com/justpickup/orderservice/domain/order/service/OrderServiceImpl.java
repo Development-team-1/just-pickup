@@ -1,11 +1,17 @@
 package com.justpickup.orderservice.domain.order.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.justpickup.orderservice.domain.order.dto.FetchOrderDto;
 import com.justpickup.orderservice.domain.order.dto.OrderDto;
 import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
 import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
 import com.justpickup.orderservice.domain.order.entity.Order;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
+import com.justpickup.orderservice.domain.order.exception.OrderException;
 import com.justpickup.orderservice.domain.order.repository.OrderRepository;
 import com.justpickup.orderservice.domain.order.repository.OrderRepositoryCustom;
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
@@ -17,15 +23,17 @@ import com.justpickup.orderservice.global.client.store.GetItemResponse;
 import com.justpickup.orderservice.global.client.store.StoreClient;
 import com.justpickup.orderservice.global.client.user.GetCustomerResponse;
 import com.justpickup.orderservice.global.client.user.UserClient;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,6 +50,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepositoryCustom orderRepositoryCustom;
     private final StoreClient storeClient;
     private final UserClient userClient;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     public List<OrderDto> findOrderMain(OrderSearchCondition condition, Long storeId) {
@@ -124,22 +133,80 @@ public class OrderServiceImpl implements OrderService {
         if(optionalOrder.isPresent()){
             if(optionalOrder.get().addOrderItem(orderItem)
                     .getStoreId().equals(storeId))
-                throw new RuntimeException("장바구니에 여러 카페의 메뉴를 담을수 없습니다.");
+                throw new OrderException("장바구니에 여러 카페의 메뉴를 담을수 없습니다.");
         }else{
-            orderRepository.save(Order.of(userId,userCouponId,storeId,orderItemDto.getPrice(),orderItem));
+            orderRepository.save(Order.of(userId,userCouponId,storeId,0L,orderItem));
         }
     }
 
     @Override
     public FetchOrderDto fetchOrder(Long userId) {
         Order order = orderRepositoryCustom.fetchOrder(userId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new OrderException("장바구니 정보를 찾을 수 없습니다."));
 
         return new FetchOrderDto(order);
     }
 
     @Override
+    @Transactional
     public void saveOrder(Long userId) {
-
+        Order order = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING)
+                .orElseThrow(() -> new OrderException("장바구니 정보를 찾을 수 없습니다."))
+                .setOrderStatus(OrderStatus.PLACED);
+        try{
+            send("orderPlaced",KafkaSendOrderDto.createPrimitiveField(order));
+        }catch (Exception ex){
+            throw new OrderException(ex.getMessage());
+        }
     }
+
+
+    public void send(String topic, KafkaSendOrderDto kafkaSendOrderDto) throws Exception{
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        String jsonInString = mapper.writeValueAsString(kafkaSendOrderDto);
+        kafkaTemplate.send(topic, jsonInString);
+        log.info("kafka Producer sent data from the Order microservice: "+ kafkaSendOrderDto);
+    }
+
+    @NoArgsConstructor
+    @Data
+    @AllArgsConstructor
+    @Builder
+    static class KafkaSendOrderDto{
+        private Long id;
+
+        private Long userId;
+
+        private String userName;
+
+        private Long userCouponId;
+
+        private Long orderPrice;
+
+        private Long storeId;
+
+//        @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+        private LocalDateTime orderTime;
+
+        private Long usedPoint;
+
+        private OrderStatus orderStatus;
+
+        private List<OrderItemDto> orderItemDtoList;
+
+        // == 생성 메소드 == //
+        public static KafkaSendOrderDto createPrimitiveField(Order order) {
+            return KafkaSendOrderDto.builder()
+                    .id(order.getId())
+                    .userId(order.getUserId())
+                    .userCouponId(order.getUserCouponId())
+                    .orderPrice(order.getOrderPrice())
+                    .orderTime(order.getOrderTime())
+                    .storeId(order.getStoreId())
+                    .usedPoint(order.getUsedPoint())
+                    .orderStatus(order.getOrderStatus())
+                    .build();
+        }
+    }
+
 }

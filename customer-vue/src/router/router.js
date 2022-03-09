@@ -60,7 +60,7 @@ const routes = [
         component: () => import('../views/LoginPage')
       },
       {
-        path: "/item/:storeId/:itemId",
+        path: "/item/:itemId",
         name: 'itemDetail',
         component: () => import('../views/ItemDetail')
       },

@@ -37,3 +37,7 @@ logging:
 # jpa query, parameter 로그 (p6spy)
 decorator.datasource.p6spy:
   enable-logging: true
+
+kafka:
+  host: 127.0.0.1
+  port: 9092
