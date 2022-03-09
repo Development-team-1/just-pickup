@@ -56,6 +56,11 @@ const routes = [
         component: () => import('../views/FavoriteStore')
       },
       {
+        path: "/notification",
+        name: 'notification',
+        component: () => import('../views/NotificationView')
+      },
+      {
         path: '/login',
         name: 'login',
         component: () => import('../views/LoginPage')

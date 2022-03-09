@@ -13,18 +13,43 @@
       <v-img :src="require('@/assets/just-logo.png')"></v-img>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn icon>
-      <v-icon>mdi-magnify</v-icon>
-    </v-btn>
+
+      <v-btn
+          color="white"
+          elevation="0"
+          @click="goNotification"
+      >
+        <v-badge
+          :content="notificationCount"
+          :value="notificationCount"
+          color="orange"
+          overlap
+        >
+            <v-icon>mdi-bell-outline</v-icon>
+        </v-badge>
+      </v-btn>
   </v-app-bar>
 </template>
 
 <script>
 export default {
-  name: "AppNavigation"
+  name: "AppNavigation",
+  mounted() {
+    console.log("[AppNavigation] mounted!");
+  },
+  data: function() {
+    return {
+      notificationCount: 0
+    }
+  },
+  methods: {
+    goNotification: function() {
+      console.log("여기!");
+      this.$router.push('/notification');
+    }
+  }
 }
 </script>
 
 <style scoped>
-
 </style>
