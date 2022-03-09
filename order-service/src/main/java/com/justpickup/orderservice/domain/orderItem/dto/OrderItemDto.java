@@ -42,15 +42,13 @@ public class OrderItemDto {
                 .build();
     }
 
-    public static OrderItemDto of(Long id, Long itemId, Long price, Long count, List<Long> itemOptionIds) {
+    public static OrderItemDto of(Long id, Long itemId, Long price, Long count, List<OrderItemOptionDto> orderItemOptions) {
         OrderItemDto orderItemDto = new OrderItemDto();
         orderItemDto.id = id;
         orderItemDto.itemId = itemId;
         orderItemDto.price = price;
         orderItemDto.count = count;
-        orderItemDto.orderItemOptionDtoList = itemOptionIds.stream()
-                .map(OrderItemOptionDto::new)
-                .collect(Collectors.toList());
+        orderItemDto.orderItemOptionDtoList = orderItemOptions;
 
         return orderItemDto;
     }

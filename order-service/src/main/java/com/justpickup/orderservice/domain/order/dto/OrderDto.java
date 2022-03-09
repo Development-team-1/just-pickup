@@ -84,6 +84,8 @@ public class OrderDto {
     }
 
 
+
+
     // == 변수 변경 메소드 == //
     public void setUserName(String userName) {
         this.userName = userName;

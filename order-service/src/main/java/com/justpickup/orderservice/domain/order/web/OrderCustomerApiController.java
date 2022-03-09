@@ -1,9 +1,11 @@
 package com.justpickup.orderservice.domain.order.web;
 
+import com.justpickup.orderservice.domain.order.dto.FetchOrderDto;
 import com.justpickup.orderservice.domain.order.dto.OrderDto;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.order.service.OrderService;
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
+import com.justpickup.orderservice.domain.orderItemOption.dto.OrderItemOptionDto;
 import com.justpickup.orderservice.global.dto.Result;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -99,7 +101,7 @@ public class OrderCustomerApiController {
                 requestItem.itemId,
                 requestItem.getPrice(),
                 requestItem.getCount(),
-                requestItem.getItemOptionIds());
+                requestItem.getItemOptionIds().stream().map(OrderItemOptionDto::new).collect(Collectors.toList()));
         orderService.addItemToBasket(orderItemDto,requestItem.getStoreId() ,Long.parseLong(userId));
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(Result.createSuccessResult(null));
@@ -117,6 +119,58 @@ public class OrderCustomerApiController {
 
     }
 
+    @GetMapping("/orders")
+    public ResponseEntity getOrder(@RequestHeader(value = "user-id") String userId){
+        FetchOrderDto fetchOrderDto = orderService.fetchOrder(Long.parseLong(userId));
+        ResponseOrder responseOrder = new ResponseOrder(fetchOrderDto);
+
+        return ResponseEntity.ok(Result.createSuccessResult(responseOrder));
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ResponseOrder{
+        private Long storeId;
+        private List<_OrderItemDto> _orderItemDtos;
+        private Long totalPrice;
+
+        @Data
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class _OrderItemDto {
+            private Long itemId;
+            private List<Long> itemOptionIds;
+            private Long price;
+
+            public _OrderItemDto(OrderItemDto orderItemDto) {
+
+                this.itemId = orderItemDto.getItemId();
+                this.itemOptionIds = orderItemDto.getOrderItemOptionDtoList()
+                        .stream()
+                        .map(OrderItemOptionDto::getId)
+                        .collect(Collectors.toList());
+                this.price = orderItemDto.getPrice();
+            }
+        }
+
+        public ResponseOrder(FetchOrderDto fetchOrderDto){
+            this.storeId = fetchOrderDto.getStoreId();
+            this._orderItemDtos = fetchOrderDto.getOrderItemDtoList().stream()
+                    .map(_OrderItemDto::new)
+                    .collect(Collectors.toList());
+            this.totalPrice = fetchOrderDto.getOrderPrice();
+
+        }
+
+    }
+
+    @PostMapping("/orders")
+    public ResponseEntity saveOrder(@RequestHeader(value = "user-id") String userId){
+        orderService.saveOrder(Long.parseLong(userId));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(Result.createSuccessResult(null));
+    }
 
 
 

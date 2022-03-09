@@ -1,9 +1,11 @@
 package com.justpickup.orderservice.domain.order.service;
 
+import com.justpickup.orderservice.domain.order.dto.FetchOrderDto;
 import com.justpickup.orderservice.domain.order.dto.OrderDto;
 import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
 import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
 import com.justpickup.orderservice.domain.order.entity.Order;
+import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.order.repository.OrderRepository;
 import com.justpickup.orderservice.domain.order.repository.OrderRepositoryCustom;
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
@@ -103,7 +105,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void addItemToBasket(OrderItemDto orderItemDto,Long storeId, Long userId) {
-        orderItemDto.getCount();
 
         //orderItemOption Entity를 생성한다.
         List<OrderItemOption> orderItemOptions = orderItemDto.getOrderItemOptionDtoList()
@@ -119,11 +120,26 @@ public class OrderServiceImpl implements OrderService {
         //HARD_CODE
         Long userCouponId=0L;
 
-        Optional<Order> optionalOrder = orderRepository.findByUserId(userId);
+        Optional<Order> optionalOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
         if(optionalOrder.isPresent()){
-            optionalOrder.get().addOrderItem(orderItem);
+            if(optionalOrder.get().addOrderItem(orderItem)
+                    .getStoreId().equals(storeId))
+                throw new RuntimeException("장바구니에 여러 카페의 메뉴를 담을수 없습니다.");
         }else{
             orderRepository.save(Order.of(userId,userCouponId,storeId,orderItemDto.getPrice(),orderItem));
         }
+    }
+
+    @Override
+    public FetchOrderDto fetchOrder(Long userId) {
+        Order order = orderRepositoryCustom.fetchOrder(userId)
+                .orElseThrow(RuntimeException::new);
+
+        return new FetchOrderDto(order);
+    }
+
+    @Override
+    public void saveOrder(Long userId) {
+
     }
 }

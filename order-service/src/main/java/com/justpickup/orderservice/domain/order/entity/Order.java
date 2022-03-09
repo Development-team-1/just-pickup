@@ -85,8 +85,10 @@ public class Order extends BaseEntity {
         transaction.setOrder(this);
     }
 
-    public void addOrderItem(OrderItem orderItem) {
+    public Order addOrderItem(OrderItem orderItem) {
         this.orderItems.add(orderItem);
+        this.orderPrice += orderItem.getPrice();
         orderItem.setOrder(this);
+        return this;
     }
 }

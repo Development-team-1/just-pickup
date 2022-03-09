@@ -1,5 +1,6 @@
 package com.justpickup.orderservice.domain.order.service;
 
+import com.justpickup.orderservice.domain.order.dto.FetchOrderDto;
 import com.justpickup.orderservice.domain.order.dto.OrderDto;
 import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
 import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
@@ -15,4 +16,6 @@ public interface OrderService {
     Page<OrderDto> findPrevOrderMain(PrevOrderSearch search, Pageable pageable, Long storeId);
     SliceImpl<OrderDto> findOrderHistory(Pageable pageable, Long userId);
     void addItemToBasket(OrderItemDto orderItemDto,Long storeId, Long userId);
+    FetchOrderDto fetchOrder(Long userId);
+    void saveOrder(Long userId);
 }

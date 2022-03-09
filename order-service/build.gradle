@@ -35,7 +35,7 @@ dependencies {
 	/*implementation 'org.springframework.boot:spring-boot-starter-amqp'*/
 	/*implementation 'org.springframework.boot:spring-boot-starter-security'*/
 	/*implementation 'org.springframework.cloud:spring-cloud-starter-config'*/
-	/*implementation 'org.springframework.kafka:spring-kafka'*/
+	implementation 'org.springframework.kafka:spring-kafka'
 	// https://mvnrepository.com/artifact/com.github.gavlyukovskiy/p6spy-spring-boot-starter
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
 
@@ -46,7 +46,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //    testImplementation 'org.springframework.amqp:spring-rabbit-test'
-//    testImplementation 'org.springframework.kafka:spring-kafka-test'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
 //    testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'com.h2database:h2'
 
