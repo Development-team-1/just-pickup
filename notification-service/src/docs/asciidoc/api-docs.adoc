@@ -70,3 +70,6 @@ operation::notification-get[snippets='curl-request,http-request,http-response,re
 === 알림 수정
 operation::notification-patch[snippets='curl-request,http-request,http-response,path-parameters,request-fields,response-fields']
 
+== API
+=== 읽지 않은 알림 개수 조회
+operation::api-get-notification-counts[snippets='curl-request,http-request,http-response,request-headers,response-fields']
