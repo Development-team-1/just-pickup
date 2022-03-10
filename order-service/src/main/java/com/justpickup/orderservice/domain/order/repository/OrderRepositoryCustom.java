@@ -3,6 +3,7 @@ package com.justpickup.orderservice.domain.order.repository;
 import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
 import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
 import com.justpickup.orderservice.domain.order.entity.Order;
+import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +15,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static com.justpickup.orderservice.domain.order.entity.QOrder.order;
+import static com.justpickup.orderservice.domain.orderItem.entity.QOrderItem.orderItem;
+import static com.justpickup.orderservice.domain.orderItemOption.entity.QOrderItemOption.orderItemOption;
+import static com.justpickup.orderservice.domain.transaction.entity.QTransaction.transaction;
 
 @Repository
 @RequiredArgsConstructor
@@ -103,5 +108,20 @@ public class OrderRepositoryCustom {
         }
 
         return new SliceImpl<>(contents, pageable, hasNext);
+    }
+
+    public Optional<Order> fetchOrder(Long userId){
+
+        return Optional.ofNullable(queryFactory.selectFrom(order)
+                .leftJoin(order.orderItems, orderItem).fetchJoin()
+                .leftJoin(orderItem.orderItemOptions,orderItemOption)
+                .leftJoin(order.transaction,transaction)
+                    .where(
+                            order.userId.eq(userId),
+                            order.orderStatus.eq(OrderStatus.PENDING)
+                    )
+                        .distinct()
+                            .fetchOne());
+
     }
 }

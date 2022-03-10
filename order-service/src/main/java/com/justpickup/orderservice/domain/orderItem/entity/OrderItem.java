@@ -54,4 +54,15 @@ public class OrderItem extends BaseEntity {
         }
         return orderItem;
     }
+
+    public static OrderItem of(Long itemId, Long price, Long count, List<OrderItemOption> orderItemOptions) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.itemId = itemId;
+        orderItem.price = price;
+        orderItem.count = count;
+        for (OrderItemOption orderItemOption : orderItemOptions) {
+            orderItem.addOrderItemOption(orderItemOption);
+        }
+        return orderItem;
+    }
 }

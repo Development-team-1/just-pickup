@@ -2,13 +2,13 @@ package com.justpickup.storeservice.domain.item.service;
 
 import com.justpickup.storeservice.domain.category.entity.Category;
 import com.justpickup.storeservice.domain.category.repository.CategoryRepository;
+import com.justpickup.storeservice.domain.item.dto.FetchItemDto;
 import com.justpickup.storeservice.domain.item.dto.ItemDto;
 import com.justpickup.storeservice.domain.item.entity.Item;
 import com.justpickup.storeservice.domain.item.exception.NotExistItemException;
 import com.justpickup.storeservice.domain.item.repository.ItemRepository;
 import com.justpickup.storeservice.domain.item.repository.ItemRepositoryCustom;
 import com.justpickup.storeservice.domain.itemoption.dto.ItemOptionDto;
-import com.justpickup.storeservice.domain.itemoption.entity.ItemOption;
 import com.justpickup.storeservice.domain.itemoption.repository.ItemOptionRepository;
 import com.justpickup.storeservice.domain.store.entity.Store;
 import com.justpickup.storeservice.domain.store.repository.StoreRepository;
@@ -46,11 +46,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto findFullItemByItemId(Long itemId) {
-        Item findItem = itemRepositoryCustom.findById(itemId)
+    public FetchItemDto fetchItem(Long itemId) {
+        Item findItem = itemRepositoryCustom.fetchItem(itemId)
                 .orElseThrow(() -> new NotExistItemException("존재하지 않는 아이템 입니다."));
 
-        return ItemDto.createWithCategoryItemDtoAndItemOption(findItem);
+        return new FetchItemDto(findItem);
     }
 
 

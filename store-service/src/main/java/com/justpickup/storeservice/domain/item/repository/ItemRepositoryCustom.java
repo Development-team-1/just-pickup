@@ -3,9 +3,7 @@ package com.justpickup.storeservice.domain.item.repository;
 import com.justpickup.storeservice.domain.category.entity.QCategory;
 import com.justpickup.storeservice.domain.item.entity.Item;
 import com.justpickup.storeservice.domain.item.entity.QItem;
-import com.justpickup.storeservice.domain.itemoption.entity.ItemOption;
 import com.justpickup.storeservice.domain.itemoption.entity.QItemOption;
-import com.justpickup.storeservice.domain.store.entity.QStore;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,7 +20,7 @@ public class ItemRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public Optional<Item> findById(Long itemId){
+    public Optional<Item> fetchItem(Long itemId){
         Item item = queryFactory.selectFrom(QItem.item)
                 .join(QItem.item.itemOptions, QItemOption.itemOption).fetchJoin()
                 .join(QItem.item.category,QCategory.category).fetchJoin()

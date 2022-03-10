@@ -4,6 +4,7 @@
       dense
       color="white"
       elevation="1"
+
   >
     <v-app-bar-nav-icon>
       <v-icon>mdi-arrow-left</v-icon>

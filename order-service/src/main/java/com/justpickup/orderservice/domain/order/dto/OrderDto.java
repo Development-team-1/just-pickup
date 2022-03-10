@@ -1,5 +1,7 @@
 package com.justpickup.orderservice.domain.order.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.justpickup.orderservice.domain.order.entity.Order;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
@@ -7,12 +9,14 @@ import com.justpickup.orderservice.domain.orderItem.entity.OrderItem;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter @NoArgsConstructor
+@Getter @Setter
+@NoArgsConstructor
 public class OrderDto {
     private Long id;
 
@@ -26,6 +30,7 @@ public class OrderDto {
 
     private Long storeId;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime orderTime;
 
     private Long usedPoint;
@@ -82,6 +87,8 @@ public class OrderDto {
                 .orderItemDtoList(orderItemDtoList)
                 .build();
     }
+
+
 
 
     // == 변수 변경 메소드 == //

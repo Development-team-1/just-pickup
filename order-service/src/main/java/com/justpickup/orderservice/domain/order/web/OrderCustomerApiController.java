@@ -1,10 +1,13 @@
 package com.justpickup.orderservice.domain.order.web;
 
+import com.justpickup.orderservice.domain.order.dto.FetchOrderDto;
 import com.justpickup.orderservice.domain.order.dto.OrderDto;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.order.service.OrderService;
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
+import com.justpickup.orderservice.domain.orderItemOption.dto.OrderItemOptionDto;
 import com.justpickup.orderservice.global.dto.Result;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +17,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -89,4 +89,91 @@ public class OrderCustomerApiController {
             }
         }
     }
+
+    /**
+     * order
+     */
+
+    @PostMapping("item")
+    public ResponseEntity addItemToBasket( @RequestBody RequestItem requestItem,
+                                           @RequestHeader(value = "user-id") String userId){
+        OrderItemDto orderItemDto = OrderItemDto.of(-1L,
+                requestItem.getItemId(),
+                requestItem.getPrice(),
+                requestItem.getCount(),
+                requestItem.getItemOptionIds().stream().map(OrderItemOptionDto::new).collect(Collectors.toList()));
+        orderService.addItemToBasket(orderItemDto,requestItem.getStoreId() ,Long.parseLong(userId));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(Result.createSuccessResult(null));
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RequestItem{
+        private Long itemId;
+        private Long storeId;
+        private Long price;
+        private Long count;
+        private List<Long> itemOptionIds ;
+
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity fetchOrder(@RequestHeader(value = "user-id") String userId){
+        FetchOrderDto fetchOrderDto = orderService.fetchOrder(Long.parseLong(userId));
+        FetchOrderResponse fetchOrderResponse = new FetchOrderResponse(fetchOrderDto);
+
+        return ResponseEntity.ok(Result.createSuccessResult(fetchOrderResponse));
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FetchOrderResponse {
+        private Long storeId;
+        private List<_OrderItemDto> _orderItemDtos;
+        private Long totalPrice;
+
+        @Data
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class _OrderItemDto {
+            private Long itemId;
+            private List<Long> itemOptionIds;
+            private Long price;
+            private Long count;
+
+            public _OrderItemDto(OrderItemDto orderItemDto) {
+
+                this.itemId = orderItemDto.getItemId();
+                this.itemOptionIds = orderItemDto.getOrderItemOptionDtoList()
+                        .stream()
+                        .map(OrderItemOptionDto::getId)
+                        .collect(Collectors.toList());
+                this.price = orderItemDto.getPrice();
+                this.count = orderItemDto.getCount();
+            }
+        }
+
+        public FetchOrderResponse(FetchOrderDto fetchOrderDto){
+            this.storeId = fetchOrderDto.getStoreId();
+            this._orderItemDtos = fetchOrderDto.getOrderItemDtoList().stream()
+                    .map(_OrderItemDto::new)
+                    .collect(Collectors.toList());
+            this.totalPrice = fetchOrderDto.getOrderPrice();
+
+        }
+
+    }
+
+    @PostMapping("/orders")
+    public ResponseEntity saveOrder(@RequestHeader(value = "user-id") String userId){
+        orderService.saveOrder(Long.parseLong(userId));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(Result.createSuccessResult(null));
+    }
+
+
+
 }
