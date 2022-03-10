@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.storeservice.config.TestConfig;
 import com.justpickup.storeservice.domain.category.dto.CategoryDto;
 import com.justpickup.storeservice.domain.favoritestore.repository.FavoriteStoreRepository;
+import com.justpickup.storeservice.domain.item.dto.FetchItemDto;
 import com.justpickup.storeservice.domain.item.dto.ItemDto;
-import com.justpickup.storeservice.domain.item.exception.NotExistItemException;
 import com.justpickup.storeservice.domain.item.service.ItemService;
 import com.justpickup.storeservice.domain.itemoption.entity.OptionType;
 import com.justpickup.storeservice.domain.store.repository.StoreRepository;
@@ -21,15 +21,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.LongSupplier;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -118,7 +115,7 @@ class ItemOwnerApiControllerTest {
     void getItem() throws Exception {
         // GIVEN
         long itemId = 1L;
-        ItemDto willReturnDto = ItemDto.builder()
+        FetchItemDto willReturnDto = FetchItemDto.builder()
                 .id(1L)
                 .salesYn(Yn.Y)
                 .price(1500L)
@@ -126,7 +123,7 @@ class ItemOwnerApiControllerTest {
                 .itemOptions(new ArrayList<>())
                 .categoryDto(new CategoryDto())
                 .build();
-        given(itemService.findFullItemByItemId(itemId))
+        given(itemService.fetchItem(itemId))
                 .willReturn(willReturnDto);
 
         // WHEN

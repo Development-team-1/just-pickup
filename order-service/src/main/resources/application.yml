@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 54329
 
 spring:
   application:
@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     generate-ddl: true
     open-in-view: false
     properties:
@@ -37,3 +37,7 @@ logging:
 # jpa query, parameter 로그 (p6spy)
 decorator.datasource.p6spy:
   enable-logging: true
+
+kafka:
+  host: 127.0.0.1
+  port: 9092

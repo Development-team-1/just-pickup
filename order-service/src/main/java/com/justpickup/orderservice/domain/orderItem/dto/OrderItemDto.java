@@ -1,9 +1,13 @@
 package com.justpickup.orderservice.domain.orderItem.dto;
 
 import com.justpickup.orderservice.domain.orderItem.entity.OrderItem;
+import com.justpickup.orderservice.domain.orderItemOption.dto.OrderItemOptionDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter @NoArgsConstructor
 public class OrderItemDto {
@@ -14,7 +18,7 @@ public class OrderItemDto {
 
     private String itemName;
 
-    // private List<OrderItemOptionDto> orderItemOptionDtoList;
+    private List<OrderItemOptionDto> orderItemOptionDtoList;
 
     private Long price;
 
@@ -38,6 +42,16 @@ public class OrderItemDto {
                 .build();
     }
 
+    public static OrderItemDto of(Long id, Long itemId, Long price, Long count, List<OrderItemOptionDto> orderItemOptions) {
+        OrderItemDto orderItemDto = new OrderItemDto();
+        orderItemDto.id = id;
+        orderItemDto.itemId = itemId;
+        orderItemDto.price = price;
+        orderItemDto.count = count;
+        orderItemDto.orderItemOptionDtoList = orderItemOptions;
+
+        return orderItemDto;
+    }
     // == 변수 변경 메소드 == //
     public void setItemName(String itemName) {
         this.itemName = itemName;

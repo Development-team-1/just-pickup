@@ -64,13 +64,36 @@ public class Order extends BaseEntity {
         return order;
     }
 
+    public static Order of(Long userId, Long userCouponId, Long storeId, Long orderPrice,
+                            OrderItem orderItem) {
+        Order order = new Order();
+        order.userId = userId;
+        order.userCouponId = userCouponId;
+        order.storeId = storeId;
+        order.orderPrice = orderPrice;
+
+        order.addOrderItem(orderItem);
+
+        order.usedPoint = 0L;
+        order.orderStatus = OrderStatus.PENDING;
+        order.orderTime = LocalDateTime.now();
+        return order;
+    }
+
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
         transaction.setOrder(this);
     }
 
-    public void addOrderItem(OrderItem orderItem) {
+    public Order addOrderItem(OrderItem orderItem) {
         this.orderItems.add(orderItem);
+        this.orderPrice += (orderItem.getPrice()*orderItem.getCount());
         orderItem.setOrder(this);
+        return this;
+    }
+
+    public Order setOrderStatus(OrderStatus orderStatus){
+        this.orderStatus = orderStatus;
+        return this;
     }
 }

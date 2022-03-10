@@ -1,5 +1,6 @@
 package com.justpickup.storeservice.domain.item.web;
 
+import com.justpickup.storeservice.domain.item.dto.FetchItemDto;
 import com.justpickup.storeservice.domain.item.dto.ItemDto;
 import com.justpickup.storeservice.domain.item.service.ItemService;
 import com.justpickup.storeservice.domain.itemoption.dto.ItemOptionDto;
@@ -90,9 +91,9 @@ public class ItemOwnerApiController {
 
     @GetMapping("/item/{itemId}")
     public ResponseEntity getItem(@PathVariable("itemId") Long itemId) {
-        ItemDto itemByItemId = itemService.findFullItemByItemId(itemId);
+        FetchItemDto fetchItemDto = itemService.fetchItem(itemId);
 
-        GetItemResponse getItemResponse = new GetItemResponse(itemByItemId);
+        GetItemResponse getItemResponse = new GetItemResponse(fetchItemDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Result.createSuccessResult(getItemResponse));
     }
@@ -106,13 +107,13 @@ public class ItemOwnerApiController {
         private Long CategoryId;
         private List<ItemOptionResponse> itemOptions;
 
-        public GetItemResponse(ItemDto itemDto) {
-            this.id = itemDto.getId();
-            this.name = itemDto.getName();
-            this.salesYn = itemDto.getSalesYn();
-            this.price = itemDto.getPrice();
-            this.CategoryId = itemDto.getCategoryDto().getId();
-            this.itemOptions = itemDto.getItemOptions()
+        public GetItemResponse(FetchItemDto fetchItemDto) {
+            this.id = fetchItemDto.getId();
+            this.name = fetchItemDto.getName();
+            this.salesYn = fetchItemDto.getSalesYn();
+            this.price = fetchItemDto.getPrice();
+            this.CategoryId = fetchItemDto.getCategoryDto().getId();
+            this.itemOptions = fetchItemDto.getItemOptions()
                     .stream().map(ItemOptionResponse::new)
                     .collect(Collectors.toList());
         }

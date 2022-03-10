@@ -65,6 +65,16 @@ const routes = [
         name: 'login',
         component: () => import('../views/LoginPage')
       },
+      {
+        path: "/item/:itemId",
+        name: 'itemDetail',
+        component: () => import('../views/ItemDetail')
+      },
+      {
+        path: "/order",
+        name: 'orderPage',
+        component: () => import('../views/OrderPage')
+      },
     ]
   },
   {

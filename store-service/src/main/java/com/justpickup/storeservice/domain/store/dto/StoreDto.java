@@ -18,5 +18,4 @@ public class StoreDto {
         this.name = store.getName();
         this.phoneNumber = store.getPhoneNumber();
     }
-
 }
