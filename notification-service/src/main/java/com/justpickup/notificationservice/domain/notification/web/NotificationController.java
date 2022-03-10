@@ -17,12 +17,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/notification")
 public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @GetMapping("")
+    @GetMapping("/notifications")
     public ResponseEntity<Result> getNotificationByUserId(@RequestHeader("user-id") String userIdHeader) {
         Long userId = Long.valueOf(userIdHeader);
 
@@ -59,7 +58,7 @@ public class NotificationController {
         }
     }
 
-    @PatchMapping("/{notificationId}")
+    @PatchMapping("/notification/{notificationId}")
     public ResponseEntity<Result> patchNotification(@PathVariable("notificationId") Long notificationId,
                                                     @RequestBody PatchNotificationRequest notificationRequest) {
 

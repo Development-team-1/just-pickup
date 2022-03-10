@@ -44,4 +44,9 @@ public class NotificationServiceImpl implements NotificationService {
         Yn readYn = dto.isRead() ? Yn.Y : Yn.N;
         notification.modifyReadYn(readYn);
     }
+
+    @Override
+    public Long findNotificationCounts(Long userId, Yn readYn) {
+        return notificationRepository.countByUserIdAndReadYn(userId, readYn);
+    }
 }
