@@ -96,4 +96,16 @@ public class Order extends BaseEntity {
         this.orderStatus = orderStatus;
         return this;
     }
+
+    public void placed() {
+        this.orderStatus = OrderStatus.PLACED;
+    }
+
+    public void order() {
+        this.orderStatus = OrderStatus.ORDER;
+    }
+
+    public void reject() {
+        this.orderStatus = OrderStatus.REJECT;
+    }
 }

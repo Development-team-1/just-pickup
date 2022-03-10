@@ -1,9 +1,6 @@
 package com.justpickup.orderservice.domain.order.service;
 
-import com.justpickup.orderservice.domain.order.dto.FetchOrderDto;
-import com.justpickup.orderservice.domain.order.dto.OrderDto;
-import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
-import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
+import com.justpickup.orderservice.domain.order.dto.*;
 import com.justpickup.orderservice.domain.order.entity.Order;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.order.exception.OrderException;
@@ -11,14 +8,8 @@ import com.justpickup.orderservice.domain.order.repository.OrderRepository;
 import com.justpickup.orderservice.domain.order.repository.OrderRepositoryCustom;
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
 import com.justpickup.orderservice.domain.orderItem.entity.OrderItem;
-import com.justpickup.orderservice.domain.orderItem.repository.OrderItemRepository;
 import com.justpickup.orderservice.domain.orderItemOption.entity.OrderItemOption;
-import com.justpickup.orderservice.domain.orderItemOption.repository.OrderItemOptionRepository;
-import com.justpickup.orderservice.global.client.store.GetItemResponse;
-import com.justpickup.orderservice.global.client.store.StoreClient;
-import com.justpickup.orderservice.global.client.user.GetCustomerResponse;
-import com.justpickup.orderservice.global.client.user.UserClient;
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -38,28 +30,18 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final OrderItemRepository  orderItemRepository;
-    private final OrderItemOptionRepository orderItemOptionRepository;
     private final OrderRepositoryCustom orderRepositoryCustom;
-    private final StoreClient storeClient;
-    private final UserClient userClient;
     private final OrderSender orderSender;
 
-
-
     @Override
-    public List<OrderDto> findOrderMain(OrderSearchCondition condition, Long storeId) {
+    public OrderMainDto findOrderMain(OrderSearchCondition condition, Long storeId) {
         // 주문 가져오기
-        List<OrderDto> orderDtoList =
-                orderRepositoryCustom.findOrderMain(condition, storeId)
-                        .stream()
-                        .map(OrderDto::createFullField)
-                        .collect(Collectors.toList());
+        OrderMainResult orderMainResult = orderRepositoryCustom.findOrderMain(condition, storeId);
 
         // 사용자명 및 아이템 이름 가져오기
 //        getUserNameAndItemName(orderDtoList);
 
-        return orderDtoList;
+        return OrderMainDto.of(orderMainResult.getOrders(), orderMainResult.isHasNext());
     }
 
     @Override
@@ -69,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderDto> orderDtoList = orderPage.getContent()
                 .stream()
                 .map(OrderDto::createFullField)
-                .collect(Collectors.toList());
+                .collect(toList());
 
         // 사용자명 및 아이템 이름 가져오기
 //        getUserNameAndItemName(orderDtoList);
@@ -84,26 +66,11 @@ public class OrderServiceImpl implements OrderService {
         List<OrderDto> contents = orderHistory.getContent()
                 .stream()
                 .map(OrderDto::createFullField)
-                .collect(Collectors.toList());
+                .collect(toList());
 
         // TODO: 2022/03/07 Feign Client 통신
 
         return new SliceImpl<>(contents, pageable, orderHistory.hasNext());
-    }
-
-    private void getUserNameAndItemName(List<OrderDto> orderDtoList) {
-        orderDtoList.forEach(orderDto -> {
-            GetCustomerResponse getCustomerResponse =
-                    userClient.getUser(orderDto.getUserId()).getData();
-            orderDto.setUserName(getCustomerResponse.getUserName());
-
-            orderDto.getOrderItemDtoList()
-                    .forEach(orderItemDto -> {
-                        GetItemResponse getItemResponse =
-                                storeClient.getItem(orderItemDto.getItemId()).getData();
-                        orderItemDto.setItemName(getItemResponse.getName());
-                    });
-        });
     }
 
     @Override
@@ -113,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
         //orderItemOption Entity를 생성한다.
         List<OrderItemOption> orderItemOptions = orderItemDto.getOrderItemOptionDtoList()
                 .stream().map(orderItemOptionDto -> OrderItemOption.of(orderItemDto.getId()))
-                .collect(Collectors.toList());
+                .collect(toList());
 
         //orderItem을 Entity를 생성한다.
         OrderItem orderItem = OrderItem.of(orderItemDto.getItemId()
@@ -155,7 +122,13 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    @Transactional
+    public void modifyOrder(Long orderId, OrderStatus orderStatus) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderException(orderId + "는 없는 주문 번호입니다."));
 
-
+        order.setOrderStatus(orderStatus);
+    }
 
 }
