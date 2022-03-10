@@ -1,6 +1,5 @@
 package com.justpickup.storeservice.domain.store.repository;
 
-import com.justpickup.storeservice.domain.favoritestore.entity.FavoriteStore;
 import com.justpickup.storeservice.domain.favoritestore.entity.QFavoriteStore;
 import com.justpickup.storeservice.domain.store.dto.SearchStoreCondition;
 import com.justpickup.storeservice.domain.store.dto.SearchStoreResult;
@@ -83,7 +82,7 @@ public class StoreRepositoryCustom {
         return content;
     }
 
-    private NumberExpression<Double> getHaversineDistance (double SearchLatitude, double SearchLongitude){
+    private NumberExpression<Double> getHaversineDistance(double SearchLatitude, double SearchLongitude){
         Expression<Double> latitude = Expressions.constant(SearchLatitude);
         Expression<Double> longitude = Expressions.constant(SearchLongitude);
 

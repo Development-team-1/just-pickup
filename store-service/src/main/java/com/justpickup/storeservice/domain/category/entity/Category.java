@@ -60,4 +60,11 @@ public class Category extends BaseEntity {
         return new Category(id,name,order,store);
     }
 
+    public static Category of(String name, Integer order, Store store) {
+        Category category = new Category();
+        category.name = name;
+        category.order = order;
+        category.store = store;
+        return category;
+    }
 }

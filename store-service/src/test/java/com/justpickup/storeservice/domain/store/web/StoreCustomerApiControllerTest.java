@@ -93,16 +93,17 @@ class StoreCustomerApiControllerTest {
                                 fieldWithPath("message").description("메시지"),
                                 fieldWithPath("data[*].id").description("매장 고유번호"),
                                 fieldWithPath("data[*].name").description("매장 이름"),
-                                fieldWithPath("data[*].distance").description("고객과의 거리차이 m/km")
+                                fieldWithPath("data[*].distance").description("고객과의 거리차이 m/km"),
+                                fieldWithPath("data[*].favoriteCounts").description("즐겨찾기 회수")
                         )
                 ));
     }
 
 
     private List<SearchStoreResult> getWillReturnSearchStore(){
-        SearchStoreResult result_1 = new SearchStoreResult(1L, "이디야커피 마포오벨리스크점", 145.11980562222007);
-        SearchStoreResult result_2 = new SearchStoreResult(2L, "만랩커피 마포점", 150.97181089895466);
-        SearchStoreResult result_3 = new SearchStoreResult(3L, "커피온리 마포역점", 341.25696860337655);
+        SearchStoreResult result_1 = new SearchStoreResult(1L, "이디야커피 마포오벨리스크점", 145.11980562222007, 5L);
+        SearchStoreResult result_2 = new SearchStoreResult(2L, "만랩커피 마포점", 150.97181089895466, 5L);
+        SearchStoreResult result_3 = new SearchStoreResult(3L, "커피온리 마포역점", 341.25696860337655, 5L);
 
         return List.of(result_1,result_2,result_3);
     }

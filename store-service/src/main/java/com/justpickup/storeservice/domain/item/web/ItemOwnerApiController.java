@@ -128,10 +128,8 @@ public class ItemOwnerApiController {
             private String name;
 
             public ItemOptionResponse(ItemOptionDto itemOptionDto) {
-
                 this.id = itemOptionDto.getId();
                 this.optionType = itemOptionDto.getOptionType();
-                this.price = itemOptionDto.getPrice();
                 this.name = itemOptionDto.getName();
             }
         }
@@ -181,13 +179,11 @@ public class ItemOwnerApiController {
             private Long id;
             private String name;
             private OptionType optionType;
-            private Long price;
 
             public static ItemOptionDto createItemOptionDto(ItemOptionRequest itemOptionRequest){
                 return ItemOptionDto.builder()
                         .id(itemOptionRequest.getId())
                         .name(itemOptionRequest.getName())
-                        .price(itemOptionRequest.getPrice())
                         .optionType(itemOptionRequest.getOptionType())
                         .build();
 
