@@ -38,6 +38,7 @@ spring:
               - PUT
               - OPTIONS
               - DELETE
+              - PATCH
             allowedHeaders: '*'
             allow-credentials: true
       routes:
@@ -56,6 +57,14 @@ spring:
           filters:
             - AuthorizationHeaderFilter
             - RewritePath=/store-service/(?<segment>.*),/$\{segment}
+
+        - id: notification-service
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/notification-service/**
+          filters:
+            - AuthorizationHeaderFilter
+            - RewritePath=/notification-service/(?<segment>.*),/$\{segment}
 
         - id: user-service
           uri: lb://USER-SERVICE
