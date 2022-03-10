@@ -32,10 +32,9 @@ public class ItemOwnerApiController {
                                                                @PageableDefault Pageable pageable,
                                                                @RequestHeader(value = "user-id") String userId ){
 
-        Long storeId = Long.parseLong(userId);
 
         Page<ItemDto> itemDtoList =
-                itemService.findItemList(storeId,
+                itemService.findItemList(Long.parseLong(userId),
                         word.orElse(""),
                         pageable);
         List<GetItemListResponse.Item> itemList = itemDtoList.stream()
@@ -200,7 +199,6 @@ public class ItemOwnerApiController {
     public ResponseEntity createItem( @RequestBody @Valid ItemRequest itemRequest,
                                       @RequestHeader(value = "user-id") String userId ){
 
-        Long storeId = Long.parseLong(userId);
 
         List<ItemOptionDto> itemOption = itemRequest.getRequiredOption().stream()
                 .map(ItemRequest.ItemOptionRequest::createItemOptionDto)
@@ -209,7 +207,7 @@ public class ItemOwnerApiController {
                 .map(ItemRequest.ItemOptionRequest::createItemOptionDto)
                 .collect(Collectors.toList()));
 
-        itemService.createItem(storeId
+        itemService.createItem(Long.parseLong(userId)
                 , itemRequest.getItemName()
                 , itemRequest.getItemPrice()
                 , itemRequest.getCategoryId()

@@ -17,12 +17,12 @@ public class CategoryRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<Category> getCategoryList(Long storeId){
+    public List<Category> getCategoryList(Long userId){
 
         List<Category> categoryList = jpaQueryFactory.selectFrom(QCategory.category)
                 .leftJoin(QCategory.category.items, QItem.item).fetchJoin()
                 .join(QCategory.category.store, QStore.store).fetchJoin()
-                .where(QCategory.category.store.id.eq(storeId))
+                .where(QCategory.category.store.userId.eq(userId))
                 .orderBy(QCategory.category.order.asc())
                 .distinct()
                 .fetch();

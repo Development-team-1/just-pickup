@@ -57,9 +57,9 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    public Page<ItemDto> findItemList( Long storeId,String word, Pageable pageable) {
+    public Page<ItemDto> findItemList( Long userId,String word, Pageable pageable) {
 
-        Page<Item> itemList = itemRepositoryCustom.findItem(storeId,word,pageable);
+        Page<Item> itemList = itemRepositoryCustom.findItem(userId,word,pageable);
         return PageableExecutionUtils.getPage(itemList.stream()
                 .map(ItemDto::createWithCategoryItemDto)
                 .collect(Collectors.toList()),pageable,itemList::getTotalElements);
@@ -91,14 +91,14 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void createItem(Long storeId,
+    public void createItem(Long userId,
                               String itemName,
                               Long itemPrice,
                               Long categoryId,
                               List<ItemOptionDto> itemOptionDtos) {
 
         //find Store
-        Store store = storeRepository.findById(storeId)
+        Store store = storeRepository.findByUserId(userId)
                 .orElseThrow(() -> new NotExistItemException("존재하지 않는 매장 입니다."));
 
         //find Category

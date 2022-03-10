@@ -32,14 +32,14 @@ public class ItemRepositoryCustom {
         return Optional.ofNullable(item);
     }
 
-    public Page<Item> findItem(Long storeId,String word, Pageable pageable){
+    public Page<Item> findItem(Long userId,String word, Pageable pageable){
 
         //count 가져오기
         Long count =  queryFactory.select(QItem.item.count())
                 .from(QItem.item)
                 .join(QItem.item.category)
                 .leftJoin(QItem.item.store)
-                .on(QItem.item.store.id.eq(storeId))
+                .on(QItem.item.store.userId.eq(userId))
                 .where(
                         QItem.item.name.contains(word)
                             .or(QItem.item.category.name.contains(word))
@@ -52,7 +52,7 @@ public class ItemRepositoryCustom {
         List<Item> itemList = queryFactory.selectFrom(QItem.item)
                 .join(QItem.item.category).fetchJoin()
                 .leftJoin(QItem.item.store)
-                .on(QItem.item.store.id.eq(storeId))
+                .on(QItem.item.store.id.eq(userId))
                 .where(
                         QItem.item.name.contains(word)
                             .or(QItem.item.category.name.contains(word))
