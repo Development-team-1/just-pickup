@@ -176,10 +176,39 @@ class OrderCustomerApiControllerTest {
     @DisplayName("장바구니 정보 조회_성공")
     void fetchOrder() throws Exception{
         //Given
+        FetchOrderDto fetchOrderDto =
+                new FetchOrderDto(2L,2L,12000L,2L
+                ,List.of(
+                        OrderItemDto.of(1L,300L,3000L,2L,
+                                List.of(new OrderItemOptionDto(2L)
+                                        ,new OrderItemOptionDto(3L))
+                        )
+                    )
+                );
 
+        given(orderService.fetchOrder(2L)).willReturn(fetchOrderDto);
         //When
 
+        ResultActions actions = mockMvc.perform(get(url + "/orders")
+                .header("user-id", "2")
+        );
+
         //Then
+        actions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("fetch-order",
+                        requestHeaders(headerWithName("user-id").description("유저 고유번호")),
+                        responseFields(
+                                fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),
+                                fieldWithPath("message").description("메시지"),
+                                fieldWithPath("data.storeId").description("매장 고유번호"),
+                                fieldWithPath("data.totalPrice").description("총 합계"),
+                                fieldWithPath("data._orderItemDtos[*].itemId").description("상품 고유번호"),
+                                fieldWithPath("data._orderItemDtos[*].price").description("상품 가격"),
+                                fieldWithPath("data._orderItemDtos[*].count").description("상품 갯수"),
+                                fieldWithPath("data._orderItemDtos[*].itemOptionIds[*]").description("아이템 옵션들")
+                        )));
+
 
     }
 
@@ -189,8 +218,15 @@ class OrderCustomerApiControllerTest {
         //Given
 
         //When
-
+        ResultActions actions = mockMvc.perform(post(url + "/orders")
+                .header("user-id", "2")
+        );
         //Then
+        actions.andExpect(status().isCreated())
+                .andDo(print())
+                .andDo(document("save-order",
+                        requestHeaders(headerWithName("user-id").description("유저 고유번호"))
+                        ));
 
     }
 
