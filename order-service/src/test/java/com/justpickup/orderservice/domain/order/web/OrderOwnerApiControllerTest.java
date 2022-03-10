@@ -3,6 +3,9 @@ package com.justpickup.orderservice.domain.order.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.orderservice.config.TestConfig;
 import com.justpickup.orderservice.domain.order.dto.OrderDto;
+import com.justpickup.orderservice.domain.order.dto.OrderMainDto;
+import com.justpickup.orderservice.domain.order.dto.OrderMainDto._Order;
+import com.justpickup.orderservice.domain.order.dto.OrderMainDto._OrderItem;
 import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
 import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
@@ -27,6 +30,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -74,7 +78,7 @@ class OrderOwnerApiControllerTest {
         Long storeId = 1L;
 
         given(orderService.findOrderMain(condition, storeId))
-                .willReturn(getOrderMainDtoList());
+                .willReturn(getWillReturnOrderMain());
 
         // WHEN
 
@@ -87,10 +91,9 @@ class OrderOwnerApiControllerTest {
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("code").value(Code.SUCCESS.name()))
                 .andExpect(jsonPath("message").isEmpty())
-                .andExpect(jsonPath("data").exists())
-                .andExpect(jsonPath("data[*].orderItemResponses").exists())
-                .andExpect(jsonPath("data[*].orderStatus").exists())
-                .andExpect(jsonPath("data[*].orderTime").exists())
+                .andExpect(jsonPath("data.hasNext").exists())
+                .andExpect(jsonPath("data.orders").exists())
+                .andExpect(jsonPath("data.orders[*].orderItems").exists())
                 .andDo(print())
                 .andDo(document("orderMain-get",
                         requestParameters(
@@ -100,17 +103,37 @@ class OrderOwnerApiControllerTest {
                         responseFields(
                                 fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),
                                 fieldWithPath("message").description("메시지"),
-                                fieldWithPath("data[*].orderId").description("주문 고유 번호"),
-                                fieldWithPath("data[*].userId").description("고객 고유 번호"),
-                                fieldWithPath("data[*].userName").description("고객 이름"),
-                                fieldWithPath("data[*].orderItemResponses[*].orderItemId").description("장바구니 고유번호"),
-                                fieldWithPath("data[*].orderItemResponses[*].itemId").description("상품 고유번호"),
-                                fieldWithPath("data[*].orderItemResponses[*].itemName").description("상품 이름"),
-                                fieldWithPath("data[*].orderStatus").description("주문 상태"),
-                                fieldWithPath("data[*].orderTime").description("주문 시간")
+                                fieldWithPath("data.hasNext").description("다음 게시물 표시 여부"),
+                                fieldWithPath("data.orders[*].id").description("주문 고유번호"),
+                                fieldWithPath("data.orders[*].orderTime").description("주문 시간 [yyyy-MM-dd HH:mm]"),
+                                fieldWithPath("data.orders[*].orderStatus").description("주문 상태"),
+                                fieldWithPath("data.orders[*].userName").description("주문한 사용자 이름"),
+                                fieldWithPath("data.orders[*].storeName").description("가게 이름"),
+                                fieldWithPath("data.orders[*].orderItems[*].itemName").description("아이템 이름")
                         )
                 ))
         ;
+    }
+
+    private OrderMainDto getWillReturnOrderMain() {
+        List<_Order> orders = new ArrayList<>();
+        for (long i = 1; i <= 6; i++) {
+            List<_OrderItem> orderItems = new ArrayList<>();
+            for (long j = 10; j <= 12; j++) {
+                _OrderItem orderItem = _OrderItem.builder()
+                        .id(j)
+                        .itemId(j)
+                        .itemName("아이템" + i * j).build();
+                orderItems.add(orderItem);
+            }
+
+            _Order order = _Order.builder()
+                    .id(i).userId(i + 10).orderStatus(OrderStatus.ORDER)
+                    .orderTime(LocalDateTime.now()).orderItems(orderItems).storeName("가게명" + i)
+                    .build();
+            orders.add(order);
+        }
+        return OrderMainDto.builder().orders(orders).hasNext(true).build();
     }
 
     @Test
@@ -181,7 +204,7 @@ class OrderOwnerApiControllerTest {
                 .id(2L)
                 .userId(1L)
                 .orderItemDtoList(List.of(orderItemDto_102, orderItemDto_103))
-                .orderStatus(OrderStatus.CANCELED)
+                .orderStatus(OrderStatus.FAIL)
                 .orderTime(LocalDateTime.of(2022, 2, 3, 15, 0, 0))
                 .build();
         orderDto_2.setUserName("닉네임");
