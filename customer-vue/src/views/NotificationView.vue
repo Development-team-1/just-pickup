@@ -16,13 +16,13 @@
         <v-list-item-action>
           <v-checkbox
               disabled
-              v-if="item.read"
+              v-if="item.prevRead"
               v-model="item.read"
               hide-details></v-checkbox>
           <v-checkbox
               v-else
               v-model="item.read"
-              @click="clickRead(item.id)"
+              @click="clickRead(item.id, item.read)"
               hide-details></v-checkbox>
         </v-list-item-action>
       </v-list-item>
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import notificationApi from "../api/notification";
+import notificationApi from "@/api/notification";
 
 export default {
   name: "NotificationView",
@@ -59,12 +59,21 @@ export default {
           id: notification.id,
           message: notification.message,
           title: notification.title,
+          prevRead: notification.read,
           read: notification.read
         });
       });
     },
-    clickRead: function(id) {
-      console.log("clickRead", id);
+    clickRead: async function(id, isRead) {
+      await notificationApi.patchNotification(id, isRead);
+
+      if (isRead) {
+        alert("해당 알림은 읽음 처리되었습니다.");
+        this.$emit("minusCount");
+      } else {
+        alert("해당 알림은 읽음 해제 처리되었습니다.");
+        this.$emit("plusCount");
+      }
     }
   }
 }

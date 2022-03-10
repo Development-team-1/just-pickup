@@ -20,8 +20,8 @@
           @click="goNotification"
       >
         <v-badge
-          :content="notificationCount"
-          :value="notificationCount"
+          :content="notificationCounts"
+          :value="notificationCounts"
           color="orange"
           overlap
         >
@@ -34,17 +34,9 @@
 <script>
 export default {
   name: "AppNavigation",
-  mounted() {
-    console.log("[AppNavigation] mounted!");
-  },
-  data: function() {
-    return {
-      notificationCount: 0
-    }
-  },
+  props: ["notificationCounts"],
   methods: {
     goNotification: function() {
-      console.log("여기!");
       this.$router.push('/notification');
     }
   }
