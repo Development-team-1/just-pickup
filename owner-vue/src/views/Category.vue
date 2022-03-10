@@ -56,7 +56,7 @@
 
 <script>
 import draggable from 'vuedraggable'
-import store from "@/api/store";
+import storeApi from "@/api/store";
 import {
   mdiContentSave, mdiDelete,
   mdiPlus,
@@ -103,7 +103,7 @@ export default {
       let data = {
         storeId : "1",
         categoryList: [],
-        deletedList: vm.deletedList
+        deletedList: this.deletedList
       }
 
       var categoryEl = document.querySelector("#categoryEl");
@@ -116,16 +116,17 @@ export default {
         data.categoryList.push(category)
       })
 
-      store.putCategoryList(data)
+      storeApi.putCategoryList(data)
         .then(function () {
-          vm.deletedList=[]
           vm.getCategoryList()
       });
 
     },
     getCategoryList:function(){
+      this.deletedList=[]
+      this.categoryList = [];
       var vm =this;
-      store.getCategoryList()
+      storeApi.getCategoryList()
       .then(function (response) {
         vm.categoryList = response.data.data;
       });

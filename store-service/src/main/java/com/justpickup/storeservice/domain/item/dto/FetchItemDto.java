@@ -40,7 +40,7 @@ public class FetchItemDto {
         this.price = item.getPrice();
         this.categoryDto = new CategoryDto(item.getCategory());
         this.itemOptions = item.getItemOptions().stream().map(ItemOptionDto::new).collect(Collectors.toList());
-        this.storeDto = new StoreDto(item.getStore().getId(), item.getStore().getName());
+        this.storeDto = new StoreDto(item.getStore().getId(), item.getStore().getName(), item.getStore().getPhoneNumber());
     }
 
 }

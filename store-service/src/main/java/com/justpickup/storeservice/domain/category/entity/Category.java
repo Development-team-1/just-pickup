@@ -49,15 +49,11 @@ public class Category extends BaseEntity {
         this.order = order;
     }
 
-    private Category (Long id , String name, Integer order, Store store){
+    public Category (Long id , String name, Integer order, Store store){
         this.id = id;
         this.name = name;
         this.order = order;
         this.store = store;
-    }
-
-    public static Category createCategory(Long id ,String name, Integer order, Store store){
-        return new Category(id,name,order,store);
     }
 
     public static Category of(String name, Integer order, Store store) {

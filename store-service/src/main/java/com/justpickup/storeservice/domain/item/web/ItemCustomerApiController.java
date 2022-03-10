@@ -51,7 +51,7 @@ public class ItemCustomerApiController {
             this.itemOptions = fetchItemDto.getItemOptions()
                     .stream().map(ItemOptionResponse::new)
                     .collect(Collectors.toList());
-            this.storeId = fetchItemDto.getStoreDto().getStoreId();
+            this.storeId = fetchItemDto.getStoreDto().getId();
         }
 
         @Data
@@ -60,15 +60,12 @@ public class ItemCustomerApiController {
 
             private OptionType optionType;
 
-            private Long price;
-
             private String name;
 
             public ItemOptionResponse(ItemOptionDto itemOptionDto) {
 
                 this.id = itemOptionDto.getId();
                 this.optionType = itemOptionDto.getOptionType();
-                this.price = itemOptionDto.getPrice();
                 this.name = itemOptionDto.getName();
             }
         }

@@ -35,23 +35,21 @@ public class CategoryService {
     }
 
     @Transactional
-    public void putCategoryList(Long storeId , List<CategoryDto> categoryDtoList , List<CategoryDto> deletedCategoryDtoList ){
+    public void putCategoryList(Long storeId ,
+                                List<CategoryDto> categoryDtoList ,
+                                List<CategoryDto> deletedCategoryDtoList ){
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NotFoundStoreException(HttpStatus.BAD_REQUEST,"존재하지않는 Store"));
 
         List<Category> categoryList =categoryDtoList.stream()
-                .map(categoryDto -> {
-                    categoryDto.setStore(store);
-                    return CategoryDto.createCategory(categoryDto);
-                })
+                .map(categoryDto ->
+                        new Category(categoryDto.getId(), categoryDto.getName(), categoryDto.getOrder(), store))
                 .collect(Collectors.toList());
 
         List<Category> deletedCategoryList =deletedCategoryDtoList.stream()
-                .map(categoryDto -> {
-                    categoryDto.setStore(store);
-                    return CategoryDto.createCategory(categoryDto);
-                })
+                .map(categoryDto ->
+                        new Category(categoryDto.getId(), categoryDto.getName(), categoryDto.getOrder(), store))
                 .collect(Collectors.toList());
 
         categoryList.forEach(

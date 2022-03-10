@@ -9,6 +9,7 @@ import com.justpickup.storeservice.domain.item.exception.NotExistItemException;
 import com.justpickup.storeservice.domain.item.repository.ItemRepository;
 import com.justpickup.storeservice.domain.item.repository.ItemRepositoryCustom;
 import com.justpickup.storeservice.domain.itemoption.dto.ItemOptionDto;
+import com.justpickup.storeservice.domain.itemoption.entity.ItemOption;
 import com.justpickup.storeservice.domain.itemoption.repository.ItemOptionRepository;
 import com.justpickup.storeservice.domain.store.entity.Store;
 import com.justpickup.storeservice.domain.store.repository.StoreRepository;
