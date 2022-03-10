@@ -44,10 +44,10 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
             exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
             responseBody.put("code", "INVALID");
             responseBody.put("message", "Invalid Access Token");
-        }else{
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+        } else {
+            exchange.getResponse().setStatusCode(exchange.getResponse().getStatusCode());
             exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
-            responseBody.put("code", "INVALID");
+            responseBody.put("code", ex.getMessage());
         }
 
         DataBuffer wrap = null;
