@@ -64,6 +64,10 @@
 == snippets 작성 컨벤션
 domain-httpRequestCode-etc
 
+== 주문
+=== 주문 수정
+operation::order-patch[snippets='curl-request,http-request,http-response,path-parameters,request-fields,response-fields']
+
 == 점주 서비스
 === 주문 페이지
 - 페이지 offset : 6
