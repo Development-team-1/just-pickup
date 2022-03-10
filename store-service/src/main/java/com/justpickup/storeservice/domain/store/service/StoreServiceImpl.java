@@ -3,6 +3,10 @@ package com.justpickup.storeservice.domain.store.service;
 import com.justpickup.storeservice.domain.favoritestore.repository.FavoriteStoreCustom;
 import com.justpickup.storeservice.domain.store.dto.SearchStoreCondition;
 import com.justpickup.storeservice.domain.store.dto.SearchStoreResult;
+import com.justpickup.storeservice.domain.store.dto.StoreDto;
+import com.justpickup.storeservice.domain.store.entity.Store;
+import com.justpickup.storeservice.domain.store.exception.NotExistStoreException;
+import com.justpickup.storeservice.domain.store.repository.StoreRepository;
 import com.justpickup.storeservice.domain.store.repository.StoreRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +14,6 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +21,7 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreRepositoryCustom storeRepositoryCustom;
     private final FavoriteStoreCustom favoriteStoreCustom;
+    private final StoreRepository storeRepository;
 
     @Override
     public SliceImpl<SearchStoreResult> findSearchStoreScroll(SearchStoreCondition condition, Pageable pageable) {
@@ -40,5 +44,13 @@ public class StoreServiceImpl implements StoreService {
             result.setFavoriteCounts(favoriteCounts);
         });
         return favoriteStores;
+    }
+
+    @Override
+    public StoreDto findStore(Long storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new NotExistStoreException(storeId + "는 없는 매장 고유번호입니다."));
+
+        return new StoreDto(store);
     }
 }

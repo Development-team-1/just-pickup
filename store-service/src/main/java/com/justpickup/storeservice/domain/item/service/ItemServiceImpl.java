@@ -20,7 +20,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,7 +59,7 @@ public class ItemServiceImpl implements ItemService {
 
         Page<Item> itemList = itemRepositoryCustom.findItem(storeId,word,pageable);
         return PageableExecutionUtils.getPage(itemList.stream()
-                .map(ItemDto::createWithCategoryItemDto)
+                .map(ItemDto::createWithCategory)
                 .collect(Collectors.toList()),pageable,itemList::getTotalElements);
     }
 
@@ -95,7 +94,6 @@ public class ItemServiceImpl implements ItemService {
                               Long itemPrice,
                               Long categoryId,
                               List<ItemOptionDto> itemOptionDtos) {
-
         //find Store
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NotExistItemException("존재하지 않는 매장 입니다."));
@@ -104,11 +102,13 @@ public class ItemServiceImpl implements ItemService {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotExistItemException("존재하지 않는 카테고리 입니다."));
 
-        //create Item
-        Item item = Item.createdFullItem(category,store,new ArrayList<>() ,itemName, itemPrice);
+        List<ItemOption> itemOptions = itemOptionDtos
+                .stream()
+                .map(itemOptionDto -> ItemOption.of(itemOptionDto.getOptionType(), itemOptionDto.getName()))
+                .collect(Collectors.toList());
 
-        //add ItemOption
-        itemOptionDtos.forEach((itemOptionDto ->
-                itemOptionRepository.save(ItemOptionDto.createItemOption(itemOptionDto, item))));
+        Item createdItem = Item.of(itemName, itemPrice, category, store, itemOptions);
+
+        itemRepository.save(createdItem);
     }
 }

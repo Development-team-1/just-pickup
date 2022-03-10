@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
@@ -48,13 +49,14 @@ public class Store extends BaseEntity {
     private Long userId;
 
     @OneToMany(mappedBy = "store")
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
 
     @OneToMany(mappedBy = "store")
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 
     @OneToMany(mappedBy = "store")
-    private List<FavoriteStore> favoriteStores;
+    private List<FavoriteStore> favoriteStores = new ArrayList<>();
+
     // == 연관관계 편의 메소드 == //
     public void addCategory(Category category) {
         categories.add(category);

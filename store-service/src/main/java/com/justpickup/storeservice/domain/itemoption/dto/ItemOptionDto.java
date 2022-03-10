@@ -20,20 +20,15 @@ public class ItemOptionDto {
 
     private OptionType optionType;
 
-    private Long price;
-
     private String name;
 
     public ItemOptionDto (ItemOption itemOption){
         this.id = itemOption.getId();
         this.optionType = itemOption.getOptionType();
-        this.price = itemOption.getPrice();
         this.name = itemOption.getName();
     }
 
     public static ItemOption createItemOption (ItemOptionDto itemOptionDto, Item item){
-
-        return new ItemOption(itemOptionDto.getOptionType(),itemOptionDto.getPrice(),itemOptionDto.getName(),item);
-
+        return new ItemOption(itemOptionDto.getOptionType(), itemOptionDto.getName(),item);
     }
 }

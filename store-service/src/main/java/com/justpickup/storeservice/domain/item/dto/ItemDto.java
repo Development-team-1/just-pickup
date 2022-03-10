@@ -52,7 +52,7 @@ public class ItemDto {
                 .build();
     }
 
-    public static ItemDto createWithCategoryItemDto(Item item) {
+    public static ItemDto createWithCategory(Item item) {
         return ItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())

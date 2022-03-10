@@ -6,29 +6,43 @@
       elevation="1"
 
   >
+    <v-app-bar-nav-icon>
+      <v-icon>mdi-arrow-left</v-icon>
+    </v-app-bar-nav-icon>
+    <v-spacer></v-spacer>
+    <v-toolbar-title>
+      <v-img :src="require('@/assets/just-logo.png')"></v-img>
+    </v-toolbar-title>
+    <v-spacer></v-spacer>
 
-    <v-row class="d-flex" style="max-width: 768px;display: table; margin-left: auto; margin-right: auto; width: 100%" align="center">
-      <v-app-bar-nav-icon>
-        <v-icon>mdi-arrow-left</v-icon>
-      </v-app-bar-nav-icon>
-      <v-spacer></v-spacer>
-      <v-toolbar-title>
-        <v-img :src="require('@/assets/just-logo.png')"></v-img>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
+      <v-btn
+          color="white"
+          elevation="0"
+          @click="goNotification"
+      >
+        <v-badge
+          :content="notificationCounts"
+          :value="notificationCounts"
+          color="orange"
+          overlap
+        >
+            <v-icon>mdi-bell-outline</v-icon>
+        </v-badge>
       </v-btn>
-    </v-row>
   </v-app-bar>
 </template>
 
 <script>
 export default {
-  name: "AppNavigation"
+  name: "AppNavigation",
+  props: ["notificationCounts"],
+  methods: {
+    goNotification: function() {
+      this.$router.push('/notification');
+    }
+  }
 }
 </script>
 
 <style scoped>
-
 </style>

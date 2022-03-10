@@ -4,6 +4,7 @@ import jwt from "@/common/jwt";
 import auth from "@/api/auth";
 
 import HomeLayout from '../views/Layout/HomeLayout.vue';
+import StoreLayout from "@/views/Layout/StoreLayout";
 const ACCESS_TOKEN_NAME = "accessToken";
 const EXPIRED_TIME_NAME = "expiredTime";
 
@@ -55,6 +56,11 @@ const routes = [
         component: () => import('../views/FavoriteStore')
       },
       {
+        path: "/notification",
+        name: 'notification',
+        component: () => import('../views/NotificationView')
+      },
+      {
         path: '/login',
         name: 'login',
         component: () => import('../views/LoginPage')
@@ -71,8 +77,20 @@ const routes = [
       },
     ]
   },
-
-
+  {
+    path: '/store',
+    redirect: 'store',
+    beforeEnter: authCheck,
+    component: StoreLayout,
+    children: [
+      {
+        path: "/store/:storeId",
+        name: "store",
+        component: () => import('../views/StoreView'),
+        props: true
+      },
+    ]
+  },
   {
     path: '/auth',
     name: 'auth',

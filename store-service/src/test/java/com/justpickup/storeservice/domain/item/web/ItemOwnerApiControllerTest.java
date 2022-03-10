@@ -53,12 +53,6 @@ class ItemOwnerApiControllerTest {
     @MockBean
     ItemService itemService;
 
-    @MockBean
-    private StoreRepository storeRepository;
-
-    @MockBean
-    private FavoriteStoreRepository favoriteStoreRepository;
-
     @Test
     @DisplayName("상품 리스트 조회")
     void getItemList() throws Exception {
@@ -174,9 +168,9 @@ class ItemOwnerApiControllerTest {
         Long categoryId = 1L;
 
         List<ItemOwnerApiController.ItemRequest.ItemOptionRequest> requiredOption =
-                List.of(new ItemOwnerApiController.ItemRequest.ItemOptionRequest(null, "HOT",OptionType.REQUIRED,null));
+                List.of(new ItemOwnerApiController.ItemRequest.ItemOptionRequest(null, "HOT",OptionType.REQUIRED));
         List<ItemOwnerApiController.ItemRequest.ItemOptionRequest> otherOption =
-                List.of(new ItemOwnerApiController.ItemRequest.ItemOptionRequest(null, "샷 추가",OptionType.OTHER,null));
+                List.of(new ItemOwnerApiController.ItemRequest.ItemOptionRequest(null, "샷 추가", OptionType.OTHER));
 
 
         ItemOwnerApiController.ItemRequest itemRequest =
@@ -205,12 +199,10 @@ class ItemOwnerApiControllerTest {
                                 fieldWithPath("requiredOption[*].id").description("옵션 고유번호"),
                                 fieldWithPath("requiredOption[*].name").description("옵션 이름"),
                                 fieldWithPath("requiredOption[*].optionType").description("옵션 타입"),
-                                fieldWithPath("requiredOption[*].price").description("옵션 가격"),
                                 fieldWithPath("otherOption").description("추가옵션"),
                                 fieldWithPath("otherOption[*].id").description("옵션 고유번호"),
                                 fieldWithPath("otherOption[*].name").description("옵션 이름"),
-                                fieldWithPath("otherOption[*].optionType").description("옵션 타입"),
-                                fieldWithPath("otherOption[*].price").description("옵션 가격")
+                                fieldWithPath("otherOption[*].optionType").description("옵션 타입")
                         ))
                 );
     }
@@ -224,9 +216,9 @@ class ItemOwnerApiControllerTest {
         Long categoryId = 1L;
 
         List<ItemOwnerApiController.ItemRequest.ItemOptionRequest> requiredOption =
-                List.of(new ItemOwnerApiController.ItemRequest.ItemOptionRequest(null, "HOT",OptionType.REQUIRED,null));
+                List.of(new ItemOwnerApiController.ItemRequest.ItemOptionRequest(null, "HOT",OptionType.REQUIRED));
         List<ItemOwnerApiController.ItemRequest.ItemOptionRequest> otherOption =
-                List.of(new ItemOwnerApiController.ItemRequest.ItemOptionRequest(null, "샷 추가",OptionType.OTHER,null));
+                List.of(new ItemOwnerApiController.ItemRequest.ItemOptionRequest(null, "샷 추가",OptionType.OTHER));
 
 
         ItemOwnerApiController.ItemRequest itemRequest =
@@ -254,12 +246,10 @@ class ItemOwnerApiControllerTest {
                                 fieldWithPath("requiredOption[*].id").description("옵션 고유번호"),
                                 fieldWithPath("requiredOption[*].name").description("옵션 이름"),
                                 fieldWithPath("requiredOption[*].optionType").description("옵션 타입"),
-                                fieldWithPath("requiredOption[*].price").description("옵션 가격"),
                                 fieldWithPath("otherOption").description("추가옵션"),
                                 fieldWithPath("otherOption[*].id").description("옵션 고유번호"),
                                 fieldWithPath("otherOption[*].name").description("옵션 이름"),
-                                fieldWithPath("otherOption[*].optionType").description("옵션 타입"),
-                                fieldWithPath("otherOption[*].price").description("옵션 가격")
+                                fieldWithPath("otherOption[*].optionType").description("옵션 타입")
                         ))
                 );
     }

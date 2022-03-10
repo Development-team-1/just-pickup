@@ -7,7 +7,6 @@ import com.justpickup.storeservice.domain.category.repository.CategoryRepository
 import com.justpickup.storeservice.domain.category.repository.CategoryRepositoryCustom;
 import com.justpickup.storeservice.domain.store.entity.Store;
 import com.justpickup.storeservice.domain.store.repository.StoreRepository;
-import com.justpickup.storeservice.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,7 +26,7 @@ public class CategoryService {
     private final CategoryRepositoryCustom categoryRepositoryCustom;
     private final StoreRepository storeRepository;
 
-    public List<CategoryDto> getCategoryList(Long storeId){
+    public List<CategoryDto> getCategoriesWithItem(Long storeId){
 
         return categoryRepositoryCustom.getCategoryList(storeId)
                 .stream()
@@ -74,6 +73,6 @@ public class CategoryService {
                                 .orElseThrow(() -> new NotFoundStoreException(HttpStatus.BAD_REQUEST,"존재하지않는 Category")));
                 }
         );
-
     }
+
 }
