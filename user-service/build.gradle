@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.just-pickup'
-version = '0.0.1-SNAPSHOT'
+version = '1.0'
 sourceCompatibility = '11'
 
 configurations {
@@ -54,8 +54,6 @@ dependencies {
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'com.h2database:h2'
-
-    testImplementation 'org.springframework.security:spring-security-test'
 
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     // operation block 을 위한 의존성
