@@ -9,7 +9,7 @@ export default {
                 page: page
             }
         }
-        return axios.get( process.env.VUE_APP_ORDER_URL + "/order/prev-order", options);
+        return axios.get( process.env.VUE_APP_API_URL + "/order/prev-order", options);
     },
     requestOrder(orderDate, lastOrderId) {
         const options = {
@@ -18,6 +18,12 @@ export default {
                 lastOrderId: lastOrderId
             }
         }
-        return axios.get(process.env.VUE_APP_ORDER_URL + "/order/order-main", options);
+        return axios.get(process.env.VUE_APP_API_URL + "/order/order-main", options);
+    },
+    patchOrder(orderId, orderStatus) {
+        const body = {
+            orderStatus: orderStatus
+        }
+        return axios.patch(process.env.VUE_APP_OWNER_SERVICE_BASEURL + "/order-service/order/" + orderId, body);
     }
 }

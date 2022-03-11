@@ -1,6 +1,7 @@
 package com.justpickup.orderservice.domain.order.web;
 
 import com.justpickup.orderservice.domain.order.dto.OrderDto;
+import com.justpickup.orderservice.domain.order.dto.OrderMainDto;
 import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
 import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
@@ -27,7 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/api/owner/order")
@@ -40,56 +42,59 @@ public class OrderOwnerApiController {
 
     @GetMapping("/order-main")
     public ResponseEntity<Result> orderMain(@Valid OrderSearchCondition condition) {
+        // TODO: 2022/03/10 Feign client storeId 가져오기 구현 필요
         Long userId = 1L;
         Long storeId = 1L;
 
-        List<OrderDto> orderDto = orderService.findOrderMain(condition, storeId);
+        OrderMainDto orderMainDto = orderService.findOrderMain(condition, storeId);
 
-        List<OrderMainResponse> orderMainResponses = orderDto.stream()
-                .map(OrderMainResponse::new)
-                .collect(Collectors.toList());
+        OrderMainResponse orderMainResponse = new OrderMainResponse(orderMainDto);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(Result.createSuccessResult(orderMainResponses));
+                .body(Result.createSuccessResult(orderMainResponse));
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
+    @Data @NoArgsConstructor
     static class OrderMainResponse {
-        private Long orderId;
-        private Long userId;
-        private String userName;
-        private List<OrderItemResponse> orderItemResponses;
-        private OrderStatus orderStatus;
-        private String orderTime;
+        private boolean hasNext;
+        private List<_Order> orders;
 
-        public OrderMainResponse(OrderDto orderDto) {
-            List<OrderItemResponse> orderItemDtoList = orderDto.getOrderItemDtoList()
+        public OrderMainResponse(OrderMainDto orderMainDto) {
+            this.hasNext = orderMainDto.isHasNext();
+            this.orders = orderMainDto.getOrders()
                     .stream()
-                    .map(OrderItemResponse::new)
-                    .collect(Collectors.toList());
-
-            this.orderId = orderDto.getId();
-            this.userId = orderDto.getUserId();
-            this.userName = orderDto.getUserName();
-            this.orderItemResponses = orderItemDtoList;
-            this.orderStatus = orderDto.getOrderStatus();
-            this.orderTime = orderDto.getOrderTime()
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    .map(_Order::new)
+                    .collect(toList());
         }
-    }
 
-    @Data
-    static class OrderItemResponse {
-        private Long orderItemId;
-        private Long itemId;
-        private String itemName;
+        @Data
+        static class _Order {
+            private Long id;
+            private String orderTime;
+            private String orderStatus;
+            private String userName;
+            private String storeName;
+            private List<_OrderItem> orderItems;
 
-        public OrderItemResponse(OrderItemDto orderItemDto) {
-            this.orderItemId = orderItemDto.getId();
-            this.itemId = orderItemDto.getItemId();
-            this.itemName = orderItemDto.getItemName();
+            public _Order(OrderMainDto._Order order) {
+                this.id = order.getId();
+                this.orderTime = order.getOrderTime()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                this.orderStatus = order.getOrderStatus().name();
+                this.userName = order.getUserName();
+                this.storeName = order.getStoreName();
+                this.orderItems = order.getOrderItems()
+                        .stream().map(_OrderItem::new).collect(toList());
+            }
+        }
+
+        @Data
+        static class _OrderItem {
+            private String itemName;
+
+            public _OrderItem(OrderMainDto._OrderItem orderItem) {
+                this.itemName = orderItem.getItemName();
+            }
         }
     }
 
@@ -117,7 +122,7 @@ public class OrderOwnerApiController {
         private Page page;
 
         public ResponsePrevOrder(List<OrderDto> orderDtoList, int startPage, int totalPage) {
-            orders = orderDtoList.stream().map(OrderVo::new).collect(Collectors.toList());
+            orders = orderDtoList.stream().map(OrderVo::new).collect(toList());
             page = new Page(startPage, totalPage);
         }
 
@@ -137,7 +142,7 @@ public class OrderOwnerApiController {
                 this.orderPrice = orderDto.getOrderPrice();
                 this.userName = orderDto.getUserName();
                 this.orderItems = orderDto.getOrderItemDtoList()
-                        .stream().map(OrderItemVo::new).collect(Collectors.toList());
+                        .stream().map(OrderItemVo::new).collect(toList());
             }
         }
 

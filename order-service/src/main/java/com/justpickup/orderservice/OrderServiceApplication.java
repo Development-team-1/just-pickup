@@ -26,7 +26,7 @@ public class OrderServiceApplication {
 	@Transactional
 	CommandLineRunner run(OrderRepository orderRepository) {
 		return args -> {
-			Long userId = 1L;
+			Long userId = 2L;
 			Long userCouponId = null;
 			Long storeId = 1L;
 			Long orderPrice = 1000L;
@@ -44,6 +44,12 @@ public class OrderServiceApplication {
 						OrderItemOption.of(), OrderItemOption.of());
 
 				Order order = Order.of(userId, userCouponId, storeId, orderPrice * i, transaction, orderItem, orderItem1);
+
+				if (i % 2 == 0) {
+					order.placed();
+				} else {
+					order.order();
+				}
 
 				orderRepository.save(order);
 			}

@@ -15,18 +15,20 @@
     <v-row>
       <v-col v-for="card in cards" cols="4" :key="card.orderId">
         <order-card
-            :order-id="card.orderId"
+            :id="card.orderId"
             :userName="card.userName"
             :itemNames="card.itemNames"
             :orderTime="card.orderTime"
             :orderStatus="card.orderStatus"
+            @placed="card.orderStatus = 'PLACED'"
+            @reject="card.orderStatus = 'REJECT'"
         >
         </order-card>
       </v-col>
     </v-row>
 
     <br><br><br>
-    <v-row justify="center" v-if="showButton">
+    <v-row justify="center" v-if="hasNext">
       <v-btn rounded outlined color="primary"
              @click="more">더보기</v-btn>
     </v-row>
@@ -53,45 +55,38 @@ export default {
       date: '',
       cards: [],
       lastOrderId: null,
-      showButton: false
+      hasNext: false
     }
   },
   methods: {
-    search: function() {
+    search: async function() {
       this.cards = [];
       this.lastOrderId = null;
-      OrderApi.requestOrder(this.date, this.lastOrderId)
-        .then( (response) => {
-          this.renderCard(response.data);
-        })
-        .catch( (error) => {
-          console.log(error);
-        })
+
+      const response = await OrderApi.requestOrder(this.date, this.lastOrderId);
+
+      this.renderCard(response.data)
     },
     renderCard: function (json) {
-      const orders = json.data;
+      console.log(json);
+      const orders = json.data.orders;
       const size = orders.length;
 
-      if (size === 0) {
-        alert("검색 데이터가 없습니다.");
-        this.showButton = false;
-      } else {
-        this.showButton = true;
-      }
+      this.hasNext = json.data.hasNext;
 
       orders.forEach( (order, index) => {
         if (index === (size - 1)) {
-          this.lastOrderId = order.orderId;
+          this.lastOrderId = order.id;
         }
 
-        let orderItemNames = []
-        order.orderItemResponses.forEach( (orderItem) => {
-          orderItemNames.push(orderItem.itemId);
+        let orderItemNames = [];
+        order.orderItems.forEach( (orderItem) => {
+          orderItemNames.push(orderItem.itemName);
         })
 
         this.cards.push({
-          orderId: order.orderId,
-          userName: order.orderId,
+          orderId: order.id,
+          userName: order.userName,
           itemNames: orderItemNames,
           orderTime: order.orderTime,
           orderStatus: order.orderStatus
@@ -101,14 +96,9 @@ export default {
     inputDate: function(value) {
       this.date = value;
     },
-    more: function() {
-      OrderApi.requestOrder(this.date, this.lastOrderId)
-          .then( (response) => {
-            this.renderCard(response.data);
-          })
-          .catch( (error) => {
-            console.log(error);
-          })
+    more: async function() {
+      const response = await OrderApi.requestOrder(this.date, this.lastOrderId);
+      this.renderCard(response.data);
     }
   }
 }

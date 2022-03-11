@@ -1,5 +1,6 @@
 package com.justpickup.orderservice.domain.order.repository;
 
+import com.justpickup.orderservice.domain.order.dto.OrderMainResult;
 import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
 import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
 import com.justpickup.orderservice.domain.order.entity.Order;
@@ -36,22 +37,33 @@ public class OrderRepositoryCustom {
     ORDER BY id desc
     LIMIT 페이지 사이즈
      */
-    public List<Order> findOrderMain(OrderSearchCondition condition, Long storeId) {
+    public OrderMainResult findOrderMain(OrderSearchCondition condition, Long storeId) {
         LocalDateTime start = condition.getOrderStartTime();
         LocalDateTime end = condition.getOrderEndTime();
+        int pageSize = 6;
 
-        return queryFactory
+        List<Order> orders = queryFactory
                 .selectFrom(order)
                 .join(order.transaction).fetchJoin()
                 .where(
-                    order.orderTime.between(start, end),
-                    order.storeId.eq(storeId),
-                    orderIdLt(condition.getLastOrderId())
+                        orderIdLt(condition.getLastOrderId()),
+                        order.orderTime.between(start, end),
+                        order.storeId.eq(storeId),
+                        order.orderStatus.ne(OrderStatus.PENDING),
+                        order.orderStatus.ne(OrderStatus.FAIL)
                 )
-                .orderBy(order.orderTime.desc())
-                .limit(6)
+                .orderBy(order.id.desc())
+                .limit(pageSize + 1)
                 .distinct()
                 .fetch();
+
+        boolean hasNext = false;
+        if (orders.size() > pageSize) {
+            orders.remove(pageSize);
+            hasNext = true;
+        }
+
+        return OrderMainResult.of(orders, hasNext);
     }
 
     private BooleanExpression orderIdLt(Long lastOrderId) {
@@ -124,4 +136,5 @@ public class OrderRepositoryCustom {
                             .fetchOne());
 
     }
+
 }
