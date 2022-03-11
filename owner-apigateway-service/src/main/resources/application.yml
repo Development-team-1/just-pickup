@@ -3,16 +3,24 @@ server:
 
 eureka:
   client:
-    fetch-registry: true
-    register-with-eureka: true
     service-url:
-      defalutZone: http://localhost:8761/eureka
+      fetch-registry: true
+      register-with-eureka: true
+      defaultZone: http://localhost:8761/eureka
+
+
 
 spring:
   application:
     name: owner-apigateway-service
-
+  profiles:
+    default: dev
+  config:
+    import: optional:configserver:http://127.0.0.1:8888
   cloud:
+    config:
+      name: bootstrap
+
     gateway:
       default-filters:
         - name: GlobalFilter
@@ -92,6 +100,7 @@ spring:
           filters:
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
             - AuthorizationHeaderFilter
+
 
 token:
   access-expired-time: 3600000
