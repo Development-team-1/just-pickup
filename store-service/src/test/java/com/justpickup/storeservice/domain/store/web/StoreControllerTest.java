@@ -41,7 +41,7 @@ class StoreControllerTest {
     void getStore() throws Exception {
         //given
         String storeId = "1";
-        given(storeService.findStore(1L)).willReturn(getWillReturnStore());
+        given(storeService.findStoreById(1L)).willReturn(getWillReturnStore());
 
         //when
         ResultActions actions = mockMvc.perform(get("/store/{storeId}", storeId));

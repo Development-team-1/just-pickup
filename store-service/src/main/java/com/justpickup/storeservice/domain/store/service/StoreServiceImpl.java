@@ -3,6 +3,7 @@ package com.justpickup.storeservice.domain.store.service;
 import com.justpickup.storeservice.domain.favoritestore.repository.FavoriteStoreCustom;
 import com.justpickup.storeservice.domain.store.dto.SearchStoreCondition;
 import com.justpickup.storeservice.domain.store.dto.SearchStoreResult;
+import com.justpickup.storeservice.domain.store.dto.StoreByUserIdDto;
 import com.justpickup.storeservice.domain.store.dto.StoreDto;
 import com.justpickup.storeservice.domain.store.entity.Store;
 import com.justpickup.storeservice.domain.store.exception.NotExistStoreException;
@@ -47,10 +48,18 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public StoreDto findStore(Long storeId) {
+    public StoreDto findStoreById(Long storeId) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NotExistStoreException(storeId + "는 없는 매장 고유번호입니다."));
 
         return new StoreDto(store);
+    }
+
+    @Override
+    public StoreByUserIdDto findStoreByUserId(Long userId) {
+        Store store = storeRepository.findByUserId(userId)
+                .orElseThrow(() -> new NotExistStoreException(userId + "의 매장은 없습니다."));
+
+        return StoreByUserIdDto.of(store);
     }
 }

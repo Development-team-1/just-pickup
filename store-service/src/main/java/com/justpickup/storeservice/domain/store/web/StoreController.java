@@ -21,7 +21,7 @@ public class StoreController {
 
     @GetMapping("/{storeId}")
     public ResponseEntity<Result> getStore(@PathVariable("storeId") Long storeId) {
-        StoreDto storeDto = storeService.findStore(storeId);
+        StoreDto storeDto = storeService.findStoreById(storeId);
 
         GetStoreResponse getStoreResponse = new GetStoreResponse(storeDto);
         return ResponseEntity.ok(Result.createSuccessResult(getStoreResponse));
