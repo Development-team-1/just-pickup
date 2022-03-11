@@ -53,3 +53,4 @@ token:
   secret: my-secret
   refresh-token-name: refresh-token
   access-token-name: access-token
+  fegin: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmZWlnbiIsImV4cCI6MTE2NDY5NzY4NzAsImlhdCI6MTY0Njk3Njg3MH0.5x4Nx7oMnpF0_kZpbZsiB1u9eEbQ4IKIhJlEsa3D22cjZjvTHKz57GCz0sgXb_olhSNIVv9xF41A29-XYiFeBQ
