@@ -42,13 +42,6 @@ spring:
             allowedHeaders: '*'
             allow-credentials: true
       routes:
-        - id: owner-frontend-service
-          uri: lb://OWNER-FRONTEND-SERVICE
-          predicates:
-            - Path=/owner-frontend-service/**
-          filters:
-            - RewritePath=/owner-frontend-service/(?<segment>.*),/$\{segment}
-
         - id: order-service
           uri: lb://ORDER-SERVCIE
           predicates:
@@ -105,6 +98,6 @@ spring:
 token:
   access-expired-time: 3600000
   refresh-expired-time: 604800000
-  secret: my-secret
+  secret: $2a$10$q42lY7Y18xqrFt1qbODZIO4OMTeOxnrCe7tF3n9bazJinVE7VH5Pi
   refresh-token-name: refresh-token
   access-token-name: access-token
