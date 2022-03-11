@@ -89,9 +89,6 @@ operation::get-categoryList[snippets='curl-request,http-request,http-response,re
 operation::put-categoryList[snippets='curl-request,http-request,http-response,request-body,request-fields']
 
 
-
-
-
 == 매장
 === 매장 검색 조회
 operation::api-customer-store-search[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
@@ -99,4 +96,6 @@ operation::api-customer-store-search[snippets='curl-request,http-request,http-re
 operation::favoriteStore-get[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
 === 매장 조회
 operation::store-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
+=== 매장 조회 (회원 고유번호)
+operation::api-get-store-byUserId[snippets='curl-request,http-request,http-response,request-headers,response-fields']
 

@@ -20,7 +20,7 @@ public class StoreOwnerApiController {
 
     private final StoreService storeService;
 
-    @GetMapping("/api/store")
+    @GetMapping("/owner/store")
     public ResponseEntity<Result> getStoreByUserId(@RequestHeader("user-id") String userHeader) {
         Long userId = Long.valueOf(userHeader);
 
