@@ -1,0 +1,915 @@
+2022-01-26 10:27:57.602 KST [1187] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-01-26 10:27:57.603 KST [1187] LOG:  listening on IPv6 address "::1", port 5432
+2022-01-26 10:27:57.603 KST [1187] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-01-26 10:27:57.604 KST [1187] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-01-26 10:27:57.606 KST [1188] LOG:  database system was shut down at 2022-01-26 10:27:57 KST
+2022-01-26 10:27:57.608 KST [1187] LOG:  database system is ready to accept connections
+2022-01-26 10:28:05.573 KST [1187] LOG:  received fast shutdown request
+2022-01-26 10:28:05.574 KST [1187] LOG:  aborting any active transactions
+2022-01-26 10:28:05.575 KST [1187] LOG:  background worker "logical replication launcher" (PID 1194) exited with exit code 1
+2022-01-26 10:28:05.575 KST [1189] LOG:  shutting down
+2022-01-26 10:28:05.582 KST [1187] LOG:  database system is shut down
+2022-01-26 10:28:06.234 KST [1204] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-01-26 10:28:06.235 KST [1204] LOG:  listening on IPv6 address "::1", port 5432
+2022-01-26 10:28:06.236 KST [1204] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-01-26 10:28:06.236 KST [1204] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-01-26 10:28:06.239 KST [1205] LOG:  database system was shut down at 2022-01-26 10:28:05 KST
+2022-01-26 10:28:06.241 KST [1204] LOG:  database system is ready to accept connections
+2022-01-26 11:18:51.646 KST [1786] ERROR:  relation "users" does not exist at character 15
+2022-01-26 11:18:51.646 KST [1786] STATEMENT:  select * from users
+	;
+2022-01-26 13:30:28.479 KST [1596] LOG:  could not receive data from client: Connection reset by peer
+2022-01-26 16:26:59.129 KST [7180] FATAL:  database "storedb" does not exist
+2022-01-26 16:45:43.824 KST [7608] ERROR:  syntax error at or near "order" at character 70
+2022-01-26 16:45:43.824 KST [7608] STATEMENT:  create table category (category_id int8 not null, name varchar(255), order int4, store_store_id int8, primary key (category_id))
+2022-01-26 16:45:43.850 KST [7608] ERROR:  relation "category" does not exist
+2022-01-26 16:45:43.850 KST [7608] STATEMENT:  alter table if exists item add constraint FKsqw01yqugaarpmku7xkry1iw1 foreign key (category_category_id) references category
+2022-01-26 16:46:59.364 KST [7662] ERROR:  syntax error at or near "order" at character 70
+2022-01-26 16:46:59.364 KST [7662] STATEMENT:  create table category (category_id int8 not null, name varchar(255), order int4, store_store_id int8, primary key (category_id))
+2022-01-26 16:46:59.398 KST [7662] ERROR:  relation "category" does not exist
+2022-01-26 16:46:59.398 KST [7662] STATEMENT:  alter table if exists item add constraint FK2n9w8d0dp4bsfra9dcg0046l4 foreign key (category_id) references category
+2022-01-26 16:48:18.595 KST [7711] ERROR:  syntax error at or near "order" at character 70
+2022-01-26 16:48:18.595 KST [7711] STATEMENT:  create table category (category_id int8 not null, name varchar(255), order int4, store_id int8, primary key (category_id))
+2022-01-26 16:48:18.632 KST [7711] ERROR:  relation "category" does not exist
+2022-01-26 16:48:18.632 KST [7711] STATEMENT:  alter table if exists item add constraint FK2n9w8d0dp4bsfra9dcg0046l4 foreign key (category_id) references category
+2022-01-26 16:51:25.844 KST [7807] ERROR:  syntax error at or near "order" at character 70
+2022-01-26 16:51:25.844 KST [7807] STATEMENT:  create table category (category_id int8 not null, name varchar(255), order int4, store_id int8, primary key (category_id))
+2022-01-26 16:51:25.878 KST [7807] ERROR:  relation "category" does not exist
+2022-01-26 16:51:25.878 KST [7807] STATEMENT:  alter table if exists item add constraint FK2n9w8d0dp4bsfra9dcg0046l4 foreign key (category_id) references category
+2022-01-26 21:53:04.282 KST [1204] LOG:  received fast shutdown request
+2022-01-26 21:53:04.283 KST [1204] LOG:  aborting any active transactions
+2022-01-26 21:53:04.283 KST [10752] FATAL:  terminating connection due to administrator command
+2022-01-26 21:53:04.283 KST [10758] FATAL:  terminating connection due to administrator command
+2022-01-26 21:53:04.283 KST [10759] FATAL:  terminating connection due to administrator command
+2022-01-26 21:53:04.284 KST [10756] FATAL:  terminating connection due to administrator command
+2022-01-26 21:53:04.285 KST [10751] FATAL:  terminating connection due to administrator command
+2022-01-26 21:53:04.285 KST [10749] FATAL:  terminating connection due to administrator command
+2022-01-26 21:53:04.285 KST [10741] FATAL:  terminating connection due to administrator command
+2022-01-26 21:53:04.283 KST [10746] FATAL:  terminating connection due to administrator command
+2022-01-26 21:53:04.285 KST [10744] FATAL:  terminating connection due to administrator command
+2022-01-26 21:53:04.287 KST [1204] LOG:  background worker "logical replication launcher" (PID 1211) exited with exit code 1
+2022-01-26 21:53:04.285 KST [10764] FATAL:  terminating connection due to administrator command
+2022-01-26 21:53:04.291 KST [1206] LOG:  shutting down
+2022-01-26 21:53:04.308 KST [1204] LOG:  database system is shut down
+2022-01-30 22:50:53.405 KST [1656] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-01-30 22:50:53.407 KST [1656] LOG:  listening on IPv6 address "::1", port 5432
+2022-01-30 22:50:53.407 KST [1656] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-01-30 22:50:53.407 KST [1656] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-01-30 22:50:53.413 KST [1657] LOG:  database system was shut down at 2022-01-26 21:53:04 KST
+2022-01-30 22:50:53.417 KST [1656] LOG:  database system is ready to accept connections
+2022-01-31 01:11:19.481 KST [1656] LOG:  received smart shutdown request
+2022-01-31 01:11:19.484 KST [1656] LOG:  background worker "logical replication launcher" (PID 1663) exited with exit code 1
+2022-01-31 01:11:19.484 KST [1658] LOG:  shutting down
+2022-01-31 01:11:19.518 KST [1656] LOG:  database system is shut down
+2022-02-02 15:26:29.518 KST [964] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-02-02 15:26:29.519 KST [964] LOG:  listening on IPv6 address "::1", port 5432
+2022-02-02 15:26:29.519 KST [964] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-02-02 15:26:29.519 KST [964] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-02-02 15:26:29.524 KST [965] LOG:  database system was shut down at 2022-01-31 01:11:19 KST
+2022-02-02 15:26:29.527 KST [964] LOG:  database system is ready to accept connections
+2022-02-02 15:55:37.085 KST [1602] ERROR:  invalid input syntax for type bigint: "SangBum" at character 194
+2022-02-02 15:55:37.085 KST [1602] STATEMENT:  INSERT INTO public.orders(
+		order_id, created_at, created_by, last_modified_at, last_modified_by, order_price, order_status, order_time, used_point, user_coupon_id, user_id)
+		VALUES (1, now(), 'SangBum', now(), 'SangBum', 1000, 'SUCCESS', now(), 0, null, 2);
+2022-02-02 16:17:13.516 KST [1525] ERROR:  relation "orders" does not exist at character 15
+2022-02-02 16:17:13.516 KST [1525] STATEMENT:  select * from orders;
+2022-02-02 16:17:15.014 KST [1525] ERROR:  relation "orders" does not exist at character 15
+2022-02-02 16:17:15.014 KST [1525] STATEMENT:  select * from orders;
+2022-02-02 16:52:16.982 KST [1602] ERROR:  duplicate key value violates unique constraint "orders_pkey"
+2022-02-02 16:52:16.982 KST [1602] DETAIL:  Key (order_id)=(1) already exists.
+2022-02-02 16:52:16.982 KST [1602] STATEMENT:  INSERT INTO public.orders(
+		order_id, created_at, created_by, last_modified_at, last_modified_by, order_price, order_status, order_time, used_point, user_coupon_id, user_id)
+		VALUES (1, now(), 2, now(), 2, 1000, 'PLACED', now(), 0, null, 2);
+		
+	
+2022-02-02 16:57:09.043 KST [2586] ERROR:  operator does not exist: timestamp with time zone + integer at character 158
+2022-02-02 16:57:09.043 KST [2586] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2022-02-02 16:57:09.043 KST [2586] STATEMENT:  INSERT INTO public.order_item(
+		order_item_id, created_at, created_by, last_modified_at, last_modified_by, count, item_id, price, order_id)
+		VALUES (5, now()+1, 2, now()+1, 2, 5, 4, 100, 1);
+2022-02-02 19:08:01.093 KST [964] LOG:  received fast shutdown request
+2022-02-02 19:08:01.093 KST [964] LOG:  aborting any active transactions
+2022-02-02 19:08:01.094 KST [1476] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.094 KST [1525] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.094 KST [1478] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.095 KST [5171] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.095 KST [5089] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.095 KST [5088] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.095 KST [5084] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.095 KST [5083] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.094 KST [1482] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.095 KST [1602] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.095 KST [5081] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.095 KST [5100] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.097 KST [964] LOG:  background worker "logical replication launcher" (PID 971) exited with exit code 1
+2022-02-02 19:08:01.095 KST [5086] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.095 KST [5085] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.099 KST [5075] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.095 KST [2586] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.099 KST [5080] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.095 KST [5174] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.099 KST [3524] FATAL:  terminating connection due to administrator command
+2022-02-02 19:08:01.103 KST [966] LOG:  shutting down
+2022-02-02 19:08:01.111 KST [964] LOG:  database system is shut down
+2022-02-03 10:05:27.904 KST [6907] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-02-03 10:05:27.906 KST [6907] LOG:  listening on IPv6 address "::1", port 5432
+2022-02-03 10:05:27.906 KST [6907] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-02-03 10:05:27.906 KST [6907] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-02-03 10:05:27.915 KST [6908] LOG:  database system was shut down at 2022-02-02 19:08:01 KST
+2022-02-03 10:05:27.919 KST [6907] LOG:  database system is ready to accept connections
+2022-02-03 11:45:44.192 KST [8877] LOG:  could not receive data from client: Connection reset by peer
+2022-02-03 11:46:11.241 KST [6907] LOG:  received smart shutdown request
+2022-02-03 11:46:11.243 KST [6907] LOG:  background worker "logical replication launcher" (PID 6914) exited with exit code 1
+2022-02-03 11:46:11.243 KST [6909] LOG:  shutting down
+2022-02-03 11:46:11.270 KST [6907] LOG:  database system is shut down
+2022-02-03 11:47:26.062 KST [610] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-02-03 11:47:26.063 KST [610] LOG:  listening on IPv6 address "::1", port 5432
+2022-02-03 11:47:26.063 KST [610] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-02-03 11:47:26.063 KST [610] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-02-03 11:47:26.070 KST [611] LOG:  database system was shut down at 2022-02-03 11:46:11 KST
+2022-02-03 11:47:26.073 KST [610] LOG:  database system is ready to accept connections
+2022-02-03 14:51:00.566 KST [2349] ERROR:  hour "20" is invalid for the 12-hour clock
+2022-02-03 14:51:00.566 KST [2349] HINT:  Use the 24-hour clock, or give an hour between 1 and 12.
+2022-02-03 14:51:00.566 KST [2349] STATEMENT:  INSERT INTO public.store(
+		store_id, created_at, created_by, last_modified_at, last_modified_by, city, street, zipcode, business_end_time, business_start_time, phone_number, photo_name, photo_path, user_id, map_id)
+		VALUES (1, now(), 1, now(), 1, '서울시', '광화문로', 123-456, to_timestamp('20:00:00', 'HH:MI:SS'), to_timestamp('09:00:00', 'HH:MI:SS'), '010-9418-1307', '사진명1', '/Users/sangbum/Desktop', 1, null);
+2022-02-03 14:52:04.144 KST [2349] ERROR:  duplicate key value violates unique constraint "store_pkey"
+2022-02-03 14:52:04.144 KST [2349] DETAIL:  Key (store_id)=(1) already exists.
+2022-02-03 14:52:04.144 KST [2349] STATEMENT:  INSERT INTO public.store(
+		store_id, created_at, created_by, last_modified_at, last_modified_by, city, street, zipcode, business_end_time, business_start_time, phone_number, photo_name, photo_path, user_id, map_id)
+		VALUES (1, now(), 1, now(), 1, '서울시', '광화문로', '123-456', to_timestamp('20:00:00', 'HH24:MI:SS'), to_timestamp('09:00:00', 'HH24:MI:SS'), '010-9418-1307', '사진명1', '/Users/sangbum/Desktop', 1, null);
+2022-02-03 14:55:54.367 KST [2766] ERROR:  insert or update on table "item" violates foreign key constraint "fk2n9w8d0dp4bsfra9dcg0046l4"
+2022-02-03 14:55:54.367 KST [2766] DETAIL:  Key (category_id)=(10) is not present in table "category".
+2022-02-03 14:55:54.367 KST [2766] STATEMENT:  INSERT INTO public.item(
+		item_id, created_at, created_by, last_modified_at, last_modified_by, name, photo_name, photo_path, price, sales_yn, category_id, store_id)
+		VALUES (2, now(), 1, now(), 1, '아이템1', '아이템_사진명', '/Users/sangbum/Desktop', 1000, 'Y', 10, 1);
+		
+	INSERT INTO public.item(
+		item_id, created_at, created_by, last_modified_at, last_modified_by, name, photo_name, photo_path, price, sales_yn, category_id, store_id)
+		VALUES (3, now(), 1, now(), 1, '아이템2', '아이템_사진명2', '/Users/sangbum/Desktop', 2000, 'Y', 10, 1);
+	
+	INSERT INTO public.item(
+		item_id, created_at, created_by, last_modified_at, last_modified_by, name, photo_name, photo_path, price, sales_yn, category_id, store_id)
+		VALUES (4, now(), 1, now(), 1, '아이템3', '아이템_사진명3', '/Users/sangbum/Desktop', 3000, 'Y', 11, 1);
+2022-02-03 15:03:12.571 KST [2824] ERROR:  syntax error at or near "," at character 160
+2022-02-03 15:03:12.571 KST [2824] STATEMENT:  INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, , now(), 1, now(), 1, 'ICE', 'REQUIRED', 0, 100);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, , now(), 1, now(), 1, 'HOT', 'REQUIRED', 0, 100);
+		
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, , now(), 1, now(), 1, '샷 추가', 'OTHER', 500, 100);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, , now(), 1, now(), 1, '투샷 추카', 'OTHER', 500, 100);
+		
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, , now(), 1, now(), 1, 'ICE', 'REQUIRED', 0, 101);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, , now(), 1, now(), 1, 'HOT', 'REQUIRED', 0, 101);
+		
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, , now(), 1, now(), 1, '샷 추가', 'OTHER', 500, 101);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, , now(), 1, now(), 1, '투샷 추카', 'OTHER', 500, 101);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, , now(), 1, now(), 1, 'ICE', 'REQUIRED', 0, 102);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, , now(), 1, now(), 1, 'HOT', 'REQUIRED', 0, 102);
+		
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, , now(), 1, now(), 1, '샷 추가', 'OTHER', 500, 102);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, , now(), 1, now(), 1, '투샷 추카', 'OTHER', 500, 102);
+2022-02-03 15:03:56.272 KST [2824] ERROR:  insert or update on table "item_option" violates foreign key constraint "fkpiufbijq6m8l18jf9a0nwny62"
+2022-02-03 15:03:56.272 KST [2824] DETAIL:  Key (item_id)=(100) is not present in table "item".
+2022-02-03 15:03:56.272 KST [2824] STATEMENT:  INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, 'ICE', 'REQUIRED', 0, 100);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, 'HOT', 'REQUIRED', 0, 100);
+		
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, '샷 추가', 'OTHER', 500, 100);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, '투샷 추카', 'OTHER', 500, 100);
+		
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, 'ICE', 'REQUIRED', 0, 101);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, 'HOT', 'REQUIRED', 0, 101);
+		
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, '샷 추가', 'OTHER', 500, 101);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, '투샷 추카', 'OTHER', 500, 101);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, 'ICE', 'REQUIRED', 0, 102);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, 'HOT', 'REQUIRED', 0, 102);
+		
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, '샷 추가', 'OTHER', 500, 102);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, '투샷 추카', 'OTHER', 500, 102);
+2022-02-03 15:04:32.047 KST [2349] ERROR:  update or delete on table "store" violates foreign key constraint "fkqdaotwkf5g9vmdox82ttt50i5" on table "category"
+2022-02-03 15:04:32.047 KST [2349] DETAIL:  Key (store_id)=(1) is still referenced from table "category".
+2022-02-03 15:04:32.047 KST [2349] STATEMENT:  
+		
+	delete from store;
+	
+	delete from category;
+	
+	delete from item;
+2022-02-03 15:05:11.941 KST [2766] ERROR:  duplicate key value violates unique constraint "item_option_pkey"
+2022-02-03 15:05:11.941 KST [2766] DETAIL:  Key (item_option_id)=(1000) already exists.
+2022-02-03 15:05:11.941 KST [2766] STATEMENT:  -- store
+	INSERT INTO public.store(
+		store_id, created_at, created_by, last_modified_at, last_modified_by, city, street, zipcode, business_end_time, business_start_time, phone_number, photo_name, photo_path, user_id, map_id)
+		VALUES (1, now(), 1, now(), 1, '서울시', '광화문로', '123-456', to_timestamp('20:00:00', 'HH24:MI:SS'), to_timestamp('09:00:00', 'HH24:MI:SS'), '010-9418-1307', '사진명1', '/Users/sangbum/Desktop', 1, null);
+	
+	-- category
+	INSERT INTO public.category(
+		category_id, created_at, created_by, last_modified_at, last_modified_by, name, orders, store_id)
+		VALUES (10, now(), 1, now(), 1, '카테고리1', 0, 1);
+		
+	INSERT INTO public.category(
+		category_id, created_at, created_by, last_modified_at, last_modified_by, name, orders, store_id)
+		VALUES (11, now(), 1, now(), 1, '카테고리2', 1, 1);
+	
+	-- item
+	INSERT INTO public.item(
+		item_id, created_at, created_by, last_modified_at, last_modified_by, name, photo_name, photo_path, price, sales_yn, category_id, store_id)
+		VALUES (100, now(), 1, now(), 1, '아이템1', '아이템_사진명', '/Users/sangbum/Desktop', 1000, 'Y', 10, 1);
+		
+	INSERT INTO public.item(
+		item_id, created_at, created_by, last_modified_at, last_modified_by, name, photo_name, photo_path, price, sales_yn, category_id, store_id)
+		VALUES (101, now(), 1, now(), 1, '아이템2', '아이템_사진명2', '/Users/sangbum/Desktop', 2000, 'Y', 10, 1);
+	
+	INSERT INTO public.item(
+		item_id, created_at, created_by, last_modified_at, last_modified_by, name, photo_name, photo_path, price, sales_yn, category_id, store_id)
+		VALUES (102, now(), 1, now(), 1, '아이템3', '아이템_사진명3', '/Users/sangbum/Desktop', 3000, 'Y', 11, 1);
+	
+	
+	-- item option
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, 'ICE', 'REQUIRED', 0, 100);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, 'HOT', 'REQUIRED', 0, 100);
+		
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, '샷 추가', 'OTHER', 500, 100);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, '투샷 추카', 'OTHER', 500, 100);
+		
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, 'ICE', 'REQUIRED', 0, 101);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, 'HOT', 'REQUIRED', 0, 101);
+		
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, '샷 추가', 'OTHER', 500, 101);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, '투샷 추카', 'OTHER', 500, 101);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, 'ICE', 'REQUIRED', 0, 102);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, 'HOT', 'REQUIRED', 0, 102);
+		
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, '샷 추가', 'OTHER', 500, 102);
+	
+	INSERT INTO public.item_option(
+		item_option_id, created_at, created_by, last_modified_at, last_modified_by, name, option_type, price, item_id)
+		VALUES (1000, now(), 1, now(), 1, '투샷 추카', 'OTHER', 500, 102);
+	
+2022-02-03 15:13:16.048 KST [2925] ERROR:  syntax error at or near ";" at character 296
+2022-02-03 15:13:16.048 KST [2925] STATEMENT:  INSERT INTO public.orders(
+		order_id, created_at, created_by, last_modified_at, last_modified_by, order_price, order_status, order_time, used_point, user_coupon_id, user_id)
+		VALUES (1, now(), 1, now(), 1, 10000, 'PLACED', to_timestamp('2022-02-03 14:00:00', 'YYYY-MM-DD HH24:MI:SS', 0, null, 1);
+				
+	INSERT INTO public.orders(
+		order_id, created_at, created_by, last_modified_at, last_modified_by, order_price, order_status, order_time, used_point, user_coupon_id, user_id)
+		VALUES (2, now(), 1, now(), 1, 20000, 'CANCELD', to_timestamp('2022-02-03 15:00:00', 'YYYY-MM-DD HH24:MI:SS', 0, null, 1);
+2022-02-03 15:13:34.477 KST [2925] ERROR:  duplicate key value violates unique constraint "orders_pkey"
+2022-02-03 15:13:34.477 KST [2925] DETAIL:  Key (order_id)=(1) already exists.
+2022-02-03 15:13:34.477 KST [2925] STATEMENT:  INSERT INTO public.orders(
+		order_id, created_at, created_by, last_modified_at, last_modified_by, order_price, order_status, order_time, used_point, user_coupon_id, user_id)
+		VALUES (1, now(), 1, now(), 1, 10000, 'PLACED', to_timestamp('2022-02-03 14:00:00', 'YYYY-MM-DD HH24:MI:SS'), 0, null, 1);
+				
+	INSERT INTO public.orders(
+		order_id, created_at, created_by, last_modified_at, last_modified_by, order_price, order_status, order_time, used_point, user_coupon_id, user_id)
+		VALUES (2, now(), 1, now(), 1, 20000, 'CANCELD', to_timestamp('2022-02-03 15:00:00', 'YYYY-MM-DD HH24:MI:SS'), 0, null, 1);
+2022-02-03 16:09:59.449 KST [2974] ERROR:  syntax error at or near "from" at character 8
+2022-02-03 16:09:59.449 KST [2974] STATEMENT:  update from order set order_status = 'CANCELED' where order_status = 'CANCELD'
+2022-02-03 16:10:02.873 KST [2974] ERROR:  syntax error at or near "order" at character 8
+2022-02-03 16:10:02.873 KST [2974] STATEMENT:  update order set order_status = 'CANCELED' where order_status = 'CANCELD'
+2022-02-03 17:20:05.501 KST [5555] ERROR:  duplicate key value violates unique constraint "users_pkey"
+2022-02-03 17:20:05.501 KST [5555] DETAIL:  Key (user_id)=(1) already exists.
+2022-02-03 17:20:05.501 KST [5555] STATEMENT:  INSERT INTO public.users(
+		dtype, user_id, created_at, created_by, last_modified_at, last_modified_by, name, password, phone_number)
+		VALUES ('Customer', 1, now(), 1, now(), 1, '박상범', 'plain text', '010-9418-1307');
+		
+	INSERT INTO public.users(
+		dtype, user_id, created_at, created_by, last_modified_at, last_modified_by, name, password, phone_number)
+		VALUES ('StoreOwner', 9999, now(), 9999, now(), 9999, '관리자', 'plain text', '010-0000-0000');
+		
+	INSERT INTO public.store_owner(
+		business_number, user_id)
+		VALUES ('00000', 9999);
+2022-02-03 19:50:54.524 KST [6224] ERROR:  update or delete on table "users" violates foreign key constraint "fkra1cb3fu95r1a0m7aksow0nk4" on table "customer"
+2022-02-03 19:50:54.524 KST [6224] DETAIL:  Key (user_id)=(1) is still referenced from table "customer".
+2022-02-03 19:50:54.524 KST [6224] STATEMENT:  
+	update users set user_id = 2 where user_id = 1;
+	update customer set user_id = 2 where user_id = 1;
+2022-02-03 19:51:01.241 KST [6224] ERROR:  insert or update on table "customer" violates foreign key constraint "fkra1cb3fu95r1a0m7aksow0nk4"
+2022-02-03 19:51:01.241 KST [6224] DETAIL:  Key (user_id)=(2) is not present in table "users".
+2022-02-03 19:51:01.241 KST [6224] STATEMENT:  
+	update customer set user_id = 2 where user_id = 1;
+	update users set user_id = 2 where user_id = 1;
+2022-02-03 20:48:39.401 KST [610] LOG:  received fast shutdown request
+2022-02-03 20:48:39.402 KST [610] LOG:  aborting any active transactions
+2022-02-03 20:48:39.402 KST [5588] FATAL:  terminating connection due to administrator command
+2022-02-03 20:48:39.403 KST [2299] FATAL:  terminating connection due to administrator command
+2022-02-03 20:48:39.404 KST [2283] FATAL:  terminating connection due to administrator command
+2022-02-03 20:48:39.405 KST [2282] FATAL:  terminating connection due to administrator command
+2022-02-03 20:48:39.405 KST [4211] FATAL:  terminating connection due to administrator command
+2022-02-03 20:48:39.408 KST [2285] FATAL:  terminating connection due to administrator command
+2022-02-03 20:48:39.408 KST [5555] FATAL:  terminating connection due to administrator command
+2022-02-03 20:48:39.402 KST [6224] FATAL:  terminating connection due to administrator command
+2022-02-03 20:48:39.410 KST [610] LOG:  background worker "logical replication launcher" (PID 617) exited with exit code 1
+2022-02-03 20:48:39.413 KST [612] LOG:  shutting down
+2022-02-03 20:48:39.430 KST [610] LOG:  database system is shut down
+2022-02-04 14:40:11.684 KST [11083] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-02-04 14:40:11.686 KST [11083] LOG:  listening on IPv6 address "::1", port 5432
+2022-02-04 14:40:11.686 KST [11083] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-02-04 14:40:11.687 KST [11083] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-02-04 14:40:11.695 KST [11084] LOG:  database system was shut down at 2022-02-03 20:48:39 KST
+2022-02-04 14:40:11.700 KST [11083] LOG:  database system is ready to accept connections
+2022-02-04 22:15:38.098 KST [11083] LOG:  received fast shutdown request
+2022-02-04 22:15:38.099 KST [11083] LOG:  aborting any active transactions
+2022-02-04 22:15:38.100 KST [18861] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.100 KST [18859] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.100 KST [18860] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.100 KST [18858] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.101 KST [18857] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.101 KST [18856] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.102 KST [18855] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.103 KST [18854] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.103 KST [18582] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.103 KST [18581] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.103 KST [18580] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.104 KST [18579] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.105 KST [18578] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.105 KST [18577] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.105 KST [18576] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.106 KST [18574] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.106 KST [18573] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.106 KST [19086] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.107 KST [19085] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.107 KST [19083] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.107 KST [19082] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.108 KST [19081] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.108 KST [19080] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.108 KST [19088] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.108 KST [19078] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.109 KST [19077] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.109 KST [18862] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.109 KST [17957] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.109 KST [17673] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.110 KST [17649] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.110 KST [12726] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.110 KST [12723] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.110 KST [12405] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.110 KST [12403] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.103 KST [18853] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.107 KST [18527] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.112 KST [18575] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.114 KST [12441] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.114 KST [11105] FATAL:  terminating connection due to administrator command
+2022-02-04 22:15:38.115 KST [11083] LOG:  background worker "logical replication launcher" (PID 11090) exited with exit code 1
+2022-02-04 22:15:38.116 KST [11085] LOG:  shutting down
+2022-02-04 22:15:38.129 KST [11083] LOG:  database system is shut down
+2022-02-07 14:55:00.111 KST [21317] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-02-07 14:55:00.114 KST [21317] LOG:  listening on IPv6 address "::1", port 5432
+2022-02-07 14:55:00.114 KST [21317] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-02-07 14:55:00.114 KST [21317] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-02-07 14:55:00.124 KST [21318] LOG:  database system was shut down at 2022-02-04 22:15:38 KST
+2022-02-07 14:55:00.131 KST [21317] LOG:  database system is ready to accept connections
+2022-02-11 12:36:31.001 KST [80905] WARNING:  PID 5588 is not a PostgreSQL server process
+2022-02-11 12:36:31.065 KST [80909] WARNING:  PID 12441 is not a PostgreSQL server process
+2022-02-11 12:36:31.082 KST [80910] WARNING:  PID 12726 is not a PostgreSQL server process
+2022-02-11 12:36:31.096 KST [80911] WARNING:  PID 17649 is not a PostgreSQL server process
+2022-02-11 12:36:31.107 KST [80912] WARNING:  PID 17673 is not a PostgreSQL server process
+2022-02-11 17:28:06.282 KST [21317] LOG:  received fast shutdown request
+2022-02-11 17:28:06.282 KST [21317] LOG:  aborting any active transactions
+2022-02-11 17:28:06.284 KST [21317] LOG:  background worker "logical replication launcher" (PID 21324) exited with exit code 1
+2022-02-11 17:28:06.285 KST [21319] LOG:  shutting down
+2022-02-11 17:28:06.303 KST [21317] LOG:  database system is shut down
+2022-02-14 15:54:16.284 KST [2152] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-02-14 15:54:16.287 KST [2152] LOG:  listening on IPv6 address "::1", port 5432
+2022-02-14 15:54:16.287 KST [2152] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-02-14 15:54:16.288 KST [2152] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-02-14 15:54:16.295 KST [2153] LOG:  database system was shut down at 2022-02-11 17:28:06 KST
+2022-02-14 15:54:16.299 KST [2152] LOG:  database system is ready to accept connections
+2022-02-14 16:48:52.450 KST [3194] ERROR:  cannot execute nextval() in a read-only transaction
+2022-02-14 16:48:52.450 KST [3194] STATEMENT:  select nextval ('hibernate_sequence')
+2022-02-16 12:06:07.143 KST [20282] ERROR:  null value in column "role" of relation "users" violates not-null constraint
+2022-02-16 12:06:07.143 KST [20282] DETAIL:  Failing row contains (StoreOwner, 1, null, null, null, null, test@gmail.com, Park, $2a$10$8TpWy3Ce5BfvAefUBDMnLu6GvVydkOj2XriskLp7xbq4t91s//xrW, 010-1234-5678, null, null).
+2022-02-16 12:06:07.143 KST [20282] STATEMENT:  insert into users (created_at, created_by, last_modified_at, last_modified_by, email, name, password, phone_number, refresh_token_id, role, dtype, user_id) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'StoreOwner', $11)
+2022-02-18 21:44:40.888 KST [2152] LOG:  received smart shutdown request
+2022-02-18 21:44:40.891 KST [2152] LOG:  background worker "logical replication launcher" (PID 2159) exited with exit code 1
+2022-02-18 21:44:40.892 KST [2154] LOG:  shutting down
+2022-02-18 21:44:40.924 KST [2152] LOG:  database system is shut down
+2022-02-22 18:03:46.460 KST [99592] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-02-22 18:03:46.463 KST [99592] LOG:  listening on IPv6 address "::1", port 5432
+2022-02-22 18:03:46.463 KST [99592] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-02-22 18:03:46.463 KST [99592] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-02-22 18:03:46.471 KST [99593] LOG:  database system was shut down at 2022-02-18 21:44:40 KST
+2022-02-22 18:03:46.477 KST [99592] LOG:  database system is ready to accept connections
+2022-02-23 15:02:57.008 KST [10558] FATAL:  terminating connection due to administrator command
+2022-02-23 15:02:57.009 KST [10551] FATAL:  terminating connection due to administrator command
+2022-02-23 15:02:57.009 KST [10525] FATAL:  terminating connection due to administrator command
+2022-02-23 15:02:57.015 KST [99592] LOG:  received smart shutdown request
+2022-02-23 15:02:57.015 KST [10573] FATAL:  terminating connection due to administrator command
+2022-02-23 15:02:57.016 KST [99592] LOG:  background worker "logical replication launcher" (PID 99599) exited with exit code 1
+2022-02-23 15:02:57.017 KST [10580] FATAL:  terminating connection due to administrator command
+2022-02-23 15:02:57.017 KST [10575] FATAL:  terminating connection due to administrator command
+2022-02-23 15:02:57.019 KST [10577] FATAL:  terminating connection due to administrator command
+2022-02-23 15:02:57.020 KST [10571] FATAL:  terminating connection due to administrator command
+2022-02-23 15:02:57.021 KST [10560] FATAL:  terminating connection due to administrator command
+2022-02-23 15:02:57.008 KST [10552] FATAL:  terminating connection due to administrator command
+2022-02-23 15:02:57.047 KST [99594] LOG:  shutting down
+2022-02-23 15:02:57.074 KST [99592] LOG:  database system is shut down
+2022-02-23 15:08:36.011 KST [1024] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-02-23 15:08:36.013 KST [1024] LOG:  listening on IPv6 address "::1", port 5432
+2022-02-23 15:08:36.013 KST [1024] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-02-23 15:08:36.013 KST [1024] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-02-23 15:08:36.020 KST [1025] LOG:  database system was shut down at 2022-02-23 15:02:57 KST
+2022-02-23 15:08:36.023 KST [1024] LOG:  database system is ready to accept connections
+2022-02-25 16:52:37.262 KST [1024] LOG:  received smart shutdown request
+2022-02-25 16:52:37.264 KST [1024] LOG:  background worker "logical replication launcher" (PID 1031) exited with exit code 1
+2022-02-25 16:52:37.266 KST [1026] LOG:  shutting down
+2022-02-25 16:52:37.305 KST [1024] LOG:  database system is shut down
+2022-02-28 14:06:11.064 KST [2704] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-02-28 14:06:11.066 KST [2704] LOG:  listening on IPv6 address "::1", port 5432
+2022-02-28 14:06:11.066 KST [2704] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-02-28 14:06:11.066 KST [2704] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-02-28 14:06:11.073 KST [2705] LOG:  database system was shut down at 2022-02-25 16:52:37 KST
+2022-02-28 14:06:11.077 KST [2704] LOG:  database system is ready to accept connections
+2022-02-28 19:27:18.326 KST [2704] LOG:  received smart shutdown request
+2022-02-28 19:27:18.329 KST [2704] LOG:  background worker "logical replication launcher" (PID 2711) exited with exit code 1
+2022-02-28 19:27:18.331 KST [2706] LOG:  shutting down
+2022-02-28 19:27:18.362 KST [2704] LOG:  database system is shut down
+2022-03-01 12:13:28.590 KST [3086] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-03-01 12:13:28.591 KST [3086] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-03-01 12:13:28.591 KST [3086] LOG:  listening on IPv6 address "::1", port 5432
+2022-03-01 12:13:28.591 KST [3086] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-03-01 12:13:28.597 KST [3087] LOG:  database system was shut down at 2022-02-28 19:27:18 KST
+2022-03-01 12:13:28.602 KST [3086] LOG:  database system is ready to accept connections
+2022-03-02 14:54:39.312 KST [3086] LOG:  received smart shutdown request
+2022-03-02 14:54:39.315 KST [3086] LOG:  background worker "logical replication launcher" (PID 3093) exited with exit code 1
+2022-03-02 14:54:39.315 KST [3088] LOG:  shutting down
+2022-03-02 14:54:39.345 KST [3086] LOG:  database system is shut down
+2022-03-02 18:15:14.091 KST [4603] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-03-02 18:15:14.095 KST [4603] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-03-02 18:15:14.095 KST [4603] LOG:  listening on IPv6 address "::1", port 5432
+2022-03-02 18:15:14.095 KST [4603] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-03-02 18:15:14.102 KST [4604] LOG:  database system was shut down at 2022-03-02 14:54:39 KST
+2022-03-02 18:15:14.106 KST [4603] LOG:  database system is ready to accept connections
+2022-03-02 18:15:15.704 KST [4603] LOG:  received fast shutdown request
+2022-03-02 18:15:15.705 KST [4603] LOG:  aborting any active transactions
+2022-03-02 18:15:15.707 KST [4603] LOG:  background worker "logical replication launcher" (PID 4610) exited with exit code 1
+2022-03-02 18:15:15.708 KST [4605] LOG:  shutting down
+2022-03-02 18:15:15.721 KST [4603] LOG:  database system is shut down
+2022-03-03 10:18:18.356 KST [7841] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-03-03 10:18:18.358 KST [7841] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-03-03 10:18:18.359 KST [7841] LOG:  listening on IPv6 address "::1", port 5432
+2022-03-03 10:18:18.359 KST [7841] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-03-03 10:18:18.366 KST [7842] LOG:  database system was shut down at 2022-03-02 18:15:15 KST
+2022-03-03 10:18:18.369 KST [7841] LOG:  database system is ready to accept connections
+2022-03-03 10:35:08.486 KST [8510] ERROR:  syntax error at or near "from" at character 213
+2022-03-03 10:35:08.486 KST [8510] STATEMENT:  SELECT 
+	  ROUND(
+		  6371 * acos(cos(radians('lat')) * cos(radians(latitude)) * cos(radians(longitude) - radians('long')) + sin(radians('lat')) * sin(radians(latitude)))
+	  ) as distance,
+	  latitude,
+	  longitude, 
+	from your_table
+	HAVING distance<=20
+	order by distance;
+	
+	select * from store;
+2022-03-03 10:35:34.079 KST [8510] ERROR:  syntax error at or near "from" at character 213
+2022-03-03 10:35:34.079 KST [8510] STATEMENT:  SELECT 
+	  ROUND(
+		  6371 * acos(cos(radians('lat')) * cos(radians(latitude)) * cos(radians(longitude) - radians('long')) + sin(radians('lat')) * sin(radians(latitude)))
+	  ) as distance,
+	  latitude,
+	  longitude, 
+	from your_table
+	HAVING distance<=20
+	order by distance;
+	
+	select * from map;
+2022-03-03 10:35:44.812 KST [8510] ERROR:  syntax error at or near "from" at character 213
+2022-03-03 10:35:44.812 KST [8510] STATEMENT:  SELECT 
+	  ROUND(
+		  6371 * acos(cos(radians('lat')) * cos(radians(latitude)) * cos(radians(longitude) - radians('long')) + sin(radians('lat')) * sin(radians(latitude)))
+	  ) as distance,
+	  latitude,
+	  longitude, 
+	from map
+	HAVING distance<=20
+	order by distance;
+2022-03-03 10:35:55.654 KST [8510] ERROR:  invalid input syntax for type double precision: "lat" at character 45
+2022-03-03 10:35:55.654 KST [8510] STATEMENT:  SELECT 
+	  ROUND(
+		  6371 * acos(cos(radians('lat')) * cos(radians(latitude)) * cos(radians(longitude) - radians('long')) + sin(radians('lat')) * sin(radians(latitude)))
+	  ) as distance,
+	  latitude,
+	  longitude
+	from map
+	HAVING distance<=20
+	order by distance;
+	
+2022-03-03 10:36:52.827 KST [8510] ERROR:  column "distance" does not exist at character 242
+2022-03-03 10:36:52.827 KST [8510] STATEMENT:  SELECT 
+	  ROUND(
+		  6371 * acos(cos(radians(37.5403903)) * cos(radians(latitude)) * cos(radians(longitude) - radians(126.9440975)) + sin(radians(37.5403903)) * sin(radians(latitude)))
+	  ) as distance,
+	  latitude,
+	  longitude
+	from map
+	HAVING distance<=20
+	order by distance;
+	
+2022-03-03 10:40:20.944 KST [8510] ERROR:  column "distance" does not exist at character 247
+2022-03-03 10:40:20.944 KST [8510] STATEMENT:  SELECT * , 
+	  ( 6371 * ACOS( COS( RADIANS( 37.5403903 ) ) * COS( RADIANS( latitude ) ) 
+					* COS( RADIANS( longitude ) - RADIANS( 126.9440975 ) ) 
+					+ SIN( RADIANS( 37.5403903 ) ) * SIN( RADIANS( latitude ) ) ) ) AS distance 
+	FROM map 
+	having distance <= 1 
+	order by distance asc limit 10
+	
+	
+	
+	-- 37.5403903
+	-- 126.9440975
+2022-03-03 10:40:29.614 KST [8510] ERROR:  column "distance" does not exist at character 247
+2022-03-03 10:40:29.614 KST [8510] STATEMENT:  SELECT * , 
+	  ( 6371 * ACOS( COS( RADIANS( 37.5403903 ) ) * COS( RADIANS( latitude ) ) 
+					* COS( RADIANS( longitude ) - RADIANS( 126.9440975 ) ) 
+					+ SIN( RADIANS( 37.5403903 ) ) * SIN( RADIANS( latitude ) ) ) ) AS distance 
+	FROM map 
+	having distance <= 1 
+	order by distance asc limit 10
+	
+	
+	
+	-- 37.5403903
+	-- 126.9440975
+2022-03-03 10:42:59.708 KST [8510] ERROR:  column m.store_id does not exist at character 264
+2022-03-03 10:42:59.708 KST [8510] HINT:  Perhaps you meant to reference the column "s.store_id".
+2022-03-03 10:42:59.708 KST [8510] STATEMENT:  SELECT * , 
+	  ( 6371 * ACOS( COS( RADIANS( 37.5403903 ) ) * COS( RADIANS( latitude ) ) 
+					* COS( RADIANS( longitude ) - RADIANS( 126.9440975 ) ) 
+					+ SIN( RADIANS( 37.5403903 ) ) * SIN( RADIANS( latitude ) ) ) ) AS distance 
+	FROM map m
+	     join store s
+		 on m.store_id = s.store_id
+	order by distance
+	
+	
+	
+	-- 37.5403903
+	-- 126.9440975
+2022-03-03 11:43:29.593 KST [9615] ERROR:  input is out of range
+2022-03-03 11:43:29.593 KST [9615] STATEMENT:  select acos((cos(radians($1))*cos(radians(map1_.latitude))*(cos(radians(map1_.longitude))-$2)+radians($3))*radians(map1_.latitude))*$4 as col_0_0_ from store store0_ inner join map map1_ on store0_.map_id=map1_.map_id
+2022-03-03 11:44:18.639 KST [8510] ERROR:  input is out of range
+2022-03-03 11:44:18.639 KST [8510] STATEMENT:  select
+	        acos((cos(radians(37.5403903))*cos(radians(map1_.latitude))*(cos(radians(map1_.longitude))-126.9440975)+radians(37.5403903))*radians(map1_.latitude))*1000.0 as col_0_0_ 
+	    from
+	        store store0_ 
+	    inner join
+	        map map1_ 
+	            on store0_.map_id=map1_.map_id
+2022-03-03 11:44:37.678 KST [8510] ERROR:  syntax error at or near "select" at character 312
+2022-03-03 11:44:37.678 KST [8510] STATEMENT:  SELECT * , 
+	  ( 6371 * ACOS( COS( RADIANS( 37.5403903 ) ) * COS( RADIANS( latitude ) ) 
+					* COS( RADIANS( longitude ) - RADIANS( 126.9440975 ) ) 
+					+ SIN( RADIANS( 37.5403903 ) ) * SIN( RADIANS( latitude ) ) ) ) * 1000 AS distance 
+	FROM map m
+	     join store s
+		 on m.map_id = s.map_id
+	order by distance
+	
+	
+	
+	select
+	        6371 * acos((cos(radians(37.5403903))*cos(radians(map1_.latitude))*(cos(radians(map1_.longitude))-126.9440975)+radians(37.5403903))*radians(map1_.latitude))*1000.0 as col_0_0_ 
+	    from
+	        store store0_ 
+	    inner join
+	        map map1_ 
+	            on store0_.map_id=map1_.map_id
+2022-03-03 11:44:38.593 KST [8510] ERROR:  syntax error at or near "select" at character 312
+2022-03-03 11:44:38.593 KST [8510] STATEMENT:  SELECT * , 
+	  ( 6371 * ACOS( COS( RADIANS( 37.5403903 ) ) * COS( RADIANS( latitude ) ) 
+					* COS( RADIANS( longitude ) - RADIANS( 126.9440975 ) ) 
+					+ SIN( RADIANS( 37.5403903 ) ) * SIN( RADIANS( latitude ) ) ) ) * 1000 AS distance 
+	FROM map m
+	     join store s
+		 on m.map_id = s.map_id
+	order by distance
+	
+	
+	
+	select
+	        6371 * acos((cos(radians(37.5403903))*cos(radians(map1_.latitude))*(cos(radians(map1_.longitude))-126.9440975)+radians(37.5403903))*radians(map1_.latitude))*1000.0 as col_0_0_ 
+	    from
+	        store store0_ 
+	    inner join
+	        map map1_ 
+	            on store0_.map_id=map1_.map_id
+2022-03-03 11:44:42.832 KST [8510] ERROR:  input is out of range
+2022-03-03 11:44:42.832 KST [8510] STATEMENT:  select
+	        6371 * acos((cos(radians(37.5403903))*cos(radians(map1_.latitude))*(cos(radians(map1_.longitude))-126.9440975)+radians(37.5403903))*radians(map1_.latitude))*1000.0 as col_0_0_ 
+	    from
+	        store store0_ 
+	    inner join
+	        map map1_ 
+	            on store0_.map_id=map1_.map_id
+2022-03-03 11:48:40.060 KST [8510] ERROR:  syntax error at or near "select" at character 312
+2022-03-03 11:48:40.060 KST [8510] STATEMENT:  SELECT * , 
+	  ( 6371 * ACOS( COS( RADIANS( 37.5403903 ) ) * COS( RADIANS( latitude ) ) 
+					* COS( RADIANS( longitude ) - RADIANS( 126.9440975 ) ) 
+					+ SIN( RADIANS( 37.5403903 ) ) * SIN( RADIANS( latitude ) ) ) ) * 1000 AS distance 
+	FROM map m
+	     join store s
+		 on m.map_id = s.map_id
+	order by distance
+	
+	
+	
+	select
+	        acos((cos(radians(37.5403903))*cos(radians(map1_.latitude))*(cos(radians(map1_.longitude))-radians(126.9440975))+radians(37.5403903))*radians(map1_.latitude))*6371000.0 as col_0_0_ 
+	    from
+	        store store0_ 
+	    inner join
+	        map map1_ 
+	            on store0_.map_id=map1_.map_id
+2022-03-03 11:58:49.607 KST [8510] ERROR:  input is out of range
+2022-03-03 11:58:49.607 KST [8510] STATEMENT:  select acos(
+		cos(radians(37.5403903)) * cos(radians(map1_.latitude))
+		 *(cos(radians(map1_.longitude))-radians(126.9440975))
+		 +sin(radians(37.5403903))*sin(radians(map1_.latitude)))*6371.0 as col_0_0_ 
+	    from
+	        store store0_ 
+	    inner join
+	        map map1_ 
+	            on store0_.map_id=map1_.map_id
+2022-03-03 12:05:56.044 KST [10202] ERROR:  input is out of range
+2022-03-03 12:05:56.044 KST [10202] STATEMENT:  select acos((cos(radians($1))*cos(radians(map1_.latitude))*(cos(radians(map1_.longitude))-$2)+sin(radians($3)))*sin(radians(map1_.latitude)))*$4 as col_0_0_ from store store0_ inner join map map1_ on store0_.map_id=map1_.map_id
+2022-03-03 12:06:38.056 KST [10259] ERROR:  input is out of range
+2022-03-03 12:06:38.056 KST [10259] STATEMENT:  select acos((cos(radians($1))*cos(radians(map1_.latitude))*(cos(radians(map1_.longitude))-$2)+sin(radians($3)))*sin(radians(map1_.latitude)))*$4 as col_0_0_ from store store0_ inner join map map1_ on store0_.map_id=map1_.map_id
+2022-03-03 12:08:25.390 KST [10313] ERROR:  input is out of range
+2022-03-03 12:08:25.390 KST [10313] STATEMENT:  select acos(cos(radians($1))*cos(radians(map1_.latitude))*(cos(radians(map1_.longitude))-$2)) as col_0_0_ from store store0_ inner join map map1_ on store0_.map_id=map1_.map_id
+2022-03-03 12:11:10.751 KST [8510] ERROR:  input is out of range
+2022-03-03 12:11:10.751 KST [8510] STATEMENT:  
+	select acos(
+		cos(radians(37.5403903))*cos(radians(map1_.latitude))*(cos(radians(map1_.longitude))-radians(126.9440975))+sin(radians(37.5403903)))*sin(radians(map1_.latitude))*6371.0 as col_0_0_ 
+	    from
+	        store store0_ 
+	    inner join
+	        map map1_ 
+	            on store0_.map_id=map1_.map_id
+2022-03-03 12:14:08.131 KST [8510] ERROR:  input is out of range
+2022-03-03 12:14:08.131 KST [8510] STATEMENT:  select 6371 * acos(
+			cos(radians(37.5403903)) *cos(radians(map1_.latitude))
+			*(cos(radians(map1_.longitude)) - radians(126.9440975))
+			+sin(radians(37.5403903)) * sin(radians(map1_.latitude))) as col_0_0_ 
+	    from
+	        store store0_ 
+	    inner join
+	        map map1_ 
+	            on store0_.map_id=map1_.map_id
+2022-03-03 12:15:44.518 KST [8510] ERROR:  input is out of range
+2022-03-03 12:15:44.518 KST [8510] STATEMENT:  select 6371 * acos(
+			cos(radians(37.5403903)) *cos(radians(map1_.latitude))
+			*cos(radians(map1_.longitude)) - radians(126.9440975)
+			+sin(radians(37.5403903)) * sin(radians(map1_.latitude))) as col_0_0_ 
+	    from
+	        store store0_ 
+	    inner join
+	        map map1_ 
+	            on store0_.map_id=map1_.map_id
+2022-03-03 12:15:45.294 KST [8510] ERROR:  input is out of range
+2022-03-03 12:15:45.294 KST [8510] STATEMENT:  select 6371 * acos(
+			cos(radians(37.5403903)) *cos(radians(map1_.latitude))
+			*cos(radians(map1_.longitude)) - radians(126.9440975)
+			+sin(radians(37.5403903)) * sin(radians(map1_.latitude))) as col_0_0_ 
+	    from
+	        store store0_ 
+	    inner join
+	        map map1_ 
+	            on store0_.map_id=map1_.map_id
+2022-03-03 12:33:08.261 KST [8510] ERROR:  syntax error at or near "select" at character 303
+2022-03-03 12:33:08.261 KST [8510] STATEMENT:  SELECT ( 6371 * ACOS( COS( RADIANS( 37.5403903 ) ) * COS( RADIANS( latitude ) ) 
+					* COS( RADIANS( longitude ) - RADIANS( 126.9440975 ) ) 
+					+ SIN( RADIANS( 37.5403903 ) ) * SIN( RADIANS( latitude ) ) ) ) * 1000 AS distance 
+	FROM map m
+	     join store s
+		 on m.map_id = s.map_id
+	order by distance
+	
+	select
+	        acos(cos(radians(37.5403903))*cos(radians(map1_.latitude))*cos(radians(map1_.longitude)-radians(126.9440975))+sin(radians(37.5403903))*sin(radians(map1_.latitude)))*6371.0 as col_0_0_ 
+	    from
+	        store store0_ 
+	    inner join
+	        map map1_ 
+	            on store0_.map_id=map1_.map_id 
+	    order by
+	        col_0_0_ asc
+2022-03-03 21:06:25.881 KST [7841] LOG:  received smart shutdown request
+2022-03-03 21:06:25.885 KST [7841] LOG:  background worker "logical replication launcher" (PID 7848) exited with exit code 1
+2022-03-03 21:06:25.885 KST [7843] LOG:  shutting down
+2022-03-03 21:06:25.925 KST [7841] LOG:  database system is shut down
+2022-03-04 12:28:53.632 KST [1920] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-03-04 12:28:53.634 KST [1920] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-03-04 12:28:53.635 KST [1920] LOG:  listening on IPv6 address "::1", port 5432
+2022-03-04 12:28:53.635 KST [1920] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-03-04 12:28:53.643 KST [1921] LOG:  database system was shut down at 2022-03-03 21:06:25 KST
+2022-03-04 12:28:53.649 KST [1920] LOG:  database system is ready to accept connections
+2022-03-08 12:58:00.294 KST [50287] ERROR:  relation "store" does not exist at character 611
+2022-03-08 12:58:00.294 KST [50287] STATEMENT:  select store0_.store_id as store_id1_7_0_, store0_.created_at as created_2_7_0_, store0_.created_by as created_3_7_0_, store0_.last_modified_at as last_mod4_7_0_, store0_.last_modified_by as last_mod5_7_0_, store0_.city as city6_7_0_, store0_.street as street7_7_0_, store0_.zipcode as zipcode8_7_0_, store0_.business_end_time as business9_7_0_, store0_.business_start_time as busines10_7_0_, store0_.map_id as map_id16_7_0_, store0_.name as name11_7_0_, store0_.phone_number as phone_n12_7_0_, store0_.photo_name as photo_n13_7_0_, store0_.photo_path as photo_p14_7_0_, store0_.user_id as user_id15_7_0_ from store store0_ where store0_.store_id=$1
+2022-03-08 12:59:44.463 KST [50349] ERROR:  relation "store" does not exist at character 15
+2022-03-08 12:59:44.463 KST [50349] STATEMENT:  select * from store;
+2022-03-08 12:59:48.521 KST [50349] ERROR:  relation "stores" does not exist at character 15
+2022-03-08 12:59:48.521 KST [50349] STATEMENT:  select * from stores
+2022-03-08 15:13:27.902 KST [53535] ERROR:  deadlock detected
+2022-03-08 15:13:27.902 KST [53535] DETAIL:  Process 53535 waits for AccessExclusiveLock on relation 32346 of database 16537; blocked by process 53518.
+	Process 53518 waits for RowExclusiveLock on relation 32353 of database 16537; blocked by process 53535.
+	Process 53535: alter table if exists item_option drop constraint if exists FKpiufbijq6m8l18jf9a0nwny62
+	Process 53518: insert into item_option (created_at, created_by, last_modified_at, last_modified_by, item_id, name, option_type, item_option_id) values ($1, $2, $3, $4, $5, $6, $7, $8)
+2022-03-08 15:13:27.902 KST [53535] HINT:  See server log for query details.
+2022-03-08 15:13:27.902 KST [53535] STATEMENT:  alter table if exists item_option drop constraint if exists FKpiufbijq6m8l18jf9a0nwny62
+2022-03-08 19:03:38.269 KST [59722] ERROR:  relation "category" already exists
+2022-03-08 19:03:38.269 KST [59722] STATEMENT:  create table category (category_id int8 not null, created_at timestamp, created_by int8, last_modified_at timestamp, last_modified_by int8, name varchar(255), orders int4, store_id int8, primary key (category_id))
+2022-03-08 19:03:38.284 KST [59722] ERROR:  relation "favorite_store" already exists
+2022-03-08 19:03:38.284 KST [59722] STATEMENT:  create table favorite_store (favorite_store_id int8 not null, created_at timestamp, created_by int8, last_modified_at timestamp, last_modified_by int8, user_id int8, store_id int8, primary key (favorite_store_id))
+2022-03-08 19:03:38.384 KST [59722] ERROR:  relation "item" already exists
+2022-03-08 19:03:38.384 KST [59722] STATEMENT:  create table item (item_id int8 not null, created_at timestamp, created_by int8, last_modified_at timestamp, last_modified_by int8, name varchar(255), photo_name varchar(255), photo_path varchar(255), price int8, sales_yn varchar(255), category_id int8, store_id int8, primary key (item_id))
+2022-03-08 19:03:38.416 KST [59722] ERROR:  relation "item_option" already exists
+2022-03-08 19:03:38.416 KST [59722] STATEMENT:  create table item_option (item_option_id int8 not null, created_at timestamp, created_by int8, last_modified_at timestamp, last_modified_by int8, name varchar(255), option_type varchar(255), item_id int8, primary key (item_option_id))
+2022-03-08 19:03:38.515 KST [59722] ERROR:  relation "map" already exists
+2022-03-08 19:03:38.515 KST [59722] STATEMENT:  create table map (map_id int8 not null, created_at timestamp, created_by int8, last_modified_at timestamp, last_modified_by int8, latitude float8, longitude float8, primary key (map_id))
+2022-03-08 19:03:38.546 KST [59722] ERROR:  relation "review" already exists
+2022-03-08 19:03:38.546 KST [59722] STATEMENT:  create table review (review_id int8 not null, created_at timestamp, created_by int8, last_modified_at timestamp, last_modified_by int8, content varchar(255), order_id int8, photo_name varchar(255), photo_path varchar(255), star_rating int4, user_id int8, review_reply_id int8, store_id int8, primary key (review_id))
+2022-03-08 19:03:38.549 KST [59722] ERROR:  relation "review_reply" already exists
+2022-03-08 19:03:38.549 KST [59722] STATEMENT:  create table review_reply (review_reply_id int8 not null, created_at timestamp, created_by int8, last_modified_at timestamp, last_modified_by int8, content varchar(255), primary key (review_reply_id))
+2022-03-08 19:03:38.556 KST [59722] ERROR:  relation "store" already exists
+2022-03-08 19:03:38.556 KST [59722] STATEMENT:  create table store (store_id int8 not null, created_at timestamp, created_by int8, last_modified_at timestamp, last_modified_by int8, city varchar(255), street varchar(255), zipcode varchar(255), business_end_time timestamp, business_start_time timestamp, name varchar(255), phone_number varchar(255), photo_name varchar(255), photo_path varchar(255), user_id int8, map_id int8, primary key (store_id))
+2022-03-08 19:03:38.558 KST [59722] ERROR:  constraint "fkqdaotwkf5g9vmdox82ttt50i5" for relation "category" already exists
+2022-03-08 19:03:38.558 KST [59722] STATEMENT:  alter table if exists category add constraint FKqdaotwkf5g9vmdox82ttt50i5 foreign key (store_id) references store
+2022-03-08 19:03:38.562 KST [59722] ERROR:  constraint "fkr6bk7q3ru7y3dqcis9exkpxef" for relation "favorite_store" already exists
+2022-03-08 19:03:38.562 KST [59722] STATEMENT:  alter table if exists favorite_store add constraint FKr6bk7q3ru7y3dqcis9exkpxef foreign key (store_id) references store
+2022-03-08 19:03:38.564 KST [59722] ERROR:  constraint "fk2n9w8d0dp4bsfra9dcg0046l4" for relation "item" already exists
+2022-03-08 19:03:38.564 KST [59722] STATEMENT:  alter table if exists item add constraint FK2n9w8d0dp4bsfra9dcg0046l4 foreign key (category_id) references category
+2022-03-08 19:03:38.566 KST [59722] ERROR:  constraint "fki0c87m5jy5qxw8orrf2pugs6h" for relation "item" already exists
+2022-03-08 19:03:38.566 KST [59722] STATEMENT:  alter table if exists item add constraint FKi0c87m5jy5qxw8orrf2pugs6h foreign key (store_id) references store
+2022-03-08 19:03:38.570 KST [59722] ERROR:  constraint "fkpiufbijq6m8l18jf9a0nwny62" for relation "item_option" already exists
+2022-03-08 19:03:38.570 KST [59722] STATEMENT:  alter table if exists item_option add constraint FKpiufbijq6m8l18jf9a0nwny62 foreign key (item_id) references item
+2022-03-08 19:03:38.573 KST [59722] ERROR:  constraint "fkjq8c26pof1728qty4drt25na8" for relation "review" already exists
+2022-03-08 19:03:38.573 KST [59722] STATEMENT:  alter table if exists review add constraint FKjq8c26pof1728qty4drt25na8 foreign key (review_reply_id) references review_reply
+2022-03-08 19:03:38.576 KST [59722] ERROR:  constraint "fk74d12ba8sxxu9vpnc59b43y30" for relation "review" already exists
+2022-03-08 19:03:38.576 KST [59722] STATEMENT:  alter table if exists review add constraint FK74d12ba8sxxu9vpnc59b43y30 foreign key (store_id) references store
+2022-03-08 19:03:38.579 KST [59722] ERROR:  constraint "fkmika35deuby77v4xcrfihghox" for relation "store" already exists
+2022-03-08 19:03:38.579 KST [59722] STATEMENT:  alter table if exists store add constraint FKmika35deuby77v4xcrfihghox foreign key (map_id) references map
+2022-03-08 22:33:31.836 KST [64724] FATAL:  database "notificationdb" does not exist
+2022-03-08 22:33:55.035 KST [64740] FATAL:  database "notificationdb" does not exist
+2022-03-09 15:43:56.752 KST [79365] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.753 KST [79341] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.755 KST [79340] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.757 KST [79339] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.758 KST [79338] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.759 KST [79334] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.762 KST [79311] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.762 KST [79307] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.763 KST [79305] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.765 KST [79251] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.766 KST [79144] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.766 KST [79143] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.766 KST [79142] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.767 KST [79141] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.769 KST [79140] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.770 KST [79139] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.770 KST [79138] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.770 KST [79137] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.772 KST [79136] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.772 KST [79134] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.773 KST [78769] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.773 KST [78747] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.775 KST [78724] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.776 KST [78667] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.776 KST [78665] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.777 KST [78643] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.778 KST [78641] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.779 KST [78623] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.780 KST [78621] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.781 KST [78615] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.783 KST [78609] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.783 KST [78608] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.784 KST [78545] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.786 KST [78541] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.787 KST [78540] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.787 KST [78536] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.787 KST [78510] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.788 KST [78512] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.790 KST [78508] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.794 KST [1920] LOG:  received smart shutdown request
+2022-03-09 15:43:56.794 KST [79395] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.794 KST [79392] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.794 KST [79406] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.752 KST [79355] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.795 KST [1920] LOG:  background worker "logical replication launcher" (PID 1927) exited with exit code 1
+2022-03-09 15:43:56.752 KST [79356] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.752 KST [79368] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.752 KST [79369] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.752 KST [79354] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.752 KST [79352] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.808 KST [78758] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.794 KST [79373] FATAL:  terminating connection due to administrator command
+2022-03-09 15:43:56.822 KST [1922] LOG:  shutting down
+2022-03-09 15:43:56.861 KST [1920] LOG:  database system is shut down
+2022-03-09 16:02:34.001 KST [1238] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-03-09 16:02:34.002 KST [1238] LOG:  listening on IPv6 address "::1", port 5432
+2022-03-09 16:02:34.002 KST [1238] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-03-09 16:02:34.002 KST [1238] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-03-09 16:02:34.009 KST [1239] LOG:  database system was shut down at 2022-03-09 15:43:56 KST
+2022-03-09 16:02:34.013 KST [1238] LOG:  database system is ready to accept connections
+2022-03-09 17:02:34.782 KST [1238] LOG:  received smart shutdown request
+2022-03-09 17:02:34.785 KST [1238] LOG:  background worker "logical replication launcher" (PID 1245) exited with exit code 1
+2022-03-09 17:02:34.790 KST [1240] LOG:  shutting down
+2022-03-09 17:02:34.817 KST [1238] LOG:  database system is shut down
+2022-03-10 11:16:41.561 KST [1676] LOG:  starting PostgreSQL 14.1 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-03-10 11:16:41.563 KST [1676] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-03-10 11:16:41.563 KST [1676] LOG:  listening on IPv6 address "::1", port 5432
+2022-03-10 11:16:41.564 KST [1676] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-03-10 11:16:41.572 KST [1677] LOG:  database system was shut down at 2022-03-09 17:02:34 KST
+2022-03-10 11:16:41.575 KST [1676] LOG:  database system is ready to accept connections
