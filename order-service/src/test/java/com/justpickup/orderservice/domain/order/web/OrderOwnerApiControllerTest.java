@@ -62,9 +62,6 @@ class OrderOwnerApiControllerTest {
     @SpyBean
     PrevOrderSearchValidator prevOrderSearchValidator;
 
-    @MockBean
-    OrderRepository orderRepository;
-
     private final String url = "/api/owner/order";
 
     @Test

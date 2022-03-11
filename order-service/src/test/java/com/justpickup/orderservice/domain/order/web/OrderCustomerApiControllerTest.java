@@ -55,9 +55,6 @@ class OrderCustomerApiControllerTest {
     @MockBean
     OrderService orderService;
 
-    @MockBean
-    OrderRepository orderRepository;
-
     private final String url = "/api/customer/order";
 
     @Test

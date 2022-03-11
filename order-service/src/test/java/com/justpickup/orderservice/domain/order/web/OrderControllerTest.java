@@ -42,9 +42,6 @@ class OrderControllerTest {
     @MockBean
     OrderService orderService;
 
-    @MockBean
-    OrderRepository orderRepository;
-
     @Test
     @DisplayName("[PATCH] 주문 수정")
     public void patchOrder() throws Exception {
