@@ -33,6 +33,8 @@ dependencies {
 
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'
 
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'

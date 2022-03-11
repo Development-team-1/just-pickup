@@ -18,8 +18,11 @@ eureka:
 spring:
   application:
     name: customer-apigateway-service
-
+  config:
+    import: optional:configserver:http://127.0.0.1:8888
   cloud:
+    config:
+      name: bootstrap
     gateway:
       default-filters:
         - name: GlobalFilter

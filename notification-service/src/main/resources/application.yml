@@ -3,6 +3,11 @@ server.port: 0
 spring:
   application:
     name: notification-service
+  config:
+    import: optional:configserver:http://127.0.0.1:8888
+  cloud:
+    config:
+      name: service
 
   datasource:
     url: jdbc:postgresql://localhost:5432/notificationdb
@@ -12,7 +17,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     generate-ddl: true
     open-in-view: false
     properties:
