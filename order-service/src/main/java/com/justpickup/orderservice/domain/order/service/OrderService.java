@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 
 public interface OrderService {
-    OrderMainDto findOrderMain(OrderSearchCondition condition, Long storeId);
+    OrderMainDto findOrderMain(OrderSearchCondition condition, Long userId);
     Page<OrderDto> findPrevOrderMain(PrevOrderSearch search, Pageable pageable, Long storeId);
     SliceImpl<OrderDto> findOrderHistory(Pageable pageable, Long userId);
     void addItemToBasket(OrderItemDto orderItemDto,Long storeId, Long userId);

@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,12 +42,11 @@ public class OrderOwnerApiController {
     private final PrevOrderSearchValidator prevOrderSearchValidator;
 
     @GetMapping("/order-main")
-    public ResponseEntity<Result> orderMain(@Valid OrderSearchCondition condition) {
-        // TODO: 2022/03/10 Feign client storeId 가져오기 구현 필요
-        Long userId = 1L;
-        Long storeId = 1L;
+    public ResponseEntity<Result> orderMain(@Valid OrderSearchCondition condition,
+                                            @RequestHeader(value="user-id") String userHeader) {
+        Long userId = Long.valueOf(userHeader);
 
-        OrderMainDto orderMainDto = orderService.findOrderMain(condition, storeId);
+        OrderMainDto orderMainDto = orderService.findOrderMain(condition, userId);
 
         OrderMainResponse orderMainResponse = new OrderMainResponse(orderMainDto);
 

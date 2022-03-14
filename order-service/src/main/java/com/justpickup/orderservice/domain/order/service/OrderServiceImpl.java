@@ -9,6 +9,12 @@ import com.justpickup.orderservice.domain.order.repository.OrderRepositoryCustom
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
 import com.justpickup.orderservice.domain.orderItem.entity.OrderItem;
 import com.justpickup.orderservice.domain.orderItemOption.entity.OrderItemOption;
+import com.justpickup.orderservice.global.client.store.GetItemResponse;
+import com.justpickup.orderservice.global.client.store.StoreByUserIdResponse;
+import com.justpickup.orderservice.global.client.store.StoreClient;
+import com.justpickup.orderservice.global.client.user.GetCustomerResponse;
+import com.justpickup.orderservice.global.client.user.UserClient;
+import com.justpickup.orderservice.global.dto.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,6 +23,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StopWatch;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,16 +39,36 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderRepositoryCustom orderRepositoryCustom;
     private final OrderSender orderSender;
+    private final StoreClient storeClient;
+    private final UserClient userClient;
 
     @Override
-    public OrderMainDto findOrderMain(OrderSearchCondition condition, Long storeId) {
+    public OrderMainDto findOrderMain(OrderSearchCondition condition, Long userId) {
+
+        Result<StoreByUserIdResponse> store = storeClient.getStoreByUserId(userId);
+
         // 주문 가져오기
-        OrderMainResult orderMainResult = orderRepositoryCustom.findOrderMain(condition, storeId);
+        OrderMainResult orderMainResult = orderRepositoryCustom.findOrderMain(condition, store.getData().getId());
 
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        int count = 0;
         // 사용자명 및 아이템 이름 가져오기
-//        getUserNameAndItemName(orderDtoList);
+        OrderMainDto returnDto = OrderMainDto.of(orderMainResult.getOrders(), orderMainResult.isHasNext());
+        for (OrderMainDto._Order order : returnDto.getOrders()) {
+            for (OrderMainDto._OrderItem orderItem : order.getOrderItems()) {
+                count += 1;
+                Result<GetItemResponse> item = storeClient.getItem(orderItem.getItemId());
+                orderItem.changeItemName(item.getData().getName());
+            }
+            count += 1;
+            GetCustomerResponse customerResponse = userClient.getCustomerById(order.getUserId()).getData();
+            order.changeUserName(customerResponse.getUserName());
+        }
+        stopWatch.stop();
+        log.info("Feign count = {}, [StopWatch] {}", count, stopWatch.prettyPrint());
 
-        return OrderMainDto.of(orderMainResult.getOrders(), orderMainResult.isHasNext());
+        return returnDto;
     }
 
     @Override
@@ -97,7 +124,7 @@ public class OrderServiceImpl implements OrderService {
                     .getStoreId().equals(storeId))
                 throw new OrderException("장바구니에 여러 카페의 메뉴를 담을수 없습니다.");
         }else{
-            orderRepository.save(Order.of(userId,userCouponId,storeId,0L,orderItem));
+            orderRepository.save(Order.of(userId,userCouponId,storeId,orderItem));
         }
     }
 

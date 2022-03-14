@@ -44,7 +44,6 @@ public class OrderRepositoryCustom {
 
         List<Order> orders = queryFactory
                 .selectFrom(order)
-                .join(order.transaction).fetchJoin()
                 .where(
                         orderIdLt(condition.getLastOrderId()),
                         order.orderTime.between(start, end),
