@@ -3,6 +3,7 @@ package com.justpickup.storeservice.domain.item.service;
 import com.justpickup.storeservice.domain.category.entity.Category;
 import com.justpickup.storeservice.domain.category.repository.CategoryRepository;
 import com.justpickup.storeservice.domain.item.dto.FetchItemDto;
+import com.justpickup.storeservice.domain.item.dto.GetItemDto;
 import com.justpickup.storeservice.domain.item.dto.ItemDto;
 import com.justpickup.storeservice.domain.item.entity.Item;
 import com.justpickup.storeservice.domain.item.exception.NotExistItemException;
@@ -44,6 +45,15 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new NotExistItemException("존재하지 않는 아이템 입니다."));
 
         return ItemDto.createWithCategoryItemDtoAndItemOption(findItem);
+    }
+
+    @Override
+    public List<GetItemDto> getItemAndItemOptions(List<Long> itemIds) {
+
+        List<Item> items = itemRepositoryCustom.getItemAndItemOptions(itemIds);
+        return items.stream()
+                .map(GetItemDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override

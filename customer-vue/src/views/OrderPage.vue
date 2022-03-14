@@ -2,12 +2,12 @@
   <div>
     <v-row>
       <v-col>
-        <div class="text-h4" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ orderData.storeId }}</div>
+        <div class="text-h4" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ orderData.storeName }}</div>
       </v-col>
     </v-row>
     <v-row>
       <v-col
-        v-for=" orderItem in orderData._orderItemDtos"
+        v-for=" orderItem in orderData.orderItemDtoList"
         :key = "orderItem.itemId"
       >
         <v-card
@@ -17,13 +17,15 @@
           <v-list-item three-line>
             <v-list-item-content>
               <v-list-item-title class="text-h5 mb-3">
-                {{ orderItem.itemId }}
+                {{ orderItem.itemName }}
               </v-list-item-title>
               <v-list-item-subtitle class="mb-5">
                수량 : {{ orderItem.count }}
               </v-list-item-subtitle>
-              <div class="text-body-1 mb-5">
-                {{ orderItem.itemOptionIds.join(', ')}}
+              <div class="text-body-1 mb-5" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                {{ orderItem.orderItemOptionDtoList   ?
+                          orderItem.orderItemOptionDtoList.map(x=>x.name).join(', ')
+                          : null}}
               </div>
               <div class="text--primary">
                 합계 : <b> {{ orderItem.count * orderItem.price }} 원</b>
@@ -46,7 +48,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <div> 합계 : {{orderData.totalPrice}} 원</div>
+        <div> 합계 : {{orderData.orderPrice}} 원</div>
       </v-col>
     </v-row>
         <v-btn
@@ -72,22 +74,15 @@ export default {
   data: function(){
     return {
       orderData:{
-        storeId:Number,
-        _orderItemDtos:[{
-          itemId:Number,
-          itemOptionIds:Array,
-          price:Number,
-          count:Number,
-        }],
-        totalPrice:Number,
-
+        // storeName:Number,
+        // orderItemDtoList:[{
+        //   name:Number,
+        //   itemOptionIds:Array,
+        //   price:Number,
+        //   count:Number,
+        // }],
+        // orderPrice:Number,
       },
-    }
-  },
-  computed:{
-    test:function (a){
-
-      return a;
     }
   },
   methods:{
@@ -106,11 +101,13 @@ export default {
     getOrder: function(){
       orderApi.getOrder()
           .then(response=>{
+            console.log(response)
             this.orderData=response.data.data
           })
           .catch(error=>{
-            console.log(error)
-            this.$router.replace("/")
+            console.log(error.response)
+
+            // this.$router.replace("/")
           })
     },
   }
