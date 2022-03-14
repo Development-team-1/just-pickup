@@ -31,7 +31,6 @@ public class ItemOption extends BaseEntity {
     // == 연관관계 편의 메소드 == //
     public void setItem(Item item) {
         this.item = item;
-        item.getItemOptions().add(this);
     }
 
     public ItemOption(OptionType optionType, String name, Item item) {
