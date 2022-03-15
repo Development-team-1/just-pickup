@@ -27,7 +27,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/customer/{userId}")
-    public ResponseEntity getCustomer(@Valid @PathVariable("userId") Long userId) {
+    public ResponseEntity getCustomer(@PathVariable("userId") Long userId) {
 
         CustomerDto customerDto = userService.findCustomerByUserId(userId);
 
