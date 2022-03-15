@@ -15,7 +15,7 @@ public interface ItemService {
 
     FetchItemDto fetchItem(Long itemId);
 
-    Page<ItemDto> findItemList(Long userId,String word, Pageable pageable);
+    Page<ItemDto> findMenuItemList(Long userId, String word, Pageable pageable);
 
     void putItem(Long itemId, String itemName, Long itemPrice, Long categoryId, List<ItemOptionDto> itemOptionDtos);
 

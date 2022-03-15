@@ -55,9 +55,9 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    public Page<ItemDto> findItemList( Long userId,String word, Pageable pageable) {
+    public Page<ItemDto> findMenuItemList(Long userId, String word, Pageable pageable) {
 
-        Page<Item> itemList = itemRepositoryCustom.findItem(userId,word,pageable);
+        Page<Item> itemList = itemRepositoryCustom.findItem(userId, word, pageable);
         return PageableExecutionUtils.getPage(itemList.stream()
                 .map(ItemDto::createWithCategory)
                 .collect(Collectors.toList()),pageable,itemList::getTotalElements);
