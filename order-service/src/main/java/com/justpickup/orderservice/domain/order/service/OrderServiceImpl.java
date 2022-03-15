@@ -19,8 +19,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -100,7 +103,7 @@ public class OrderServiceImpl implements OrderService {
 
         Optional<Order> optionalOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
         if(optionalOrder.isPresent()){
-            if(optionalOrder.get().addOrderItem(orderItem)
+            if(!optionalOrder.get().addOrderItem(orderItem)
                     .getStoreId().equals(storeId))
                 throw new OrderException("장바구니에 여러 카페의 메뉴를 담을수 없습니다.");
         }else{
@@ -114,16 +117,17 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new OrderException("장바구니 정보를 찾을 수 없습니다."));
         GetStoreReseponse store = storeClient.getStore(String.valueOf(order.getStoreId())).getData();
 
-        Map<Long, GetItemResponse> itemMap = storeClient.getItemAndItemOptions(order.getOrderItems().stream()
+        List<GetItemResponse> data = storeClient.getItemAndItemOptions(order.getOrderItems().stream()
                 .map(OrderItem::getItemId)
-                        .filter(Objects::nonNull)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toUnmodifiableList())
-        ).getData()
-            .stream().collect(
+        ).getData();
+
+        Map<Long, GetItemResponse> itemMap = data.stream().collect(
                 Collectors.toMap(
                         GetItemResponse::getId
-                        ,getItemResponse->getItemResponse
-                        ,(t, t2) -> t
+                        , getItemResponse -> getItemResponse
+                        , (t, t2) -> t
                 )
         );
 
@@ -148,12 +152,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void saveOrder(Long userId) {
-
         orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING)
                 .orElseThrow(() -> new OrderException("장바구니 정보를 찾을 수 없습니다."))
                 .order();
-
-
     }
 
     @Override

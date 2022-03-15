@@ -41,7 +41,7 @@ public class GetItemDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    static class ItemOptionDto{
+    public static class ItemOptionDto{
         private Long id;
 
         private OptionType optionType;
