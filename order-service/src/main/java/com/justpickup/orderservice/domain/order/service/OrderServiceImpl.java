@@ -9,6 +9,9 @@ import com.justpickup.orderservice.domain.order.repository.OrderRepositoryCustom
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
 import com.justpickup.orderservice.domain.orderItem.entity.OrderItem;
 import com.justpickup.orderservice.domain.orderItemOption.entity.OrderItemOption;
+import com.justpickup.orderservice.global.client.store.GetItemResponse;
+import com.justpickup.orderservice.global.client.store.GetStoreReseponse;
+import com.justpickup.orderservice.global.client.store.StoreClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,7 +22,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -31,7 +37,8 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderRepositoryCustom orderRepositoryCustom;
-    private final OrderSender orderSender;
+
+    private final StoreClient storeClient;
 
     @Override
     public OrderMainDto findOrderMain(OrderSearchCondition condition, Long storeId) {
@@ -75,7 +82,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void addItemToBasket(OrderItemDto orderItemDto,Long storeId, Long userId) {
+    public void addItemToBasket(OrderItemDto orderItemDto, Long storeId, Long userId) {
 
         //orderItemOption Entity를 생성한다.
         List<OrderItemOption> orderItemOptions = orderItemDto.getOrderItemOptionDtoList()
@@ -105,21 +112,48 @@ public class OrderServiceImpl implements OrderService {
     public FetchOrderDto fetchOrder(Long userId) {
         Order order = orderRepositoryCustom.fetchOrder(userId)
                 .orElseThrow(() -> new OrderException("장바구니 정보를 찾을 수 없습니다."));
+        GetStoreReseponse store = storeClient.getStore(String.valueOf(order.getStoreId())).getData();
 
-        return new FetchOrderDto(order);
+        Map<Long, GetItemResponse> itemMap = storeClient.getItemAndItemOptions(order.getOrderItems().stream()
+                .map(OrderItem::getItemId)
+                        .filter(Objects::nonNull)
+                .collect(Collectors.toUnmodifiableList())
+        ).getData()
+            .stream().collect(
+                Collectors.toMap(
+                        GetItemResponse::getId
+                        ,getItemResponse->getItemResponse
+                        ,(t, t2) -> t
+                )
+        );
+
+        List<FetchOrderDto.OrderItemDto> orderItemDtoList = order.getOrderItems()
+                .stream().map(orderItem ->
+                        new FetchOrderDto.OrderItemDto(
+                                itemMap.get(orderItem.getItemId())
+                                ,orderItem))
+                .collect(Collectors.toList());
+
+
+        FetchOrderDto fetchOrderDto = FetchOrderDto.builder()
+                        .userId(order.getUserId())
+                        .orderPrice(order.getOrderPrice())
+                        .storeName(store.getName())
+                        .orderItemDtoList(orderItemDtoList)
+                        .build();
+
+        return fetchOrderDto;
     }
 
     @Override
     @Transactional
     public void saveOrder(Long userId) {
-        Order order = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING)
+
+        orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING)
                 .orElseThrow(() -> new OrderException("장바구니 정보를 찾을 수 없습니다."))
-                .setOrderStatus(OrderStatus.PLACED);
-        try{
-            orderSender.orderPlaced(OrderSender.KafkaSendOrderDto.createPrimitiveField(order));
-        }catch (Exception ex){
-            throw new OrderException(ex.getMessage());
-        }
+                .order();
+
+
     }
 
     @Override
