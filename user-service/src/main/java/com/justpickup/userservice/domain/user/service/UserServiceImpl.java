@@ -22,10 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true,propagation = Propagation.SUPPORTS)
+@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
 
@@ -64,7 +66,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         StoreOwner storeOwner = new StoreOwner(email, encode, storeOwnerDto.getName(),
                 storeOwnerDto.getPhoneNumber(), storeOwnerDto.getBusinessNumber());
 
-        StoreOwner save = userRepository.save(storeOwner);
+        userRepository.save(storeOwner);
+    }
+
+    @Override
+    public List<CustomerDto> findCustomerByUserIds(List<Long> userIds) {
+        return customerRepository.findAllById(userIds)
+                .stream()
+                .map(CustomerDto::new)
+                .collect(Collectors.toList());
     }
 
 }
