@@ -20,7 +20,7 @@
                 {{ orderItem.itemName }}
               </v-list-item-title>
               <v-list-item-subtitle class="mb-5">
-               수량 : {{ orderItem.count }}
+               수량 : {{ orderItem.count| currency }}
               </v-list-item-subtitle>
               <div class="text-body-1 mb-5" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                 {{ orderItem.orderItemOptionDtoList   ?
@@ -28,7 +28,7 @@
                           : null}}
               </div>
               <div class="text--primary">
-                합계 : <b> {{ orderItem.count * orderItem.price }} 원</b>
+                합계 : <b> {{ orderItem.count * orderItem.price | currency}} 원</b>
               </div>
             </v-list-item-content>
             <v-list-item-avatar
@@ -48,7 +48,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <div> 합계 : {{orderData.orderPrice}} 원</div>
+        <div> 합계 : {{orderData.orderPrice | currency}} 원</div>
       </v-col>
     </v-row>
         <v-btn
@@ -91,7 +91,7 @@ export default {
       orderApi.saveOrder()
           .then(()=>{
             alert('주문되었습니다.')
-            this.$router.replace("/")
+            this.$router.push("/history")
           })
           .catch(error=>{
             console.log(error)
@@ -106,8 +106,7 @@ export default {
           })
           .catch(error=>{
             console.log(error.response)
-
-            // this.$router.replace("/")
+            history.back();
           })
     },
   }

@@ -59,7 +59,7 @@ export default {
     },
     toOrder(){
       if(confirm("주문화면으로 이동할까요?")){
-        this.$router.replace("/order")
+        this.$router.push("/order")
       }
     }
   }

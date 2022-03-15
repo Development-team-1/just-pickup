@@ -14,8 +14,6 @@
         justify="center"
     >
       <v-col class="align-content-center">
-
-
             <v-form ref="form" lazy-validation>
               <v-text-field
                   :rules="[v => /.+@.+\..+/.test(v) || 'E-mail must be valid', v => !!v || '이메일은 필수 값입니다']"
