@@ -9,12 +9,11 @@ import com.justpickup.orderservice.domain.order.repository.OrderRepositoryCustom
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
 import com.justpickup.orderservice.domain.orderItem.entity.OrderItem;
 import com.justpickup.orderservice.domain.orderItemOption.entity.OrderItemOption;
-import com.justpickup.orderservice.global.client.store.GetItemResponse;
+import com.justpickup.orderservice.global.client.store.GetItemsResponse;
 import com.justpickup.orderservice.global.client.store.StoreByUserIdResponse;
 import com.justpickup.orderservice.global.client.store.StoreClient;
 import com.justpickup.orderservice.global.client.user.GetCustomerResponse;
 import com.justpickup.orderservice.global.client.user.UserClient;
-import com.justpickup.orderservice.global.dto.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,10 +24,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
@@ -44,29 +43,58 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderMainDto findOrderMain(OrderSearchCondition condition, Long userId) {
-
-        Result<StoreByUserIdResponse> store = storeClient.getStoreByUserId(userId);
+        // storeId 가져오기
+        StoreByUserIdResponse storeResponse = storeClient.getStoreByUserId(userId).getData();
 
         // 주문 가져오기
-        OrderMainResult orderMainResult = orderRepositoryCustom.findOrderMain(condition, store.getData().getId());
+        OrderMainResult orderMainResult = orderRepositoryCustom.findOrderMain(condition, storeResponse.getId());
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         int count = 0;
-        // 사용자명 및 아이템 이름 가져오기
+        // 사용자 고유번호 및 아이템 고유번호 필터링
+        Set<Long> userIds = new HashSet<>();
+        Set<Long> itemIds = new HashSet<>();
+
         OrderMainDto returnDto = OrderMainDto.of(orderMainResult.getOrders(), orderMainResult.isHasNext());
-        for (OrderMainDto._Order order : returnDto.getOrders()) {
+        List<OrderMainDto._Order> orders = returnDto.getOrders();
+
+        // userId 및 itemId Set에 추가
+        for (OrderMainDto._Order order : orders) {
+            userIds.add(order.getUserId());
             for (OrderMainDto._OrderItem orderItem : order.getOrderItems()) {
-                count += 1;
-                Result<GetItemResponse> item = storeClient.getItem(orderItem.getItemId());
-                orderItem.changeItemName(item.getData().getName());
+                itemIds.add(orderItem.getItemId());
             }
-            count += 1;
-            GetCustomerResponse customerResponse = userClient.getCustomerById(order.getUserId()).getData();
-            order.changeUserName(customerResponse.getUserName());
+        }
+
+        // item name 가져오기
+        count += 1;
+        List<GetItemsResponse> itemResponses = storeClient.getItems(itemIds).getData();
+        Map<Long, String> itemNameMap = itemResponses.stream()
+                .collect(
+                        toMap(GetItemsResponse::getId, GetItemsResponse::getName)
+                );
+
+        // user name 가져오기
+        count += 1;
+        List<GetCustomerResponse> userResponses = userClient.getCustomers(userIds).getData();
+        Map<Long, String> userNameMap = userResponses.stream()
+                .collect(
+                        toMap(GetCustomerResponse::getUserId, GetCustomerResponse::getUserName)
+                );
+
+        // 해당 ID에 맞게 이름 설정해주기
+        for (OrderMainDto._Order order : orders) {
+            String userName = userNameMap.get(order.getUserId());
+            order.changeUserName(userName);
+            for (OrderMainDto._OrderItem orderItem : order.getOrderItems()) {
+                String itemName = itemNameMap.get(orderItem.getItemId());
+                orderItem.changeItemName(itemName);
+            }
         }
         stopWatch.stop();
-        log.info("Feign count = {}, [StopWatch] {}", count, stopWatch.prettyPrint());
+        log.info("order count = {}, Feign count = {}, [StopWatch] {}",
+                returnDto.getOrders().size(), count, stopWatch.prettyPrint());
 
         return returnDto;
     }
