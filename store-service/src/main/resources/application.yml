@@ -1,9 +1,9 @@
 server:
-  port: 12343
+  port: 0
 
 spring:
   application:
-    name: store-servcie
+    name: store-service
   config:
     import: optional:configserver:http://127.0.0.1:8888
   cloud:
@@ -24,7 +24,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/storedb
     username: postgres
     password: admin
-
 
 eureka:
   client:

@@ -4,6 +4,7 @@ import com.justpickup.storeservice.domain.category.entity.Category;
 import com.justpickup.storeservice.domain.category.repository.CategoryRepository;
 import com.justpickup.storeservice.domain.item.dto.FetchItemDto;
 import com.justpickup.storeservice.domain.item.dto.ItemDto;
+import com.justpickup.storeservice.domain.item.dto.ItemsDto;
 import com.justpickup.storeservice.domain.item.entity.Item;
 import com.justpickup.storeservice.domain.item.exception.NotExistItemException;
 import com.justpickup.storeservice.domain.item.repository.ItemRepository;
@@ -35,8 +36,6 @@ public class ItemServiceImpl implements ItemService {
     private final ItemOptionRepository itemOptionRepository;
     private final CategoryRepository categoryRepository;
     private final StoreRepository storeRepository;
-
-
 
     @Override
     public ItemDto findItemByItemId(Long itemId) {
@@ -111,5 +110,13 @@ public class ItemServiceImpl implements ItemService {
         Item createdItem = Item.of(itemName, itemPrice, category, store, itemOptions);
 
         itemRepository.save(createdItem);
+    }
+
+    @Override
+    public List<ItemsDto> findItems(List<Long> itemIds) {
+        return itemRepository.findAllById(itemIds)
+                .stream()
+                .map(ItemsDto::of)
+                .collect(Collectors.toList());
     }
 }

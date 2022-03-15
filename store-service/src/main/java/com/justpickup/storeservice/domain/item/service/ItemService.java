@@ -2,6 +2,7 @@ package com.justpickup.storeservice.domain.item.service;
 
 import com.justpickup.storeservice.domain.item.dto.FetchItemDto;
 import com.justpickup.storeservice.domain.item.dto.ItemDto;
+import com.justpickup.storeservice.domain.item.dto.ItemsDto;
 import com.justpickup.storeservice.domain.itemoption.dto.ItemOptionDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +20,6 @@ public interface ItemService {
     void putItem(Long itemId, String itemName, Long itemPrice, Long categoryId, List<ItemOptionDto> itemOptionDtos);
 
     void createItem( Long userId, String itemName, Long itemPrice, Long categoryId, List<ItemOptionDto> itemOptionDtos);
+
+    List<ItemsDto> findItems(List<Long> itemIds);
 }
