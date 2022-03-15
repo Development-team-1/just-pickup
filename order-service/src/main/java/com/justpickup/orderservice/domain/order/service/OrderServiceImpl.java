@@ -22,7 +22,6 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StopWatch;
 
 import java.util.*;
 
@@ -49,9 +48,6 @@ public class OrderServiceImpl implements OrderService {
         // 주문 가져오기
         OrderMainResult orderMainResult = orderRepositoryCustom.findOrderMain(condition, storeResponse.getId());
 
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        int count = 0;
         // 사용자 고유번호 및 아이템 고유번호 필터링
         Set<Long> userIds = new HashSet<>();
         Set<Long> itemIds = new HashSet<>();
@@ -68,20 +64,10 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // item name 가져오기
-        count += 1;
-        List<GetItemsResponse> itemResponses = storeClient.getItems(itemIds).getData();
-        Map<Long, String> itemNameMap = itemResponses.stream()
-                .collect(
-                        toMap(GetItemsResponse::getId, GetItemsResponse::getName)
-                );
+        Map<Long, String> itemNameMap = getItemNameMap(itemIds);
 
         // user name 가져오기
-        count += 1;
-        List<GetCustomerResponse> userResponses = userClient.getCustomers(userIds).getData();
-        Map<Long, String> userNameMap = userResponses.stream()
-                .collect(
-                        toMap(GetCustomerResponse::getUserId, GetCustomerResponse::getUserName)
-                );
+        Map<Long, String> userNameMap = getUserNameMap(userIds);
 
         // 해당 ID에 맞게 이름 설정해주기
         for (OrderMainDto._Order order : orders) {
@@ -92,26 +78,64 @@ public class OrderServiceImpl implements OrderService {
                 orderItem.changeItemName(itemName);
             }
         }
-        stopWatch.stop();
-        log.info("order count = {}, Feign count = {}, [StopWatch] {}",
-                returnDto.getOrders().size(), count, stopWatch.prettyPrint());
 
         return returnDto;
     }
 
-    @Override
-    public Page<OrderDto> findPrevOrderMain(PrevOrderSearch search, Pageable pageable, Long storeId) {
-        Page<Order> orderPage = orderRepositoryCustom.findPrevOrderMain(search, pageable, storeId);
+    private Map<Long, String> getUserNameMap(Iterable<Long> userIds) {
+        List<GetCustomerResponse> userResponses = userClient.getCustomers(userIds).getData();
+        return userResponses.stream()
+                .collect(
+                        toMap(GetCustomerResponse::getUserId, GetCustomerResponse::getUserName)
+                );
+    }
 
-        List<OrderDto> orderDtoList = orderPage.getContent()
+    private Map<Long, String> getItemNameMap(Iterable<Long> itemIds) {
+        List<GetItemsResponse> itemResponses = storeClient.getItems(itemIds).getData();
+        return itemResponses.stream()
+                .collect(
+                        toMap(GetItemsResponse::getId, GetItemsResponse::getName)
+                );
+    }
+
+    @Override
+    public Page<PrevOrderDto> findPrevOrderMain(PrevOrderSearch search, Pageable pageable, Long userId) {
+        StoreByUserIdResponse store = storeClient.getStoreByUserId(userId).getData();
+
+        Page<Order> orderPage = orderRepositoryCustom.findPrevOrderMain(search, pageable, store.getId());
+
+        List<PrevOrderDto> prevOrderDtoList = orderPage.getContent()
                 .stream()
-                .map(OrderDto::createFullField)
+                .map(PrevOrderDto::of)
                 .collect(toList());
 
         // 사용자명 및 아이템 이름 가져오기
-//        getUserNameAndItemName(orderDtoList);
+        Set<Long> userIds = new HashSet<>();
+        Set<Long> itemIds = new HashSet<>();
 
-        return PageableExecutionUtils.getPage(orderDtoList, pageable, orderPage::getTotalElements);
+        for (PrevOrderDto prevOrderDto : prevOrderDtoList) {
+            userIds.add(prevOrderDto.getUserId());
+            for (PrevOrderDto._PrevOrderItem orderItem : prevOrderDto.getOrderItems()) {
+                itemIds.add(orderItem.getItemId());
+            }
+        }
+
+        // item name 가져오기
+        Map<Long, String> itemNameMap = getItemNameMap(itemIds);
+
+        // user name 가져오기
+        Map<Long, String> userNameMap = getUserNameMap(userIds);
+
+        for (PrevOrderDto prevOrderDto : prevOrderDtoList) {
+            String userName = userNameMap.get(prevOrderDto.getUserId());
+            prevOrderDto.changeUserName(userName);
+            for (PrevOrderDto._PrevOrderItem orderItem : prevOrderDto.getOrderItems()) {
+                String itemName = itemNameMap.get(orderItem.getItemId());
+                orderItem.changeName(itemName);
+            }
+        }
+
+        return PageableExecutionUtils.getPage(prevOrderDtoList, pageable, orderPage::getTotalElements);
     }
 
     @Override

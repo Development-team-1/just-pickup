@@ -44,7 +44,7 @@ public class OrderRepositoryCustom {
 
         List<Order> orders = queryFactory
                 .selectFrom(order)
-                .leftJoin(order.transaction).fetchJoin()
+                .leftJoin(order.transaction)
                 .where(
                         orderIdLt(condition.getLastOrderId()),
                         order.orderTime.between(start, end),
@@ -75,7 +75,7 @@ public class OrderRepositoryCustom {
         Long count = queryFactory
                 .select(order.countDistinct())
                 .from(order)
-                .innerJoin(order.transaction)
+                .leftJoin(order.transaction)
                 .where(
                         order.orderTime.between(search.getStartDateTime(), search.getEndDateTime()),
                         order.storeId.eq(storeId)
@@ -85,7 +85,7 @@ public class OrderRepositoryCustom {
         // 데이터 가져오기
         List<Order> orders = queryFactory
                 .selectFrom(order)
-                .join(order.transaction).fetchJoin()
+                .leftJoin(order.transaction).fetchJoin()
                 .where(
                         order.orderTime.between(search.getStartDateTime(), search.getEndDateTime()),
                         order.storeId.eq(storeId)
