@@ -116,55 +116,12 @@ public class OrderCustomerApiController {
         private Long price;
         private Long count;
         private List<Long> itemOptionIds ;
-
     }
 
     @GetMapping("/orders")
     public ResponseEntity fetchOrder(@RequestHeader(value = "user-id") String userId){
         FetchOrderDto fetchOrderDto = orderService.fetchOrder(Long.parseLong(userId));
-        FetchOrderResponse fetchOrderResponse = new FetchOrderResponse(fetchOrderDto);
-
-        return ResponseEntity.ok(Result.createSuccessResult(fetchOrderResponse));
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class FetchOrderResponse {
-        private Long storeId;
-        private List<_OrderItemDto> _orderItemDtos;
-        private Long totalPrice;
-
-        @Data
-        @NoArgsConstructor
-        @AllArgsConstructor
-        public static class _OrderItemDto {
-            private Long itemId;
-            private List<Long> itemOptionIds;
-            private Long price;
-            private Long count;
-
-            public _OrderItemDto(OrderItemDto orderItemDto) {
-
-                this.itemId = orderItemDto.getItemId();
-                this.itemOptionIds = orderItemDto.getOrderItemOptionDtoList()
-                        .stream()
-                        .map(OrderItemOptionDto::getId)
-                        .collect(Collectors.toList());
-                this.price = orderItemDto.getPrice();
-                this.count = orderItemDto.getCount();
-            }
-        }
-
-        public FetchOrderResponse(FetchOrderDto fetchOrderDto){
-            this.storeId = fetchOrderDto.getStoreId();
-            this._orderItemDtos = fetchOrderDto.getOrderItemDtoList().stream()
-                    .map(_OrderItemDto::new)
-                    .collect(Collectors.toList());
-            this.totalPrice = fetchOrderDto.getOrderPrice();
-
-        }
-
+        return ResponseEntity.ok(Result.createSuccessResult(fetchOrderDto));
     }
 
     @PostMapping("/orders")

@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: order-servcie
+    name: order-service
   config:
     import: optional:configserver:http://127.0.0.1:8888
   cloud:
@@ -46,7 +46,3 @@ decorator.datasource.p6spy:
 kafka:
   host: 127.0.0.1
   port: 9092
-
-#feign key
-token:
-  feign: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmZWlnbiIsImV4cCI6MTE2NDY5NzY4NzAsImlhdCI6MTY0Njk3Njg3MH0.5x4Nx7oMnpF0_kZpbZsiB1u9eEbQ4IKIhJlEsa3D22cjZjvTHKz57GCz0sgXb_olhSNIVv9xF41A29-XYiFeBQ

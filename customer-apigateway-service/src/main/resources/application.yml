@@ -46,7 +46,7 @@ spring:
             allow-credentials: true
       routes:
         - id: order-service
-          uri: lb://ORDER-SERVCIE
+          uri: lb://ORDER-SERVICE
           predicates:
             - Path=/order-service/**
           filters:
@@ -54,7 +54,7 @@ spring:
             - RewritePath=/order-service/(?<segment>.*),/$\{segment}
 
         - id: store-service
-          uri: lb://STORE-SERVCIE
+          uri: lb://STORE-SERVICE
           predicates:
             - Path=/store-service/**
           filters:

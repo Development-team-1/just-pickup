@@ -23,7 +23,7 @@ const authCheck = async function (to, from, next) {
       await auth.requestCheckAccessToken();
     }
   } catch (error) {
-    await router.replace("/login");
+    await router.push("/login");
   }
   next();
 };
@@ -37,60 +37,46 @@ const routes = [
     children: [
       {
         path: "/home",
-        beforeEnter: authCheck,
         name: 'home',
         component: () => import('../views/HomeView')
       },
       {
         path: "/search",
-        beforeEnter: authCheck,
         name: 'search-store',
         component: () => import('../views/SearchStore')
       },
       {
         path: "/history",
-        beforeEnter: authCheck,
         name: 'order-history',
         component: () => import('../views/OrderHistory')
       },
       {
         path: "/favorite",
-        beforeEnter: authCheck,
         name: 'favorite-store',
         component: () => import('../views/FavoriteStore')
       },
       {
         path: "/notification",
-        beforeEnter: authCheck,
         name: 'notification',
         component: () => import('../views/NotificationView')
       },
       {
-        path: '/login',
-        beforeEnter: authCheck,
-        name: 'login',
-        component: () => import('../views/LoginPage')
-      },
-      {
         path: "/item/:itemId",
-        beforeEnter: authCheck,
         name: 'itemDetail',
         component: () => import('../views/ItemDetail')
       },
       {
         path: "/order",
-        beforeEnter: authCheck,
         name: 'orderPage',
         component: () => import('../views/OrderPage')
       },
-      {
-        path: "/mypage",
-        beforeEnter: authCheck,
-        name: 'myPage',
-        component: () => import('../views/MyPage')
-      },
     ]
   },
+  {
+    path: '/login',
+    component: () => import('../views/LoginPage'),
+  },
+
   {
     path: '/store',
     redirect: 'store',
@@ -100,7 +86,6 @@ const routes = [
       {
         path: "/store/:storeId",
         name: "store",
-        beforeEnter: authCheck,
         component: () => import('../views/StoreView'),
         props: true
       },

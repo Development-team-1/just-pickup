@@ -70,6 +70,9 @@ operation::item-get[snippets='curl-request,http-request,http-response,path-param
 === 상품 조회 (존재하지 않는 상품)
 operation::item-get-notExistItemException[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 
+=== 상품 리스트 조회(구매자)
+operation::customer-itemList-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
+
 
 === 상품 조회(판매자)
 operation::owner-item-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']

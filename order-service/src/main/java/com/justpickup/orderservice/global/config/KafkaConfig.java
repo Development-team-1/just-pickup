@@ -31,6 +31,7 @@ public class KafkaConfig {
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServerHost+":"+kafkaServerPort);
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+//        properties.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, 5000);
 
         return new DefaultKafkaProducerFactory<>(properties);
     }

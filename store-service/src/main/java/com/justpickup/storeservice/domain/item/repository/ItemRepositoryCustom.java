@@ -1,9 +1,7 @@
 package com.justpickup.storeservice.domain.item.repository;
 
-import com.justpickup.storeservice.domain.category.entity.QCategory;
 import com.justpickup.storeservice.domain.item.entity.Item;
 import com.justpickup.storeservice.domain.item.entity.QItem;
-import com.justpickup.storeservice.domain.itemoption.entity.QItemOption;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +12,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static com.justpickup.storeservice.domain.category.entity.QCategory.category;
+import static com.justpickup.storeservice.domain.item.entity.QItem.item;
+import static com.justpickup.storeservice.domain.itemoption.entity.QItemOption.itemOption;
+
 @Repository
 @RequiredArgsConstructor
 public class ItemRepositoryCustom {
@@ -21,14 +23,24 @@ public class ItemRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     public Optional<Item> fetchItem(Long itemId){
-        Item item = queryFactory.selectFrom(QItem.item)
-                .join(QItem.item.itemOptions, QItemOption.itemOption).fetchJoin()
-                .join(QItem.item.category,QCategory.category).fetchJoin()
-                .where(QItem.item.id.eq(itemId))
+        Item fetchItem = queryFactory.selectFrom(item)
+                .join(item.itemOptions, itemOption).fetchJoin()
+                .join(item.category,category).fetchJoin()
+                .where(item.id.eq(itemId))
                 .fetchOne();
 
-        return Optional.ofNullable(item);
+        return Optional.ofNullable(fetchItem);
     }
+
+    public List<Item> getItemAndItemOptions(List<Long> itemIds){
+
+        return queryFactory.selectFrom(item)
+                .join(item.itemOptions,itemOption).fetchJoin()
+                .where(item.id.in(itemIds))
+                .fetch();
+
+    }
+
 
     public Page<Item> findItem(Long userId,String word, Pageable pageable){
 
