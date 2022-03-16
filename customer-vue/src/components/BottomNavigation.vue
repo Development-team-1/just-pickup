@@ -24,7 +24,7 @@ export default {
         {name: "검색", url: "/search", icon: "mdi-magnify"},
         {name: "즐겨찾기", url: "/favorite", icon: "mdi-cards-heart-outline"},
         {name: "주문내역", url: "/history", icon: "mdi-clipboard-check-outline"},
-        {name: "마이페이지", url: "/", icon: "mdi-account-outline"}
+        {name: "마이페이지", url: "/mypage", icon: "mdi-account-outline"}
       ]
     }
   },
@@ -33,6 +33,13 @@ export default {
       this.value = index;
       this.$router.push(url);
     }
+  },mounted() {
+    const path =this.$route.path
+    this.links.forEach((link, index) => {
+      if(link.url === path){
+        this.value = index
+      }
+    })
   }
 }
 </script>
