@@ -34,6 +34,6 @@ export default {
         })
     },
     getMenu(searchParam){
-        return axios.get(process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/api/owner/item',searchParam);
+        return axios.get(process.env.VUE_APP_OWNER_SERVICE_BASEURL+'/store-service/api/owner/item',{params:searchParam});
     },
 }

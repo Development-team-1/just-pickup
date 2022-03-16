@@ -31,7 +31,7 @@ public class OrderSender {
     @Data
     @AllArgsConstructor
     @Builder
-    static class KafkaSendOrderDto{
+    public static class KafkaSendOrderDto{
         private Long id;
 
         private Long userId;

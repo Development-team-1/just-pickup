@@ -19,7 +19,10 @@ axios.interceptors.request.use(function (config) {
   config.headers.Authorization = "Bearer " + jwt.getToken();
   return config;
 });
-
+Vue.filter('currency', function (value) {
+  var num = new Number(value);
+  return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
+});
 
 axios.interceptors.response.use(
     (response) => {
