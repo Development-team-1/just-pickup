@@ -5,7 +5,12 @@
       <v-spacer></v-spacer>
       <v-btn outlined color="grey grey lighten-1" small>상세보기</v-btn>
     </v-toolbar>
-    <v-card-title>{{ itemNames.join(", ") }}</v-card-title>
+    <v-card-title v-if="itemNames.length == 1">
+      {{ itemNames[0] }}
+    </v-card-title>
+    <v-card-title v-if="itemNames.length > 1">
+      {{ itemNames[0] }} 외 {{ itemNames.length - 1 }}건
+    </v-card-title>
     <v-card-subtitle></v-card-subtitle>
     <v-card-text>{{ orderTime }}</v-card-text>
     <v-card-actions>
@@ -56,7 +61,7 @@ export default {
   },
   props: {
     id: Number,
-    userName: Number,
+    userName: String,
     itemNames: [],
     orderTime: String,
     orderStatus: String

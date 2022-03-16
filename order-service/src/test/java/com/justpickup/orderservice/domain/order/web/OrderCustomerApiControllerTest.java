@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.orderservice.config.TestConfig;
 import com.justpickup.orderservice.domain.order.dto.FetchOrderDto;
 import com.justpickup.orderservice.domain.order.dto.OrderDto;
+import com.justpickup.orderservice.domain.order.dto.OrderHistoryDto;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.order.repository.OrderRepository;
 import com.justpickup.orderservice.domain.order.service.OrderService;
@@ -57,9 +58,6 @@ class OrderCustomerApiControllerTest {
     @MockBean
     OrderService orderService;
 
-    @MockBean
-    OrderRepository orderRepository;
-
     private final String url = "/api/customer/order";
 
     @Test
@@ -103,21 +101,25 @@ class OrderCustomerApiControllerTest {
                 ;
     }
 
-    private SliceImpl<OrderDto> getWillReturnOrderHistory(Pageable pageable) {
+    private SliceImpl<OrderHistoryDto> getWillReturnOrderHistory(Pageable pageable) {
 
-        List<OrderDto> contents = new ArrayList<>();
+        List<OrderHistoryDto> contents = new ArrayList<>();
         for (long i = 1; i <= 3; i++) {
-            OrderItemDto orderItemDto_1 = OrderItemDto.builder().id(i * 10).itemId(i * 100).build();
-            OrderItemDto orderItemDto_2 = OrderItemDto.builder().id((i + 1) * 20L).itemId((i + 1) *200L).build();
+            OrderHistoryDto._OrderHistoryItem orderItemDto_1 =
+                    OrderHistoryDto._OrderHistoryItem.builder()
+                            .id(i * 10).itemId(i * 100).build();
+            OrderHistoryDto._OrderHistoryItem orderItemDto_2 =
+                    OrderHistoryDto._OrderHistoryItem.builder()
+                            .id((i + 1) * 20L).itemId((i + 1) *200L).build();
 
             int hour = 20;
-            OrderDto orderDto = OrderDto.builder()
+            OrderHistoryDto orderDto = OrderHistoryDto.builder()
                     .id(i)
                     .orderTime(LocalDateTime.of(2022, 3, 7, --hour, 0, 0))
                     .orderStatus(OrderStatus.PLACED)
                     .storeId(i + 1000)
-                    .orderPrice(i * 10_000)
-                    .orderItemDtoList(List.of(orderItemDto_1, orderItemDto_2))
+                    .price(i * 10_000)
+                    .orderItems(List.of(orderItemDto_1, orderItemDto_2))
                     .build();
 
             contents.add(orderDto);

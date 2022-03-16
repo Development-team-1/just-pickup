@@ -30,11 +30,11 @@ public class Order extends BaseEntity {
 
     private Long storeId;
 
-    private Long orderPrice;
+    private long orderPrice;
 
     private LocalDateTime orderTime;
 
-    private Long usedPoint;
+    private long usedPoint;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
@@ -46,32 +46,11 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    public static Order of(Long userId, Long userCouponId, Long storeId, Long orderPrice,
-                              Transaction transaction, OrderItem... orderItems) {
+    public static Order of(Long userId, Long userCouponId, Long storeId, OrderItem orderItem) {
         Order order = new Order();
         order.userId = userId;
         order.userCouponId = userCouponId;
         order.storeId = storeId;
-        order.orderPrice = orderPrice;
-
-        order.setTransaction(transaction);
-        for (OrderItem orderItem : orderItems) {
-            order.addOrderItem(orderItem);
-        }
-
-        order.usedPoint = 0L;
-        order.orderStatus = OrderStatus.PLACED;
-        order.orderTime = LocalDateTime.now();
-        return order;
-    }
-
-    public static Order of(Long userId, Long userCouponId, Long storeId, Long orderPrice,
-                            OrderItem orderItem) {
-        Order order = new Order();
-        order.userId = userId;
-        order.userCouponId = userCouponId;
-        order.storeId = storeId;
-        order.orderPrice = orderPrice;
 
         order.addOrderItem(orderItem);
 
@@ -81,14 +60,25 @@ public class Order extends BaseEntity {
         return order;
     }
 
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
-        transaction.setOrder(this);
+    public static Order of(Long userId, Long userCouponId, Long storeId, List<OrderItem> orderItems) {
+        Order order = new Order();
+        order.userId = userId;
+        order.userCouponId = userCouponId;
+        order.storeId = storeId;
+
+        for (OrderItem item : orderItems) {
+            order.addOrderItem(item);
+        }
+
+        order.usedPoint = 0L;
+        order.orderStatus = OrderStatus.PENDING;
+        order.orderTime = LocalDateTime.now();
+        return order;
     }
 
     public Order addOrderItem(OrderItem orderItem) {
         this.orderItems.add(orderItem);
-        this.orderPrice += (orderItem.getPrice()*orderItem.getCount());
+        this.orderPrice += orderItem.getTotalPrice();
         orderItem.setOrder(this);
         return this;
     }
@@ -98,16 +88,19 @@ public class Order extends BaseEntity {
         return this;
     }
 
-    public void placed() {
-        this.orderStatus = OrderStatus.PLACED;
-    }
-
     public void order() {
         this.orderStatus = OrderStatus.ORDER;
     }
 
-    public void reject() {
-        this.orderStatus = OrderStatus.REJECT;
+    /**
+     * 전체 주문 가격 조회
+     */
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
     }
 
     public void fail() {

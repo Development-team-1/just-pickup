@@ -1,4 +1,4 @@
-server.port: 60000
+server.port: 0
 
 spring:
   application:
@@ -47,6 +47,7 @@ logging:
 decorator.datasource.p6spy:
   enable-logging: true
 
+# 3600000
 token:
   access-expired-time: 3600000
   refresh-expired-time: 604800000

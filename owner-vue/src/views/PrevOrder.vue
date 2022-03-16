@@ -49,24 +49,11 @@ export default {
     'date-picker': DatePicker
   },
   mounted: function() {
-    orderApi.requestPrevOrder(this.startDate, this.endDate, this.page - 1)
-        .then( (response) => {
-          this.renderList(response.data);
-        })
-        .catch( (error) => {
-          console.log(error);
-        });
+    this.search();
   },
   watch: {
-    "page": function (newPage) {
-      orderApi.requestPrevOrder(this.startDate, this.endDate, newPage - 1)
-          .then( (response) => {
-            this.renderList(response.data);
-          })
-          .catch( (error) => {
-            console.log(error);
-            console.log(error.response.data);
-          });
+    "page": function () {
+      this.search();
     }
   },
   data: function() {
@@ -98,7 +85,6 @@ export default {
       orders: [],
     }
   },
-
   methods: {
     search: function() {
       if(!this.checkDate()) return;
@@ -116,16 +102,12 @@ export default {
 
       this.orders = [];
       orders.forEach(order => {
-        let orderItemNames = [];
-        order.orderItems.forEach(orderItem => {
-          orderItemNames.push(orderItem.orderItemId);
-        })
 
         this.orders.push({
           orderId: order.orderId,
-          orderStatus: order.orderStatus,
+          orderStatus: this.getOrderStatusName(order.orderStatus),
           orderTime: order.orderTime,
-          orderItemNames: orderItemNames.join(", "),
+          orderItemNames: this.getOrderItemName(order.orderItems),
           orderPrice: order.orderPrice,
           userName: order.userName
         });
@@ -154,6 +136,21 @@ export default {
     },
     inputEndDate: function(value) {
       this.endDate = value;
+    },
+    getOrderStatusName: function(orderStatus) {
+      if (orderStatus === "ORDER") return "주문";
+      if (orderStatus === "PLACED") return "주문 수락";
+      if (orderStatus === "REJECT") return "주문 거절";
+      return orderStatus;
+    },
+    getOrderItemName: function(orderItems) {
+      const orderItemLength = orderItems.length;
+      const orderItemName = orderItems[0].orderItemName;
+      if (orderItemLength == 1) {
+        return orderItemName;
+      } else if (orderItemLength > 1) {
+        return orderItemName + " 외 " + (orderItemLength - 1) + "건";
+      }
     }
   }
 }

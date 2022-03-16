@@ -50,6 +50,10 @@ public class OrderMainDto {
                     .orderItems(orderItems)
                     .build();
         }
+
+        public void changeUserName(String userName) {
+            this.userName = userName;
+        }
     }
 
     @Getter @Builder
@@ -63,6 +67,10 @@ public class OrderMainDto {
                     .id(orderItem.getId())
                     .itemId(orderItem.getItemId())
                     .build();
+        }
+
+        public void changeItemName(String itemName) {
+            this.itemName = itemName;
         }
     }
 }

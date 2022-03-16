@@ -39,6 +39,7 @@ spring:
               - PUT
               - OPTIONS
               - DELETE
+              - PATCH
             allowedHeaders: '*'
             allow-credentials: true
       routes:

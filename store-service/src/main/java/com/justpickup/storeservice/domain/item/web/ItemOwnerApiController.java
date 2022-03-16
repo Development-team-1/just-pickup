@@ -35,7 +35,7 @@ public class ItemOwnerApiController {
 
 
         Page<ItemDto> itemDtoList =
-                itemService.findItemList(Long.parseLong(userId),
+                itemService.findMenuItemList(Long.parseLong(userId),
                         word.orElse(""),
                         pageable);
         List<GetItemListResponse.Item> itemList = itemDtoList.stream()

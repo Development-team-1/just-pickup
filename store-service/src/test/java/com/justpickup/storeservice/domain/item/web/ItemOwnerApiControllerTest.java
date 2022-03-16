@@ -3,12 +3,10 @@ package com.justpickup.storeservice.domain.item.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.storeservice.config.TestConfig;
 import com.justpickup.storeservice.domain.category.dto.CategoryDto;
-import com.justpickup.storeservice.domain.favoritestore.repository.FavoriteStoreRepository;
 import com.justpickup.storeservice.domain.item.dto.FetchItemDto;
 import com.justpickup.storeservice.domain.item.dto.ItemDto;
 import com.justpickup.storeservice.domain.item.service.ItemService;
 import com.justpickup.storeservice.domain.itemoption.entity.OptionType;
-import com.justpickup.storeservice.domain.store.repository.StoreRepository;
 import com.justpickup.storeservice.global.dto.Code;
 import com.justpickup.storeservice.global.entity.Yn;
 import org.junit.jupiter.api.DisplayName;
@@ -78,7 +76,7 @@ class ItemOwnerApiControllerTest {
 
         Page<ItemDto> page = PageableExecutionUtils.getPage(items, Pageable.ofSize(10), () -> 1);
 
-        given(itemService.findItemList(eq(1L),eq(""),any()))
+        given(itemService.findMenuItemList(eq(1L),eq(""),any()))
                 .willReturn(page);
 
         // WHEN

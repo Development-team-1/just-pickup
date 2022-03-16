@@ -72,16 +72,16 @@ operation::order-patch[snippets='curl-request,http-request,http-response,path-pa
 === 주문 페이지
 - 페이지 offset : 6
 
-operation::orderMain-get[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
+operation::orderMain-get[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
 === 점주 서비스 - 주문 페이지 (잘못된 파라미터 형식)
 
-operation::orderMain-get-badParameterException[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
+operation::orderMain-get-badParameterException[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
 
 === 점주 서비스 - 지난 주문 페이지
-operation::prevOrder-get[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
+operation::prevOrder-get[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
 
 === 점주 서비스 - 지난 주문 페이지 (잘못된 파라미터 형식)
-operation::prevOrder-get-BindException[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
+operation::prevOrder-get-BindException[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
 
 == Just Pick-up
 === 주문 내역 페이지

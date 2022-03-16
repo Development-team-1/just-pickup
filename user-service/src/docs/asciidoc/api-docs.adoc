@@ -71,6 +71,8 @@ operation::customer-get-mypage[snippets='curl-request,http-request,http-response
 operation::customer-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 === 회원 조회 (존재하지 않는 회원)
 operation::customer-get-notExistUserException[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
+=== 회원 조회
+operation::customers-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 
 == 점주
 === 회원가입 - 점주

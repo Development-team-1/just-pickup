@@ -1,13 +1,12 @@
 package com.justpickup.orderservice.domain.order.web;
 
-import com.justpickup.orderservice.domain.order.dto.OrderDto;
 import com.justpickup.orderservice.domain.order.dto.OrderMainDto;
 import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
+import com.justpickup.orderservice.domain.order.dto.PrevOrderDto;
 import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.order.service.OrderService;
 import com.justpickup.orderservice.domain.order.validator.PrevOrderSearchValidator;
-import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
 import com.justpickup.orderservice.global.dto.Result;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,12 +41,11 @@ public class OrderOwnerApiController {
     private final PrevOrderSearchValidator prevOrderSearchValidator;
 
     @GetMapping("/order-main")
-    public ResponseEntity<Result> orderMain(@Valid OrderSearchCondition condition) {
-        // TODO: 2022/03/10 Feign client storeId 가져오기 구현 필요
-        Long userId = 1L;
-        Long storeId = 1L;
+    public ResponseEntity<Result> orderMain(@Valid OrderSearchCondition condition,
+                                            @RequestHeader(value="user-id") String userHeader) {
+        Long userId = Long.valueOf(userHeader);
 
-        OrderMainDto orderMainDto = orderService.findOrderMain(condition, storeId);
+        OrderMainDto orderMainDto = orderService.findOrderMain(condition, userId);
 
         OrderMainResponse orderMainResponse = new OrderMainResponse(orderMainDto);
 
@@ -101,6 +100,7 @@ public class OrderOwnerApiController {
     @GetMapping("/prev-order")
     public ResponseEntity<Result> findPrevOrder(@Valid PrevOrderSearch prevOrderSearch,
                                                 @PageableDefault(page = 0, size = 10) Pageable pageable,
+                                                @RequestHeader(value="user-id") String userHeader,
                                                 BindingResult bindingResult) throws BindException {
         // validation
         if (bindingResult.hasErrors()) throw new BindException(bindingResult);
@@ -108,7 +108,8 @@ public class OrderOwnerApiController {
         if (bindingResult.hasErrors()) throw new BindException(bindingResult);
 
         // get data
-        Page<OrderDto> prevOrderMain = orderService.findPrevOrderMain(prevOrderSearch, pageable, 1L);
+        Long userId = Long.valueOf(userHeader);
+        Page<PrevOrderDto> prevOrderMain = orderService.findPrevOrderMain(prevOrderSearch, pageable, userId);
 
         // format data
         ResponsePrevOrder responsePrevOrder =
@@ -118,42 +119,42 @@ public class OrderOwnerApiController {
 
     @Data @AllArgsConstructor @NoArgsConstructor
     static class ResponsePrevOrder {
-        private List<OrderVo> orders;
+        private List<_Order> orders;
         private Page page;
 
-        public ResponsePrevOrder(List<OrderDto> orderDtoList, int startPage, int totalPage) {
-            orders = orderDtoList.stream().map(OrderVo::new).collect(toList());
+        public ResponsePrevOrder(List<PrevOrderDto> orderDtoList, int startPage, int totalPage) {
+            orders = orderDtoList.stream().map(_Order::new).collect(toList());
             page = new Page(startPage, totalPage);
         }
 
         @Data
-        static class OrderVo {
+        static class _Order {
             private Long orderId;
             private OrderStatus orderStatus;
             private String orderTime;
             private Long orderPrice;
             private String userName;
-            private List<OrderItemVo> orderItems;
+            private List<_OrderItem> orderItems;
 
-            public OrderVo(OrderDto orderDto) {
-                this.orderId = orderDto.getId();
-                this.orderStatus = orderDto.getOrderStatus();
-                this.orderTime = orderDto.getOrderTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                this.orderPrice = orderDto.getOrderPrice();
-                this.userName = orderDto.getUserName();
-                this.orderItems = orderDto.getOrderItemDtoList()
-                        .stream().map(OrderItemVo::new).collect(toList());
+            public _Order(PrevOrderDto prevOrderDto) {
+                this.orderId = prevOrderDto.getId();
+                this.orderStatus = prevOrderDto.getOrderStatus();
+                this.orderTime = prevOrderDto.getOrderTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                this.orderPrice = prevOrderDto.getOrderPrice();
+                this.userName = prevOrderDto.getUserName();
+                this.orderItems = prevOrderDto.getOrderItems()
+                        .stream().map(_OrderItem::new).collect(toList());
             }
         }
 
         @Data
-        static class OrderItemVo {
+        static class _OrderItem {
             private Long orderItemId;
             private String orderItemName;
 
-            public OrderItemVo(OrderItemDto orderItemDto) {
+            public _OrderItem(PrevOrderDto._PrevOrderItem orderItemDto) {
                 this.orderItemId = orderItemDto.getId();
-                this.orderItemName = orderItemDto.getItemName();
+                this.orderItemName = orderItemDto.getName();
             }
         }
 

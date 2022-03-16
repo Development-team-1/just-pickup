@@ -1,21 +1,30 @@
 package com.justpickup.storeservice.domain.store.dto;
 
 import com.justpickup.storeservice.domain.store.entity.Store;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StoreDto {
     private Long id;
     private String name;
     private String phoneNumber;
 
-    public StoreDto(Store store) {
-        this.id = store.getId();
-        this.name = store.getName();
-        this.phoneNumber = store.getPhoneNumber();
+    @Builder
+    public StoreDto(Long id, String name, String phoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public static StoreDto of(Store store) {
+        StoreDto storeDto = new StoreDto();
+        storeDto.id = store.getId();
+        storeDto.name = store.getName();
+        storeDto.phoneNumber = store.getPhoneNumber();
+        return storeDto;
     }
 }

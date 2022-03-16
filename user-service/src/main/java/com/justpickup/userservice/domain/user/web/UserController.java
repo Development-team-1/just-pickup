@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,7 +54,7 @@ public class UserController {
 
 
     @GetMapping("/customer/{userId}")
-    public ResponseEntity getCustomer(@Valid @PathVariable("userId") Long userId) {
+    public ResponseEntity getCustomer(@PathVariable("userId") Long userId) {
 
         CustomerDto customerDto = userService.findCustomerByUserId(userId);
 
@@ -60,6 +62,19 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Result.createSuccessResult(getCustomerResponse));
+    }
+
+    @GetMapping("/customers/{userIds}")
+    public ResponseEntity getCustomers(@PathVariable List<Long> userIds) {
+
+        List<CustomerDto> customers = userService.findCustomerByUserIds(userIds);
+
+        List<GetCustomerResponse> responses = customers
+                .stream()
+                .map(GetCustomerResponse::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(Result.createSuccessResult(responses));
     }
 
     @Data @NoArgsConstructor @AllArgsConstructor

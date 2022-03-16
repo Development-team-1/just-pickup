@@ -5,9 +5,14 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "USER-SERVICE", url = "127.0.0.1:8001/user-service")
+import java.util.List;
+
+@FeignClient("USER-SERVICE")
 public interface UserClient {
 
     @GetMapping("/customer/{userId}")
-    Result<GetCustomerResponse> getUser(@PathVariable("userId") Long userId);
+    Result<GetCustomerResponse> getCustomerById(@PathVariable("userId") Long userId);
+
+    @GetMapping("/customers/{userIds}")
+    Result<List<GetCustomerResponse>> getCustomers(@PathVariable("userIds") Iterable<Long> userIds);
 }

@@ -1,5 +1,5 @@
 server:
-  port: 12343
+  port: 0
 
 spring:
   application:
@@ -27,10 +27,11 @@ spring:
     username: postgres
     password: admin
 
-  sql:
-    init:
-      data-locations: classpath:data/data.sql
-      mode: always
+
+#  sql:
+#    init:
+#      data-locations: classpath:data/data.sql
+#      mode: always
 
 
 eureka:

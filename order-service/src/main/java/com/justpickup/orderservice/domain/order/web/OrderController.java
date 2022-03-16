@@ -4,6 +4,7 @@ import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.order.exception.OrderException;
 import com.justpickup.orderservice.domain.order.service.OrderService;
 import com.justpickup.orderservice.global.dto.Result;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class OrderController {
         return ResponseEntity.ok(Result.createSuccessResult(null));
     }
 
-    @Data @NoArgsConstructor
+    @Data @NoArgsConstructor @AllArgsConstructor
     static class PatchOrderRequest {
         private OrderStatus orderStatus;
     }
