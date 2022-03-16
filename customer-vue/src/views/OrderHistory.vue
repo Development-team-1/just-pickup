@@ -79,20 +79,27 @@ export default {
       const orders = data.orders;
 
       orders.forEach( (order) => {
-        let orderItemNames = [];
-        order.orderItems.forEach(orderItem => {
-          orderItemNames.push(orderItem.orderItemName);
-        })
-
         this.cards.push({
           orderId: order.orderId,
           orderTime: order.orderTime,
           storeName: order.storeName,
           orderPrice: order.orderPrice,
-          orderStatus: order.orderStatus,
-          orderItemNames: orderItemNames.join(", ")
+          orderStatus: this.getOrderStatusName(order.orderStatus),
+          orderItemNames: this.getOrderItemName(order.orderItems)
         })
       });
+    },
+    getOrderStatusName(orderStatus) {
+      if (orderStatus === "REJECT") return "주문 거절";
+      if (orderStatus === "ORDER") return "주문 중";
+      if (orderStatus === "PLACED") return "주문 수락";
+      return orderStatus;
+    },
+    getOrderItemName(orderItems) {
+      const itemSize = orderItems.length;
+      if (itemSize == 1) return orderItems[0].orderItemName;
+      else if (itemSize > 1) return orderItems[0].orderItemName + " 외 " + (itemSize - 1) + "건";
+      else return "없음";
     }
   }
 }
