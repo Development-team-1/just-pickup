@@ -133,7 +133,7 @@ export default {
       })
       .catch(error=>{
         console.log(error)
-        this.$router.replace("/")
+        this.$router.push("/")
       })
     },
     parseGroup: function (type){
@@ -151,10 +151,10 @@ export default {
       orderApi.addItemToBasket(this.setItem)
           .then(response=>{
             console.log(response)
-            this.$router.replace("/store/"+this.storeId)
+            this.$router.push("/store/"+this.storeId)
           })
           .catch(error=>{
-            console.log(error)
+            console.log(error.response)
           })
     }
   },

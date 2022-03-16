@@ -15,6 +15,9 @@ import com.justpickup.orderservice.global.client.store.StoreByUserIdResponse;
 import com.justpickup.orderservice.global.client.store.StoreClient;
 import com.justpickup.orderservice.global.client.user.GetCustomerResponse;
 import com.justpickup.orderservice.global.client.user.UserClient;
+import com.justpickup.orderservice.global.client.store.GetItemResponse;
+import com.justpickup.orderservice.global.client.store.GetStoreReseponse;
+import com.justpickup.orderservice.global.client.store.StoreClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,9 +25,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -40,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderSender orderSender;
     private final StoreClient storeClient;
     private final UserClient userClient;
-
+  
     @Override
     public OrderMainDto findOrderMain(OrderSearchCondition condition, Long userId) {
         // storeId 가져오기
@@ -183,7 +189,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void addItemToBasket(OrderItemDto orderItemDto,Long storeId, Long userId) {
+    public void addItemToBasket(OrderItemDto orderItemDto, Long storeId, Long userId) {
 
         //orderItemOption Entity를 생성한다.
         List<OrderItemOption> orderItemOptions = orderItemDto.getOrderItemOptionDtoList()
@@ -201,7 +207,7 @@ public class OrderServiceImpl implements OrderService {
 
         Optional<Order> optionalOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
         if(optionalOrder.isPresent()){
-            if(optionalOrder.get().addOrderItem(orderItem)
+            if(!optionalOrder.get().addOrderItem(orderItem)
                     .getStoreId().equals(storeId))
                 throw new OrderException("장바구니에 여러 카페의 메뉴를 담을수 없습니다.");
         }else{
@@ -213,21 +219,46 @@ public class OrderServiceImpl implements OrderService {
     public FetchOrderDto fetchOrder(Long userId) {
         Order order = orderRepositoryCustom.fetchOrder(userId)
                 .orElseThrow(() -> new OrderException("장바구니 정보를 찾을 수 없습니다."));
+        GetStoreReseponse store = storeClient.getStore(String.valueOf(order.getStoreId())).getData();
 
-        return new FetchOrderDto(order);
+        List<GetItemResponse> data = storeClient.getItemAndItemOptions(order.getOrderItems().stream()
+                .map(OrderItem::getItemId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toUnmodifiableList())
+        ).getData();
+
+        Map<Long, GetItemResponse> itemMap = data.stream().collect(
+                Collectors.toMap(
+                        GetItemResponse::getId
+                        , getItemResponse -> getItemResponse
+                        , (t, t2) -> t
+                )
+        );
+
+        List<FetchOrderDto.OrderItemDto> orderItemDtoList = order.getOrderItems()
+                .stream().map(orderItem ->
+                        new FetchOrderDto.OrderItemDto(
+                                itemMap.get(orderItem.getItemId())
+                                ,orderItem))
+                .collect(Collectors.toList());
+
+
+        FetchOrderDto fetchOrderDto = FetchOrderDto.builder()
+                        .userId(order.getUserId())
+                        .orderPrice(order.getOrderPrice())
+                        .storeName(store.getName())
+                        .orderItemDtoList(orderItemDtoList)
+                        .build();
+
+        return fetchOrderDto;
     }
 
     @Override
     @Transactional
     public void saveOrder(Long userId) {
-        Order order = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING)
+        orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING)
                 .orElseThrow(() -> new OrderException("장바구니 정보를 찾을 수 없습니다."))
-                .setOrderStatus(OrderStatus.PLACED);
-        try{
-            orderSender.orderPlaced(OrderSender.KafkaSendOrderDto.createPrimitiveField(order));
-        }catch (Exception ex){
-            throw new OrderException(ex.getMessage());
-        }
+                .order();
     }
 
     @Override

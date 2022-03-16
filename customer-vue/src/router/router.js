@@ -23,7 +23,7 @@ const authCheck = async function (to, from, next) {
       await auth.requestCheckAccessToken();
     }
   } catch (error) {
-    await router.replace("/login");
+    await router.push("/login");
   }
   next();
 };
@@ -61,11 +61,6 @@ const routes = [
         component: () => import('../views/NotificationView')
       },
       {
-        path: '/login',
-        name: 'login',
-        component: () => import('../views/LoginPage')
-      },
-      {
         path: "/item/:itemId",
         name: 'itemDetail',
         component: () => import('../views/ItemDetail')
@@ -77,6 +72,11 @@ const routes = [
       },
     ]
   },
+  {
+    path: '/login',
+    component: () => import('../views/LoginPage'),
+  },
+
   {
     path: '/store',
     redirect: 'store',

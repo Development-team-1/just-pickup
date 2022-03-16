@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 @Slf4j
 public class SqlCommandLineRunner implements CommandLineRunner {

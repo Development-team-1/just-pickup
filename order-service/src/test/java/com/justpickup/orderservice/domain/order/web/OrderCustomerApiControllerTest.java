@@ -10,6 +10,8 @@ import com.justpickup.orderservice.domain.order.repository.OrderRepository;
 import com.justpickup.orderservice.domain.order.service.OrderService;
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
 import com.justpickup.orderservice.domain.orderItemOption.dto.OrderItemOptionDto;
+import com.justpickup.orderservice.global.client.store.GetItemResponse;
+import com.justpickup.orderservice.global.client.store.OptionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -179,14 +181,14 @@ class OrderCustomerApiControllerTest {
     void fetchOrder() throws Exception{
         //Given
         FetchOrderDto fetchOrderDto =
-                new FetchOrderDto(2L,2L,12000L,2L
+                new FetchOrderDto(2L,2L,12000L,"저스트카페"
                 ,List.of(
-                        OrderItemDto.of(1L,300L,3000L,2L,
-                                List.of(new OrderItemOptionDto(2L)
-                                        ,new OrderItemOptionDto(3L))
+                        new FetchOrderDto.OrderItemDto(1L,1L,"카페라테",
+                                List.of(new GetItemResponse.ItemOptionDto(2L, OptionType.REQUIRED,"Hot")
+                                        ,new GetItemResponse.ItemOptionDto(2L, OptionType.OTHER,"샷추카")),3000L,32L)
                         )
-                    )
                 );
+
 
         given(orderService.fetchOrder(2L)).willReturn(fetchOrderDto);
         //When
@@ -203,12 +205,20 @@ class OrderCustomerApiControllerTest {
                         responseFields(
                                 fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),
                                 fieldWithPath("message").description("메시지"),
-                                fieldWithPath("data.storeId").description("매장 고유번호"),
-                                fieldWithPath("data.totalPrice").description("총 합계"),
-                                fieldWithPath("data._orderItemDtos[*].itemId").description("상품 고유번호"),
-                                fieldWithPath("data._orderItemDtos[*].price").description("상품 가격"),
-                                fieldWithPath("data._orderItemDtos[*].count").description("상품 갯수"),
-                                fieldWithPath("data._orderItemDtos[*].itemOptionIds[*]").description("아이템 옵션들")
+                                fieldWithPath("data.id").description("주문 고유번호"),
+                                fieldWithPath("data.userId").description("주문한 유저 고유번호"),
+                                fieldWithPath("data.storeName").description("매장 명"),
+                                fieldWithPath("data.orderPrice").description("총 합계"),
+                                fieldWithPath("data.orderItemDtoList[*].id").description("orderItem 고유번호"),
+                                fieldWithPath("data.orderItemDtoList[*].itemId").description("상품 고유번호"),
+                                fieldWithPath("data.orderItemDtoList[*].itemName").description("상품 명"),
+                                fieldWithPath("data.orderItemDtoList[*].orderItemOptionDtoList[*]").description("아이템 옵션들"),
+                                fieldWithPath("data.orderItemDtoList[*].orderItemOptionDtoList[*].id").description("아이템 옵션 고유번호"),
+                                fieldWithPath("data.orderItemDtoList[*].orderItemOptionDtoList[*].optionType").description("아이템 옵션 타입"),
+                                fieldWithPath("data.orderItemDtoList[*].orderItemOptionDtoList[*].name").description("아이템 옵션명"),
+                                fieldWithPath("data.orderItemDtoList[*].price").description("상품 가격"),
+                                fieldWithPath("data.orderItemDtoList[*].count").description("상품 갯수")
+
                         )));
 
 

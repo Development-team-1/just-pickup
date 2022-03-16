@@ -16,6 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @Getter
+@EntityListeners(value = {OrderListener.class})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends BaseEntity {
 
@@ -100,5 +101,9 @@ public class Order extends BaseEntity {
             totalPrice += orderItem.getTotalPrice();
         }
         return totalPrice;
+    }
+
+    public void fail() {
+        this.orderStatus = OrderStatus.FAIL;
     }
 }

@@ -65,6 +65,8 @@
 domain-httpRequestCode-etc
 
 == 유저
+=== 로그인 된 회원 조회
+operation::customer-get-mypage[snippets='curl-request,http-request,http-response,request-headers,response-fields']
 === 회원 조회
 operation::customer-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 === 회원 조회 (존재하지 않는 회원)

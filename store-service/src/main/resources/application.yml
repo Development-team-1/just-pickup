@@ -18,12 +18,21 @@ spring:
     properties:
       hibernate:
         default_batch_fetch_size: 1000
+    defer-datasource-initialization: true
+
 
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/storedb
     username: postgres
     password: admin
+
+
+#  sql:
+#    init:
+#      data-locations: classpath:data/data.sql
+#      mode: always
+
 
 eureka:
   client:
@@ -41,7 +50,3 @@ logging:
 # jpa query, parameter 로그 (p6spy)
 decorator.datasource.p6spy:
   enable-logging: true
-
-#feign key
-token:
-  feign: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmZWlnbiIsImV4cCI6MTE2NDY5NzY4NzAsImlhdCI6MTY0Njk3Njg3MH0.5x4Nx7oMnpF0_kZpbZsiB1u9eEbQ4IKIhJlEsa3D22cjZjvTHKz57GCz0sgXb_olhSNIVv9xF41A29-XYiFeBQ

@@ -72,8 +72,15 @@ operation::item-get-notExistItemException[snippets='curl-request,http-request,ht
 === 상품 리스트 조회
 operation::items-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 
+
 == 상품 (판매자)
 === 상품 조회
+=======
+=== 상품 리스트 조회(구매자)
+operation::customer-itemList-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
+
+
+=== 상품 조회(판매자)
 operation::owner-item-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 === 상품 리스트 조회
 operation::owner-itemList-get[snippets='curl-request,http-request,http-response,response-fields']

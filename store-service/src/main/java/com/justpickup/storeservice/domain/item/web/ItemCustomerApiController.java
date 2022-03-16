@@ -1,6 +1,7 @@
 package com.justpickup.storeservice.domain.item.web;
 
 import com.justpickup.storeservice.domain.item.dto.FetchItemDto;
+import com.justpickup.storeservice.domain.item.dto.GetItemDto;
 import com.justpickup.storeservice.domain.item.dto.ItemDto;
 import com.justpickup.storeservice.domain.item.service.ItemService;
 import com.justpickup.storeservice.domain.itemoption.dto.ItemOptionDto;
@@ -22,9 +23,16 @@ public class ItemCustomerApiController {
 
     private final ItemService itemService;
 
+    @GetMapping("/items/{itemId}")
+    public ResponseEntity getItemAndItemOptions(@PathVariable("itemId") List<Long> itemId) {
+        List<GetItemDto> itemList = itemService.getItemAndItemOptions(itemId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Result.createSuccessResult(itemList));
+    }
 
     @GetMapping("/item/{itemId}")
-    public ResponseEntity getItem(@PathVariable("itemId") Long itemId) {
+    public ResponseEntity fetchItem(@PathVariable("itemId") Long itemId) {
         FetchItemDto fetchItem = itemService.fetchItem(itemId);
 
         GetItemResponse getItemResponse = new GetItemResponse(fetchItem);

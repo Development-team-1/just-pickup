@@ -22,4 +22,11 @@ public interface StoreClient {
 
     @GetMapping("/stores/{storeId}")
     Result<List<GetStoreResponse>> getStoreAllById(@PathVariable("storeId") Iterable<Long> storeIds);
+  
+    @GetMapping("/store/{storeId}")
+    Result<GetStoreReseponse> getStore(@PathVariable(value = "storeId") String storeId);
+
+    @GetMapping("/api/customer/items/{itemId}")
+    Result<List<GetItemResponse>> getItemAndItemOptions(@PathVariable(value = "itemId") List<Long> itemIds);
+
 }

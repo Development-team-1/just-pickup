@@ -5,6 +5,9 @@ export default {
     requestRegisterUser(user) {
         return axios.post(process.env.VUE_APP_CUSTOMER_SERVICE_BASEURL+"/user-service/store-owner", user);
     },
+    geUserData() {
+        return axios.get(process.env.VUE_APP_CUSTOMER_SERVICE_BASEURL+"/user-service/customer/", );
+    },
 
     async requestLoginUser(email, password) {
         const user = {
