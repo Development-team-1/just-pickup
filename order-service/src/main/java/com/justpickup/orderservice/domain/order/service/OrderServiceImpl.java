@@ -10,6 +10,7 @@ import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
 import com.justpickup.orderservice.domain.orderItem.entity.OrderItem;
 import com.justpickup.orderservice.domain.orderItemOption.entity.OrderItemOption;
 import com.justpickup.orderservice.global.client.store.GetItemsResponse;
+import com.justpickup.orderservice.global.client.store.GetStoreResponse;
 import com.justpickup.orderservice.global.client.store.StoreByUserIdResponse;
 import com.justpickup.orderservice.global.client.store.StoreClient;
 import com.justpickup.orderservice.global.client.user.GetCustomerResponse;
@@ -139,17 +140,45 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public SliceImpl<OrderDto> findOrderHistory(Pageable pageable, Long userId) {
+    public SliceImpl<OrderHistoryDto> findOrderHistory(Pageable pageable, Long userId) {
         SliceImpl<Order> orderHistory = orderRepositoryCustom.findOrderHistory(pageable, userId);
 
-        List<OrderDto> contents = orderHistory.getContent()
+        List<OrderHistoryDto> orderHistoryDtoList = orderHistory.getContent()
                 .stream()
-                .map(OrderDto::createFullField)
+                .map(OrderHistoryDto::of)
                 .collect(toList());
 
-        // TODO: 2022/03/07 Feign Client 통신
+        Set<Long> storeIds = new HashSet<>();
+        Set<Long> itemIds = new HashSet<>();
+        for (OrderHistoryDto orderHistoryDto : orderHistoryDtoList) {
+            storeIds.add(orderHistoryDto.getStoreId());
+            for (OrderHistoryDto._OrderHistoryItem orderItem : orderHistoryDto.getOrderItems()) {
+                itemIds.add(orderItem.getItemId());
+            }
+        }
 
-        return new SliceImpl<>(contents, pageable, orderHistory.hasNext());
+        Map<Long, String> storeNameMap = this.getStoreNameMap(storeIds);
+        Map<Long, String> itemNameMap = this.getItemNameMap(itemIds);
+
+        for (OrderHistoryDto orderHistoryDto : orderHistoryDtoList) {
+            String userName = storeNameMap.get(orderHistoryDto.getStoreId());
+            orderHistoryDto.changeStoreName(userName);
+            for (OrderHistoryDto._OrderHistoryItem orderItem : orderHistoryDto.getOrderItems()) {
+                String itemName = itemNameMap.get(orderItem.getItemId());
+                orderItem.changeItemName(itemName);
+            }
+        }
+
+        return new SliceImpl<>(orderHistoryDtoList, pageable, orderHistory.hasNext());
+    }
+
+    private Map<Long, String> getStoreNameMap(Set<Long> storeIds) {
+        List<GetStoreResponse> storeResponses = storeClient.getStoreAllById(storeIds).getData();
+        Map<Long, String> storeMap = storeResponses.stream()
+                .collect(
+                        toMap(GetStoreResponse::getId, GetStoreResponse::getName)
+                );
+        return storeMap;
     }
 
     @Override

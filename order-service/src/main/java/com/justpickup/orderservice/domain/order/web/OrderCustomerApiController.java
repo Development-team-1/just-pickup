@@ -1,7 +1,7 @@
 package com.justpickup.orderservice.domain.order.web;
 
 import com.justpickup.orderservice.domain.order.dto.FetchOrderDto;
-import com.justpickup.orderservice.domain.order.dto.OrderDto;
+import com.justpickup.orderservice.domain.order.dto.OrderHistoryDto;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.order.service.OrderService;
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
@@ -36,7 +36,7 @@ public class OrderCustomerApiController {
                                                   @PageableDefault(page = 0, size = 3) Pageable pageable) {
         Long userId = Long.parseLong(userHeader);
 
-        SliceImpl<OrderDto> orderHistory = orderService.findOrderHistory(pageable, userId);
+        SliceImpl<OrderHistoryDto> orderHistory = orderService.findOrderHistory(pageable, userId);
 
         OrderHistoryResponse orderHistoryResponse =
                 new OrderHistoryResponse(orderHistory.getContent(), orderHistory.hasNext());
@@ -47,45 +47,45 @@ public class OrderCustomerApiController {
 
     @Data @NoArgsConstructor
     static class OrderHistoryResponse {
-        private List<_Order> orders;
+        private List<_OrderResponse> orders;
         private boolean hasNext;
 
-        public OrderHistoryResponse(List<OrderDto> orders, boolean hasNext) {
-            this.orders = orders.stream().map(_Order::new).collect(Collectors.toList());
+        public OrderHistoryResponse(List<OrderHistoryDto> orders, boolean hasNext) {
+            this.orders = orders.stream().map(_OrderResponse::new).collect(Collectors.toList());
             this.hasNext = hasNext;
         }
 
         @Data
-        static class _Order {
+        static class _OrderResponse {
             private Long orderId;
             private String orderTime;
             private OrderStatus orderStatus;
             private String storeName;
             private Long orderPrice;
-            private List<_OrderItem> orderItems;
+            private List<_OrderItemResponse> orderItems;
 
-            public _Order(OrderDto orderDto) {
-                this.orderId = orderDto.getId();
-                this.orderTime = orderDto.getOrderTime()
+            public _OrderResponse(OrderHistoryDto orderHistoryDto) {
+                this.orderId = orderHistoryDto.getId();
+                this.orderTime = orderHistoryDto.getOrderTime()
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-                this.orderStatus = orderDto.getOrderStatus();
-                this.storeName = orderDto.getStoreId().toString();
-                this.orderPrice = orderDto.getOrderPrice();
-                this.orderItems = orderDto.getOrderItemDtoList()
+                this.orderStatus = orderHistoryDto.getOrderStatus();
+                this.storeName = orderHistoryDto.getStoreName();
+                this.orderPrice = orderHistoryDto.getPrice();
+                this.orderItems = orderHistoryDto.getOrderItems()
                         .stream()
-                        .map(_OrderItem::new)
+                        .map(_OrderItemResponse::new)
                         .collect(Collectors.toList());
             }
         }
 
         @Data
-        static class _OrderItem {
+        static class _OrderItemResponse {
             private Long orderItemId;
             private String orderItemName;
 
-            public _OrderItem(OrderItemDto orderItemDto) {
-                this.orderItemId = orderItemDto.getItemId();
-                this.orderItemName = orderItemDto.getItemId().toString();
+            public _OrderItemResponse(OrderHistoryDto._OrderHistoryItem orderHistoryItem) {
+                this.orderItemId = orderHistoryItem.getItemId();
+                this.orderItemName = orderHistoryItem.getItemName();
             }
         }
     }
@@ -173,7 +173,5 @@ public class OrderCustomerApiController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(Result.createSuccessResult(null));
     }
-
-
 
 }

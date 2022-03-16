@@ -10,10 +10,9 @@ import org.springframework.data.domain.SliceImpl;
 public interface OrderService {
     OrderMainDto findOrderMain(OrderSearchCondition condition, Long userId);
     Page<PrevOrderDto> findPrevOrderMain(PrevOrderSearch search, Pageable pageable, Long userId);
-    SliceImpl<OrderDto> findOrderHistory(Pageable pageable, Long userId);
+    SliceImpl<OrderHistoryDto> findOrderHistory(Pageable pageable, Long userId);
     void addItemToBasket(OrderItemDto orderItemDto,Long storeId, Long userId);
     FetchOrderDto fetchOrder(Long userId);
     void saveOrder(Long userId);
-
     void modifyOrder(Long userId, OrderStatus orderStatus);
 }

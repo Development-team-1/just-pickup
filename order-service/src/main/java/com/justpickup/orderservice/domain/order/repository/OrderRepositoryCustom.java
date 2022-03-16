@@ -103,7 +103,7 @@ public class OrderRepositoryCustom {
     public SliceImpl<Order> findOrderHistory(Pageable pageable, Long userId) {
         List<Order> contents = queryFactory
                 .selectFrom(order)
-                .join(order.transaction).fetchJoin()
+                .leftJoin(order.transaction).fetchJoin()
                 .where(
                         order.userId.eq(userId)
                 )

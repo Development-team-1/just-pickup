@@ -52,8 +52,8 @@ public class SqlCommandLineRunner implements CommandLineRunner {
         Long userCouponId = null;
 
         for (int i = 0; i <= 100; i++) {
-//            if (i % 2 == 0) userId = 2L;
-//            else userId = 3L;
+            if (i % 2 == 0) userId = 2L;
+            else userId = 3L;
 
             List<Order> orders = new ArrayList<>();
             _Store[] stores = objectMapper.readValue(storeJson, _Store[].class);

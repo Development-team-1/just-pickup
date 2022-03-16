@@ -19,4 +19,7 @@ public interface StoreClient {
 
     @GetMapping("/api/owner/store/")
     Result<StoreByUserIdResponse> getStoreByUserId(@RequestHeader(value="user-id") Long userId);
+
+    @GetMapping("/stores/{storeId}")
+    Result<List<GetStoreResponse>> getStoreAllById(@PathVariable("storeId") Iterable<Long> storeIds);
 }
