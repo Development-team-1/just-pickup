@@ -4,6 +4,7 @@ import com.justpickup.orderservice.domain.order.entity.Order;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.orderItem.entity.OrderItem;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,11 +27,29 @@ public class PrevOrderDto {
 
     private List<_PrevOrderItem> orderItems = new ArrayList<>();
 
-    @Getter
+    @Builder
+    public PrevOrderDto(Long id, OrderStatus orderStatus, LocalDateTime orderTime, long orderPrice, Long userId, String userName, List<_PrevOrderItem> orderItems) {
+        this.id = id;
+        this.orderStatus = orderStatus;
+        this.orderTime = orderTime;
+        this.orderPrice = orderPrice;
+        this.userId = userId;
+        this.userName = userName;
+        this.orderItems = orderItems;
+    }
+
+    @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class _PrevOrderItem {
         private Long id;
         private Long itemId;
         private String name;
+
+        @Builder
+        public _PrevOrderItem(Long id, Long itemId, String name) {
+            this.id = id;
+            this.itemId = itemId;
+            this.name = name;
+        }
 
         // 생성 메소드
         static _PrevOrderItem of(OrderItem orderItem) {

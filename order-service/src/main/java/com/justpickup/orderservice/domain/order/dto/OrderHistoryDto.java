@@ -4,6 +4,7 @@ import com.justpickup.orderservice.domain.order.entity.Order;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.orderItem.entity.OrderItem;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,11 +24,29 @@ public class OrderHistoryDto {
     private String storeName;
     private List<_OrderHistoryItem> orderItems = new ArrayList<>();
 
-    @Getter
+    @Builder
+    public OrderHistoryDto(Long id, LocalDateTime orderTime, long price, OrderStatus orderStatus, Long storeId, String storeName, List<_OrderHistoryItem> orderItems) {
+        this.id = id;
+        this.orderTime = orderTime;
+        this.price = price;
+        this.orderStatus = orderStatus;
+        this.storeId = storeId;
+        this.storeName = storeName;
+        this.orderItems = orderItems;
+    }
+
+    @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class _OrderHistoryItem {
         private Long id;
         private Long itemId;
         private String itemName;
+
+        @Builder
+        public _OrderHistoryItem(Long id, Long itemId, String itemName) {
+            this.id = id;
+            this.itemId = itemId;
+            this.itemName = itemName;
+        }
 
         public static _OrderHistoryItem of(OrderItem orderItem) {
             _OrderHistoryItem orderHistoryItem = new _OrderHistoryItem();

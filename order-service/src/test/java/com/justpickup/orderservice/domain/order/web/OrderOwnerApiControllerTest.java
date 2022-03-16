@@ -2,12 +2,9 @@ package com.justpickup.orderservice.domain.order.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.orderservice.config.TestConfig;
-import com.justpickup.orderservice.domain.order.dto.OrderDto;
-import com.justpickup.orderservice.domain.order.dto.OrderMainDto;
+import com.justpickup.orderservice.domain.order.dto.*;
 import com.justpickup.orderservice.domain.order.dto.OrderMainDto._Order;
 import com.justpickup.orderservice.domain.order.dto.OrderMainDto._OrderItem;
-import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
-import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.order.repository.OrderRepository;
 import com.justpickup.orderservice.domain.order.service.OrderService;
@@ -35,6 +32,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -80,6 +79,7 @@ class OrderOwnerApiControllerTest {
         // WHEN
 
         ResultActions actions = mockMvc.perform(get(url + "/order-main")
+                .header("user-id", "1")
                 .param("orderDate", orderDate)
                 .param("lastOrderId", String.valueOf(lastOrderId))
         );
@@ -96,6 +96,9 @@ class OrderOwnerApiControllerTest {
                         requestParameters(
                                 parameterWithName("orderDate").description("주문 날짜 YYYY-MM-DD"),
                                 parameterWithName("lastOrderId").optional().description("페이지의 마지막 주문 고유 번호")
+                        ),
+                        requestHeaders(
+                                headerWithName("user-id").description("유저 고유번호")
                         ),
                         responseFields(
                                 fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),
@@ -142,6 +145,7 @@ class OrderOwnerApiControllerTest {
 
         // WHEN
         ResultActions actions = mockMvc.perform(get(url + "/order-main")
+                .header("user-id", "1")
                 .param("orderDate", orderDate)
                 .param("lastOrderId", String.valueOf(lastOrderId))
         );
@@ -157,6 +161,9 @@ class OrderOwnerApiControllerTest {
                                         parameterWithName("orderDate").description("주문 날짜 YYYY-MM-DD"),
                                         parameterWithName("lastOrderId").optional().description("페이지의 마지막 주문 고유 번호")
                                 ),
+                                requestHeaders(
+                                        headerWithName("user-id").description("유저 고유번호")
+                                ),
                                 responseFields(
                                         fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),
                                         fieldWithPath("message").description("메시지"),
@@ -167,44 +174,44 @@ class OrderOwnerApiControllerTest {
         ;
     }
 
-    private List<OrderDto> getOrderMainDtoList() {
-        OrderItemDto orderItemDto_100 = OrderItemDto.builder()
+    private List<PrevOrderDto> getOrderMainDtoList() {
+        PrevOrderDto._PrevOrderItem orderItemDto_100 = PrevOrderDto._PrevOrderItem.builder()
                 .id(100L)
                 .itemId(100L)
                 .build();
-        orderItemDto_100.setItemName("아이템1");
-        OrderItemDto orderItemDto_101 = OrderItemDto.builder()
+        orderItemDto_100.changeName("아이템1");
+        PrevOrderDto._PrevOrderItem orderItemDto_101 = PrevOrderDto._PrevOrderItem.builder()
                 .id(101L)
                 .itemId(101L)
                 .build();
-        orderItemDto_101.setItemName("아이템2");
-        OrderItemDto orderItemDto_102 = OrderItemDto.builder()
+        orderItemDto_101.changeName("아이템2");
+        PrevOrderDto._PrevOrderItem orderItemDto_102 = PrevOrderDto._PrevOrderItem.builder()
                 .id(102L)
                 .itemId(102L)
                 .build();
-        orderItemDto_102.setItemName("아이템3");
-        OrderItemDto orderItemDto_103 = OrderItemDto.builder()
+        orderItemDto_102.changeName("아이템3");
+        PrevOrderDto._PrevOrderItem orderItemDto_103 = PrevOrderDto._PrevOrderItem.builder()
                 .id(103L)
                 .itemId(103L)
                 .build();
-        orderItemDto_103.setItemName("아이템2");
+        orderItemDto_103.changeName("아이템2");
 
-        OrderDto orderDto_1 = OrderDto.builder()
+        PrevOrderDto orderDto_1 = PrevOrderDto.builder()
                 .id(1L)
                 .userId(1L)
-                .orderItemDtoList(List.of(orderItemDto_100, orderItemDto_101))
+                .orderItems(List.of(orderItemDto_100, orderItemDto_101))
                 .orderStatus(OrderStatus.PLACED)
                 .orderTime(LocalDateTime.of(2022, 2, 3, 14, 0, 0))
                 .build();
-        orderDto_1.setUserName("닉네임");
-        OrderDto orderDto_2 = OrderDto.builder()
+        orderDto_1.changeUserName("닉네임");
+        PrevOrderDto orderDto_2 = PrevOrderDto.builder()
                 .id(2L)
                 .userId(1L)
-                .orderItemDtoList(List.of(orderItemDto_102, orderItemDto_103))
+                .orderItems(List.of(orderItemDto_102, orderItemDto_103))
                 .orderStatus(OrderStatus.FAIL)
                 .orderTime(LocalDateTime.of(2022, 2, 3, 15, 0, 0))
                 .build();
-        orderDto_2.setUserName("닉네임");
+        orderDto_2.changeUserName("닉네임");
 
         return List.of(orderDto_1, orderDto_2);
     }
@@ -226,6 +233,7 @@ class OrderOwnerApiControllerTest {
 
         // WHEN
         ResultActions actions = mockMvc.perform(get(url + "/prev-order")
+                .header("user-id", "1")
                 .param("startDate", startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .param("endDate", endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .param("page", page)
@@ -250,6 +258,9 @@ class OrderOwnerApiControllerTest {
                                 parameterWithName("startDate").description("시작날짜 YYYY-MM-DD"),
                                 parameterWithName("endDate").description("종료날짜 YYYY-MM-DD"),
                                 parameterWithName("page").optional().description("검색 페이지 (0부터 시작)")
+                        ),
+                        requestHeaders(
+                                headerWithName("user-id").description("유저 고유번호")
                         ),
                         responseFields(
                                 fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),
@@ -280,6 +291,7 @@ class OrderOwnerApiControllerTest {
 
         // THEN
         ResultActions actions = mockMvc.perform(get(url + "/prev-order")
+                .header("user-id", "1")
                 .param("startDate", startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .param("endDate", endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .param("page", page)
@@ -296,6 +308,9 @@ class OrderOwnerApiControllerTest {
                                 parameterWithName("startDate").description("시작날짜 YYYY-MM-DD"),
                                 parameterWithName("endDate").description("종료날짜 YYYY-MM-DD"),
                                 parameterWithName("page").optional().description("검색 페이지 (0부터 시작)")
+                        ),
+                        requestHeaders(
+                                headerWithName("user-id").description("유저 고유번호")
                         ),
                         responseFields(
                                 fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),
