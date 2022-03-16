@@ -24,6 +24,33 @@ public class UserController {
 
     private final UserService userService;
 
+    @GetMapping("/customer/")
+    public ResponseEntity getCustomerByToken(@Valid @RequestHeader(value = "user-id") String userId ) {
+
+        CustomerDto customerDto = userService.findCustomerByUserId(Long.parseLong(userId));
+
+        GetCustomerByTokenResponse getCustomerByTokenResponse = new GetCustomerByTokenResponse(customerDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Result.createSuccessResult(getCustomerByTokenResponse));
+    }
+
+    @Data @NoArgsConstructor @AllArgsConstructor
+    static class GetCustomerByTokenResponse {
+        private Long userId;
+        private String email;
+        private String userName;
+        private String phoneNumber;
+
+        public GetCustomerByTokenResponse(CustomerDto customerDto) {
+            this.userId = customerDto.getId();
+            this.email = customerDto.getEmail();
+            this.userName = customerDto.getName();
+            this.phoneNumber = customerDto.getPhoneNumber();
+        }
+    }
+
+
     @GetMapping("/customer/{userId}")
     public ResponseEntity getCustomer(@Valid @PathVariable("userId") Long userId) {
 
