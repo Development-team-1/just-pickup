@@ -21,12 +21,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.headers.HeaderDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -57,6 +60,53 @@ class UserControllerTest {
 
     @SpyBean
     CookieProvider cookieProvider;
+
+    @Test
+    @DisplayName("로그인된 회원 조회")
+    void getCustomerByToken() throws Exception {
+        // GIVEN
+        long userId = 1L;
+
+        CustomerDto willReturnDto = CustomerDto.builder()
+                .id(1L)
+                .name("이름")
+                .password("password!@#")
+                .email("hoonasdasd@naver.com")
+                .phoneNumber("010-1234-5678")
+                .build();
+
+        given(userService.findCustomerByUserId(userId))
+                .willReturn(willReturnDto);
+
+        // WHEN
+        ResultActions actions = mockMvc.perform(get("/customer/")
+                .header("user-id",userId));
+
+        // THEN
+        actions.andExpect(status().isOk())
+                .andExpect(jsonPath("code").value(Code.SUCCESS.name()))
+                .andExpect(jsonPath("message").value(""))
+                .andExpect(jsonPath("data.userId").value(1))
+                .andExpect(jsonPath("data.email").value("hoonasdasd@naver.com"))
+                .andExpect(jsonPath("data.userName").value("이름"))
+                .andExpect(jsonPath("data.phoneNumber").value("010-1234-5678"))
+                .andDo(print())
+                .andDo(document("customer-get-mypage",
+                        requestHeaders(
+                                headerWithName("user-id").description("로그인한 유저 id")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").description("결과코드 SUCCESS/ERROR"),
+                                fieldWithPath("message").description("메시지"),
+                                fieldWithPath("data.userId").description("회원 고유번호"),
+                                fieldWithPath("data.userName").description("회원 이름"),
+                                fieldWithPath("data.email").description("회원 이메일"),
+                                fieldWithPath("data.phoneNumber").description("회원 휴대폰 번호")
+                        ))
+                )
+        ;
+    }
+
 
     @Test
     @DisplayName("회원 조회")
