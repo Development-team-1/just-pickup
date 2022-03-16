@@ -15,6 +15,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +53,7 @@ public class StoreServiceImpl implements StoreService {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NotExistStoreException(storeId + "는 없는 매장 고유번호입니다."));
 
-        return new StoreDto(store);
+        return StoreDto.of(store);
     }
 
     @Override
@@ -61,5 +62,13 @@ public class StoreServiceImpl implements StoreService {
                 .orElseThrow(() -> new NotExistStoreException(userId + "의 매장은 없습니다."));
 
         return StoreByUserIdDto.of(store);
+    }
+
+    @Override
+    public List<StoreDto> findStoreAllById(Iterable<Long> storeIds) {
+        return storeRepository.findAllById(storeIds)
+                .stream()
+                .map(StoreDto::of)
+                .collect(Collectors.toList());
     }
 }

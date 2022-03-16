@@ -9,17 +9,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/store")
 public class StoreController {
 
     private final StoreService storeService;
 
-    @GetMapping("/{storeId}")
+    @GetMapping("/store/{storeId}")
     public ResponseEntity<Result> getStore(@PathVariable("storeId") Long storeId) {
         StoreDto storeDto = storeService.findStoreById(storeId);
 
@@ -38,5 +39,17 @@ public class StoreController {
             this.name = storeDto.getName();
             this.phoneNumber = storeDto.getPhoneNumber();
         }
+    }
+
+    @GetMapping("/stores/{storeIds}")
+    public ResponseEntity<Result> getStores(@PathVariable("storeIds") List<Long> storeIds) {
+
+        List<StoreDto> storeDtoList = storeService.findStoreAllById(storeIds);
+
+        List<GetStoreResponse> responses = storeDtoList.stream()
+                .map(GetStoreResponse::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(Result.createSuccessResult(responses));
     }
 }

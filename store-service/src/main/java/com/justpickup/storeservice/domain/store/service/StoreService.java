@@ -14,4 +14,5 @@ public interface StoreService {
     List<SearchStoreResult> findFavoriteStore(SearchStoreCondition condition, Long userId);
     StoreDto findStoreById(Long storeId);
     StoreByUserIdDto findStoreByUserId(Long userId);
+    List<StoreDto> findStoreAllById(Iterable<Long> storeIds);
 }
