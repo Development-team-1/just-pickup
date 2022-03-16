@@ -100,4 +100,5 @@ operation::favoriteStore-get[snippets='curl-request,http-request,http-response,r
 operation::store-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 === 매장 조회 (회원 고유번호)
 operation::api-get-store-byUserId[snippets='curl-request,http-request,http-response,request-headers,response-fields']
-
+=== 매장 리스트 조회
+operation::stores-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
