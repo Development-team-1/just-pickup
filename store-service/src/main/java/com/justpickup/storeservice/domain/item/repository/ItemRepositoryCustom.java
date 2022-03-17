@@ -54,8 +54,6 @@ public class ItemRepositoryCustom {
                         QItem.item.name.contains(word)
                             .or(QItem.item.category.name.contains(word))
                 )
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
                 .fetchOne();
 
         //List 가져오기
