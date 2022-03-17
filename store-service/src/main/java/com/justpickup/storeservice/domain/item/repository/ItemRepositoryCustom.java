@@ -48,22 +48,22 @@ public class ItemRepositoryCustom {
         Long count =  queryFactory.select(QItem.item.count())
                 .from(QItem.item)
                 .join(QItem.item.category)
-                .leftJoin(QItem.item.store)
-                .on(QItem.item.store.userId.eq(userId))
+                .join(QItem.item.store)
                 .where(
                         QItem.item.name.contains(word)
-                            .or(QItem.item.category.name.contains(word))
+                            .or(QItem.item.category.name.contains(word)),
+                        QItem.item.store.userId.eq(userId)
                 )
                 .fetchOne();
 
         //List 가져오기
         List<Item> itemList = queryFactory.selectFrom(QItem.item)
                 .join(QItem.item.category).fetchJoin()
-                .leftJoin(QItem.item.store)
-                .on(QItem.item.store.id.eq(userId))
+                .join(QItem.item.store)
                 .where(
                         QItem.item.name.contains(word)
-                            .or(QItem.item.category.name.contains(word))
+                            .or(QItem.item.category.name.contains(word)),
+                        QItem.item.store.userId.eq(userId)
                 )
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
