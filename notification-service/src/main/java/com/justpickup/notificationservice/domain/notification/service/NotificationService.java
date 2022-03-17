@@ -10,5 +10,5 @@ public interface NotificationService {
     List<FindNotificationDto> findNotificationByUserId(Long id);
     void updateNotification(UpdateNotificationDto dto);
     Long findNotificationCounts(Long userId, Yn readYn);
-    void insertOrderPlaced(Long userId);
+    void insertOrderPlaced(Long userId, Long storeId);
 }
