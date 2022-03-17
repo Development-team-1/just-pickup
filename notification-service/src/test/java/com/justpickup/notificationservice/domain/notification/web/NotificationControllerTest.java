@@ -62,7 +62,7 @@ class NotificationControllerTest {
 
         // THEN
         ResultActions actions
-                = mockMvc.perform(get(url).header("user-id", String.valueOf(userId)));
+                = mockMvc.perform(get("/notifications").header("user-id", String.valueOf(userId)));
 
         // WHEN
         actions.andExpect(status().isOk())
