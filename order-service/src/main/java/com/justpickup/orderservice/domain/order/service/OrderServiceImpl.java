@@ -9,8 +9,10 @@ import com.justpickup.orderservice.domain.order.repository.OrderRepositoryCustom
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
 import com.justpickup.orderservice.domain.orderItem.entity.OrderItem;
 import com.justpickup.orderservice.domain.orderItemOption.entity.OrderItemOption;
-import com.justpickup.orderservice.global.client.store.*;
-import com.justpickup.orderservice.global.client.user.GetCustomerResponse;
+import com.justpickup.orderservice.global.client.store.GetItemResponse;
+import com.justpickup.orderservice.global.client.store.GetStoreReseponse;
+import com.justpickup.orderservice.global.client.store.StoreByUserIdResponse;
+import com.justpickup.orderservice.global.client.store.StoreClient;
 import com.justpickup.orderservice.global.client.user.UserClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +27,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +36,6 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderRepositoryCustom orderRepositoryCustom;
-    private final OrderSender orderSender;
     private final StoreClient storeClient;
     private final UserClient userClient;
   
@@ -63,10 +63,10 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // item name 가져오기
-        Map<Long, String> itemNameMap = getItemNameMap(itemIds);
+        Map<Long, String> itemNameMap = storeClient.getItemNameMap(itemIds);
 
         // user name 가져오기
-        Map<Long, String> userNameMap = getUserNameMap(userIds);
+        Map<Long, String> userNameMap = userClient.getUserNameMap(userIds);
 
         // 해당 ID에 맞게 이름 설정해주기
         for (OrderMainDto._Order order : orders) {
@@ -79,22 +79,6 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return returnDto;
-    }
-
-    private Map<Long, String> getUserNameMap(Iterable<Long> userIds) {
-        List<GetCustomerResponse> userResponses = userClient.getCustomers(userIds).getData();
-        return userResponses.stream()
-                .collect(
-                        toMap(GetCustomerResponse::getUserId, GetCustomerResponse::getUserName)
-                );
-    }
-
-    private Map<Long, String> getItemNameMap(Iterable<Long> itemIds) {
-        List<GetItemsResponse> itemResponses = storeClient.getItems(itemIds).getData();
-        return itemResponses.stream()
-                .collect(
-                        toMap(GetItemsResponse::getId, GetItemsResponse::getName)
-                );
     }
 
     @Override
@@ -120,10 +104,10 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // item name 가져오기
-        Map<Long, String> itemNameMap = getItemNameMap(itemIds);
+        Map<Long, String> itemNameMap = storeClient.getItemNameMap(itemIds);
 
         // user name 가져오기
-        Map<Long, String> userNameMap = getUserNameMap(userIds);
+        Map<Long, String> userNameMap = userClient.getUserNameMap(userIds);
 
         for (PrevOrderDto prevOrderDto : prevOrderDtoList) {
             String userName = userNameMap.get(prevOrderDto.getUserId());
@@ -155,8 +139,8 @@ public class OrderServiceImpl implements OrderService {
             }
         }
 
-        Map<Long, String> storeNameMap = this.getStoreNameMap(storeIds);
-        Map<Long, String> itemNameMap = this.getItemNameMap(itemIds);
+        Map<Long, String> storeNameMap = storeClient.getStoreNameMap(storeIds);
+        Map<Long, String> itemNameMap = storeClient.getItemNameMap(itemIds);
 
         for (OrderHistoryDto orderHistoryDto : orderHistoryDtoList) {
             String userName = storeNameMap.get(orderHistoryDto.getStoreId());
@@ -168,15 +152,6 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return new SliceImpl<>(orderHistoryDtoList, pageable, orderHistory.hasNext());
-    }
-
-    private Map<Long, String> getStoreNameMap(Set<Long> storeIds) {
-        List<GetStoreResponse> storeResponses = storeClient.getStoreAllById(storeIds).getData();
-        Map<Long, String> storeMap = storeResponses.stream()
-                .collect(
-                        toMap(GetStoreResponse::getId, GetStoreResponse::getName)
-                );
-        return storeMap;
     }
 
     @Override
@@ -233,7 +208,6 @@ public class OrderServiceImpl implements OrderService {
                                 itemMap.get(orderItem.getItemId())
                                 ,orderItem))
                 .collect(Collectors.toList());
-
 
         FetchOrderDto fetchOrderDto = FetchOrderDto.builder()
                         .userId(order.getUserId())
