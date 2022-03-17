@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
@@ -31,12 +32,11 @@ public class Category extends BaseEntity {
     private Store store;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 
     // == 연관관계 편의 메소드 == //
     public void setStore(Store store) {
         this.store = store;
-        store.getCategories().add(this);
     }
 
     public void addItem(Item item) {
