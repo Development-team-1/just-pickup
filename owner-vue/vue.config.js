@@ -3,6 +3,6 @@ module.exports = {
     'vuetify'
   ],
   devServer:{
-    allowedHosts: ['just-pickup.com'],
+    allowedHosts: ['admin.just-pickup.com'],
   }
 }
