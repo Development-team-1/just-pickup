@@ -49,4 +49,15 @@ public class NotificationServiceImpl implements NotificationService {
     public Long findNotificationCounts(Long userId, Yn readYn) {
         return notificationRepository.countByUserIdAndReadYn(userId, readYn);
     }
+
+    @Transactional
+    @Override
+    public void insertOrderPlaced(Long userId) {
+        String title = "주문이 수락되었어요.";
+        String storeName = "[]";
+        String message = storeName + "매장의 주문이 수락되었습니다.";
+        Notification notification = Notification.of(userId, message, title);
+
+        notificationRepository.save(notification);
+    }
 }
