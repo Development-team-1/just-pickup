@@ -48,13 +48,13 @@ public class Store extends BaseEntity {
     //== user-service.user pk ==//
     private Long userId;
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Category> categories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Item> items = new ArrayList<>();
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<FavoriteStore> favoriteStores = new ArrayList<>();
 
     // == 연관관계 편의 메소드 == //

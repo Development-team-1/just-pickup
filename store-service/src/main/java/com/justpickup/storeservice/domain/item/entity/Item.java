@@ -54,12 +54,10 @@ public class Item extends BaseEntity {
 
     public void setStore(Store store) {
         this.store = store;
-        store.getItems().add(this);
     }
 
     public void setCategory(Category category) {
         this.category = category;
-        category.getItems().add(this);
     }
 
     public void setItemNameAndPriceAndCategory(String name , Long price,Category category){

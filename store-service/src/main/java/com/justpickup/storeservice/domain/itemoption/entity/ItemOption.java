@@ -24,7 +24,7 @@ public class ItemOption extends BaseEntity {
 
     private String name;
 
-    @ManyToOne(fetch = LAZY , cascade = CascadeType.ALL)
+    @ManyToOne(fetch = LAZY )
     @JoinColumn(name = "item_id")
     private Item item;
 

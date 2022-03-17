@@ -22,11 +22,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@Component
+@Component
 @RequiredArgsConstructor
 @Slf4j
 public class SqlCommandLineRunner implements CommandLineRunner {
@@ -105,23 +104,28 @@ public class SqlCommandLineRunner implements CommandLineRunner {
             Category 디카페인 = categoryRepository.save(Category.of("디카페인", 1, store));
             Category 티 = categoryRepository.save(Category.of("티", 2, store));
 
-            ItemOption ice = ItemOption.of(OptionType.REQUIRED, "ICE");
-            ItemOption hot = ItemOption.of(OptionType.REQUIRED, "HOT");
-
-            Item 아메리카노 = Item.of("아메리카노", 1500L, 카페인, store, List.of(ice, hot));
-            Item 카페라떼 = Item.of("카페라떼", 2000L, 카페인, store, List.of(ice, hot));
-            Item 카페모카 = Item.of("카페모카", 3900L, 카페인, store, List.of(ice, hot));
-            Item 콜드브루 = Item.of("콜드브루", 2500L, 카페인, store, List.of(ice));
-            Item 녹차라떼 = Item.of("녹차라떼", 3000L, 디카페인, store, List.of(ice, hot));
-            Item 딸기라떼 = Item.of("딸기라떼", 3000L, 디카페인, store, List.of(ice, hot));
-            Item 녹차 = Item.of("녹차", 3000L, 티, store, List.of(hot));
-            Item 히비스커스 = Item.of("히비스커스 티", 3000L, 티, store, List.of(hot));
+            Item 아메리카노 = Item.of("아메리카노", 1500L, 카페인, store, List.of(getIceOption(), getHotOption()));
+            Item 카페라떼 = Item.of("카페라떼", 2000L, 카페인, store, List.of(getIceOption(), getHotOption()));
+            Item 카페모카 = Item.of("카페모카", 3900L, 카페인, store, List.of(getIceOption(), getHotOption()));
+            Item 콜드브루 = Item.of("콜드브루", 2500L, 카페인, store, List.of(getIceOption()));
+            Item 녹차라떼 = Item.of("녹차라떼", 3000L, 디카페인, store, List.of(getIceOption(), getHotOption()));
+            Item 딸기라떼 = Item.of("딸기라떼", 3000L, 디카페인, store, List.of(getIceOption(), getHotOption()));
+            Item 녹차 = Item.of("녹차", 3000L, 티, store, List.of(getHotOption()));
+            Item 히비스커스 = Item.of("히비스커스 티", 3000L, 티, store, List.of(getIceOption(), getHotOption()));
 
             List<Item> items = List.of(아메리카노, 카페라떼, 카페모카, 콜드브루, 녹차라떼, 딸기라떼, 녹차, 히비스커스);
             itemRepository.saveAll(items);
 
             items.forEach(item -> store.addItem(item));
         });
+    }
+
+    private ItemOption getIceOption() {
+        return ItemOption.of(OptionType.REQUIRED, "ICE");
+    }
+
+    private ItemOption getHotOption() {
+        return ItemOption.of(OptionType.REQUIRED, "HOT");
     }
 
     void createFavoriteStore(FavoriteStoreRepository favoriteStoreRepository, List<Store> stores) {
