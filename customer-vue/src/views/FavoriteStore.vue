@@ -23,7 +23,10 @@
         />
       </v-col>
       <v-col v-for="card in cards" v-bind:key="card.storeId" sm="6">
-        <v-card v-bind:data-id="card.storeId">
+        <v-card
+            v-bind:data-id="card.storeId"
+            @click="clickCard(card.storeId)"
+        >
           <v-img
               height="180"
               :src="require('@/assets/store.jpeg')"
@@ -110,6 +113,12 @@ export default {
           favoriteCounts: store.favoriteCounts
         })
       });
+    },
+    clickCard: function(storeId) {
+      this.$router.push({
+        name: "store",
+        params: {storeId: storeId}
+      })
     }
   }
 }
