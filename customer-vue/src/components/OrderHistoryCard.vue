@@ -2,7 +2,6 @@
   <v-card
       class="mx-auto mb-5"
       outlined
-
   >
     <v-list-item three-line>
       <v-list-item-content>
@@ -19,7 +18,7 @@
           {{ card.orderItemNames }}
         </div>
         <div class="text--primary">
-          합계 : <b>{{ card.orderPrice }}원</b>
+          합계 : <b>{{ card.orderPrice | currency }}원</b>
         </div>
       </v-list-item-content>
 
@@ -33,11 +32,15 @@
     </v-list-item>
 
     <v-card-actions class="pb-1">
-      <v-btn block color="primary">재주문하기</v-btn>
+      <v-btn block color="primary" @click="clickReOrder">
+        재주문하기
+      </v-btn>
     </v-card-actions>
 
     <v-card-actions class="pt-1">
-      <v-btn block outlined color="primary">자세히보기</v-btn>
+      <v-btn block outlined color="primary" @click="clickDetail">
+        자세히보기
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -47,11 +50,23 @@ export default {
   name: "OrderHistoryCard",
   props: {
     card: {
+      storeId: Number,
       storeName: String,
       orderTime: String,
       orderStatus: String,
       orderItemNames: String,
       orderPrice: String
+    }
+  },
+  methods: {
+    clickReOrder: function() {
+      this.$router.push({
+        name: "store",
+        params: {storeId: this.card.storeId}
+      })
+    },
+    clickDetail: function() {
+      alert("준비 중입니다.");
     }
   }
 }

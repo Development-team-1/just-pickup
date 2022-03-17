@@ -60,6 +60,7 @@ public class OrderCustomerApiController {
             private Long orderId;
             private String orderTime;
             private OrderStatus orderStatus;
+            private Long storeId;
             private String storeName;
             private Long orderPrice;
             private List<_OrderItemResponse> orderItems;
@@ -69,6 +70,7 @@ public class OrderCustomerApiController {
                 this.orderTime = orderHistoryDto.getOrderTime()
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
                 this.orderStatus = orderHistoryDto.getOrderStatus();
+                this.storeId = orderHistoryDto.getStoreId();
                 this.storeName = orderHistoryDto.getStoreName();
                 this.orderPrice = orderHistoryDto.getPrice();
                 this.orderItems = orderHistoryDto.getOrderItems()
