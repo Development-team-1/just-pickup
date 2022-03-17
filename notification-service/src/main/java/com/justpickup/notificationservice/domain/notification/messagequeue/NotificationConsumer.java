@@ -23,6 +23,7 @@ public class NotificationConsumer {
     private final ObjectMapper objectMapper;
     private final NotificationService notificationService;
 
+    @Transactional
     @KafkaListener(topics = "orderPlaced")
     public void orderPlaced(String kafkaMessage) throws JsonProcessingException {
         log.debug("## NotificationConsumer.orderPlaced");

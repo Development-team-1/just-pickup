@@ -83,13 +83,12 @@ public class Order extends BaseEntity {
         return this;
     }
 
-    public Order setOrderStatus(OrderStatus orderStatus){
+    public void setOrderStatus(OrderStatus orderStatus){
         this.orderStatus = orderStatus;
-        return this;
     }
 
-    public void order() {
-        this.orderStatus = OrderStatus.ORDER;
+    public void placed() {
+        this.orderStatus = OrderStatus.PLACED;
     }
 
     /**
@@ -104,6 +103,6 @@ public class Order extends BaseEntity {
     }
 
     public void fail() {
-        this.orderStatus = OrderStatus.FAIL;
+        this.orderStatus = OrderStatus.FAILED;
     }
 }

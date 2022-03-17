@@ -29,29 +29,29 @@ const routes = [
     component: DashboardLayout,
     beforeEnter: authCheck,
     children: [
-      {
-        path: "/dashboard",
-        name: 'dashboard',
-        component: () => import('./../views/Dashboard')
-      },
+
       {
         path: '/category',
         name: 'category',
+        beforeEnter: authCheck,
         component: () => import('./../views/Category')
       },
       {
         path: '/menu',
         name: 'menu',
+        beforeEnter: authCheck,
         component: () => import('./../views/Menu')
       },
       {
         path: '/prev-order',
         name: 'prev-order',
+        beforeEnter: authCheck,
         component: () => import('./../views/PrevOrder')
       },
       {
         path: '/order',
         name: 'order',
+        beforeEnter: authCheck,
         component: () => import('./../views/Order.vue')
       }
     ]

@@ -26,7 +26,7 @@ public class OrderController {
     public ResponseEntity<Result> patchOrder(@PathVariable("orderId") Long orderId,
                                              @RequestBody PatchOrderRequest patchOrderRequest) {
         OrderStatus orderStatus = patchOrderRequest.getOrderStatus();
-        if (orderStatus != OrderStatus.PLACED && orderStatus != OrderStatus.REJECT) {
+        if (orderStatus != OrderStatus.PLACED && orderStatus != OrderStatus.REJECTED) {
             throw new OrderException("주문 수락, 거절 외에는 변경 불가능합니다.");
         }
 

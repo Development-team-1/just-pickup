@@ -128,7 +128,7 @@ class OrderOwnerApiControllerTest {
             }
 
             _Order order = _Order.builder()
-                    .id(i).userId(i + 10).orderStatus(OrderStatus.ORDER)
+                    .id(i).userId(i + 10).orderStatus(OrderStatus.ACCEPTED)
                     .orderTime(LocalDateTime.now()).orderItems(orderItems).storeName("가게명" + i)
                     .build();
             orders.add(order);
@@ -208,7 +208,7 @@ class OrderOwnerApiControllerTest {
                 .id(2L)
                 .userId(1L)
                 .orderItems(List.of(orderItemDto_102, orderItemDto_103))
-                .orderStatus(OrderStatus.FAIL)
+                .orderStatus(OrderStatus.FAILED)
                 .orderTime(LocalDateTime.of(2022, 2, 3, 15, 0, 0))
                 .build();
         orderDto_2.changeUserName("닉네임");

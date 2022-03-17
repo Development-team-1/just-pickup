@@ -50,7 +50,7 @@ public class OrderRepositoryCustom {
                         order.orderTime.between(start, end),
                         order.storeId.eq(storeId),
                         order.orderStatus.ne(OrderStatus.PENDING),
-                        order.orderStatus.ne(OrderStatus.FAIL)
+                        order.orderStatus.ne(OrderStatus.FAILED)
                 )
                 .orderBy(order.id.desc())
                 .limit(pageSize + 1)

@@ -1,10 +1,13 @@
 <template>
   <!-- <v-navigation-drawer v-model="drawer" app> -->
-  <v-navigation-drawer app>
+  <v-navigation-drawer
+      v-model="drawer"
+      app>
     <v-img
       height="140"
       class="pa-4"
       src="https://preview.pixlr.com/images/800wm/1439/2/1439104804.jpg"
+
     >
       <div class="text-center">
         <v-avatar class="mb-4" color="grey darken-1" size="64">
@@ -18,13 +21,13 @@
     </v-img>
     <v-divider></v-divider>
     <v-list>
-      <v-list-item v-for="[icon, text] in links" :key="icon" link>
+      <v-list-item v-for="(link,index) in links" :key="link.icon" link @click="clickGo(index, link.url)">
         <v-list-item-icon>
-          <v-icon>{{ icon }}</v-icon>
+          <v-icon>{{ link.icon }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
-          <v-list-item-title>{{ text }}</v-list-item-title>
+          <v-list-item-title>{{ link.name }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -38,14 +41,26 @@ export default {
   data() {
     return {
       links: [
-        ["mdi-microsoft-windows", "Dashboard"],
-        ["mdi-account", "Profile"],
-        ["mdi-clipboard-list-outline", "Products"],
-        ["mdi-card-account-details-outline", "Orders"],
-        ["mdi-cog", "System Setting"],
+        {name: "지난 주문", url: "/prev-order", icon: "mdi-home-outline"},
+        {name: "카테고리", url: "/category", icon: "mdi-magnify"},
+        {name: "주문", url: "/order", icon: "mdi-cards-heart-outline"},
+        {name: "메뉴 관리", url: "/menu", icon: "mdi-cards-heart-outline"},
       ],
     };
   },
+  methods: {
+    clickGo: function (index, url) {
+      this.value = index;
+      this.$router.push(url);
+    }
+  },mounted() {
+    const path =this.$route.path
+    this.links.forEach((link, index) => {
+      if(link.url === path){
+        this.value = index
+      }
+    })
+  }
 };
 </script>
 

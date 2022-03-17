@@ -9,15 +9,9 @@ import com.justpickup.orderservice.domain.order.repository.OrderRepositoryCustom
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
 import com.justpickup.orderservice.domain.orderItem.entity.OrderItem;
 import com.justpickup.orderservice.domain.orderItemOption.entity.OrderItemOption;
-import com.justpickup.orderservice.global.client.store.GetItemsResponse;
-import com.justpickup.orderservice.global.client.store.GetStoreResponse;
-import com.justpickup.orderservice.global.client.store.StoreByUserIdResponse;
-import com.justpickup.orderservice.global.client.store.StoreClient;
+import com.justpickup.orderservice.global.client.store.*;
 import com.justpickup.orderservice.global.client.user.GetCustomerResponse;
 import com.justpickup.orderservice.global.client.user.UserClient;
-import com.justpickup.orderservice.global.client.store.GetItemResponse;
-import com.justpickup.orderservice.global.client.store.GetStoreReseponse;
-import com.justpickup.orderservice.global.client.store.StoreClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,12 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -258,7 +250,7 @@ public class OrderServiceImpl implements OrderService {
     public void saveOrder(Long userId) {
         orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING)
                 .orElseThrow(() -> new OrderException("장바구니 정보를 찾을 수 없습니다."))
-                .order();
+                .placed();
     }
 
     @Override

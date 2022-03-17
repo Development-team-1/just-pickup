@@ -77,8 +77,8 @@ public class SqlCommandLineRunner implements CommandLineRunner {
                 }
 
                 Order order = Order.of(userId, userCouponId, storeId, orderItems);
-                if (i % 2 == 0) order.setOrderStatus(OrderStatus.ORDER);
-                else order.setOrderStatus(OrderStatus.REJECT);
+                if (i % 2 == 0) order.setOrderStatus(OrderStatus.FINISHED);
+                else order.setOrderStatus(OrderStatus.REJECTED);
                 orders.add(order);
             }
 

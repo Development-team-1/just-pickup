@@ -20,16 +20,16 @@ public class OrderListener {
     @PostUpdate
     public void postUpdate(Order order){
         OrderStatus orderStatus = order.getOrderStatus();
-        if (orderStatus == OrderStatus.ORDER) {
-            log.info("[OrderListener] {}", OrderStatus.ORDER.name());
+        if (orderStatus == OrderStatus.PLACED) {
+            log.info("[OrderListener] {}", OrderStatus.PLACED.name());
             try{
                 orderSender.orderPlaced(OrderSender.KafkaSendOrderDto.createPrimitiveField(order));
             }catch (Exception ex){
                 throw new OrderException(ex.getMessage());
             }
 
-        } else if (orderStatus == OrderStatus.PLACED) {
-            log.info("[OrderListener] {}", OrderStatus.PLACED.name());
+        } else if (orderStatus == OrderStatus.ACCEPTED) {
+            log.info("[OrderListener] {}", OrderStatus.ACCEPTED.name());
         }
     }
 }

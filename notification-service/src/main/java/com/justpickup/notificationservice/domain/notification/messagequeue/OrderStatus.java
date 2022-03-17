@@ -12,7 +12,9 @@ public enum OrderStatus {
     ACCEPTED("주문수락"),
     REJECTED("주문거절"),
     WAITING("픽업대기"),
-    FINISHED("픽업완료");
+    FINISHED("픽업완료"),
+    FAILED("실패");
+
 
     private String message;
 
