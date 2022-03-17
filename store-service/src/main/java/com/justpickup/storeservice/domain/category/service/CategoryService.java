@@ -26,9 +26,15 @@ public class CategoryService {
     private final CategoryRepositoryCustom categoryRepositoryCustom;
     private final StoreRepository storeRepository;
 
-    public List<CategoryDto> getCategoriesWithItem(Long storeId){
+    public List<CategoryDto> getCategoriesWithItemByUserId(Long userId){
+        return categoryRepositoryCustom.getCategoryListByUserId(userId)
+                .stream()
+                .map(CategoryDto::new)
+                .collect(Collectors.toList());
+    }
 
-        return categoryRepositoryCustom.getCategoryList(storeId)
+    public List<CategoryDto> getCategoriesWithItemById(Long storeId){
+        return categoryRepositoryCustom.getCategoryListById(storeId)
                 .stream()
                 .map(CategoryDto::new)
                 .collect(Collectors.toList());

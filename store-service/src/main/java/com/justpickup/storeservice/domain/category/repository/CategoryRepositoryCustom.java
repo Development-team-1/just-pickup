@@ -4,7 +4,6 @@ import com.justpickup.storeservice.domain.category.entity.Category;
 import com.justpickup.storeservice.domain.category.entity.QCategory;
 import com.justpickup.storeservice.domain.item.entity.QItem;
 import com.justpickup.storeservice.domain.store.entity.QStore;
-import com.querydsl.core.QueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -17,21 +16,25 @@ public class CategoryRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<Category> getCategoryList(Long userId){
+    public List<Category> getCategoryListByUserId(Long userId){
 
-        List<Category> categoryList = jpaQueryFactory.selectFrom(QCategory.category)
+        return jpaQueryFactory.selectFrom(QCategory.category)
                 .leftJoin(QCategory.category.items, QItem.item).fetchJoin()
                 .join(QCategory.category.store, QStore.store).fetchJoin()
                 .where(QCategory.category.store.userId.eq(userId))
                 .orderBy(QCategory.category.order.asc())
                 .distinct()
                 .fetch();
-
-        return categoryList;
     }
 
+    public List<Category> getCategoryListById(Long storeId){
 
-
-
-
+        return jpaQueryFactory.selectFrom(QCategory.category)
+                .leftJoin(QCategory.category.items, QItem.item).fetchJoin()
+                .join(QCategory.category.store, QStore.store).fetchJoin()
+                .where(QCategory.category.store.id.eq(storeId))
+                .orderBy(QCategory.category.order.asc())
+                .distinct()
+                .fetch();
+    }
 }

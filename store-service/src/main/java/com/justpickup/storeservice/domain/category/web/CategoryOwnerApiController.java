@@ -22,20 +22,17 @@ public class CategoryOwnerApiController {
     private final CategoryService categoryService;
 
     @GetMapping("/category")
-    public ResponseEntity getCategoryList(@RequestHeader(value = "user-id") String userId ){
-        Long storeId = Long.parseLong(userId);
-        List<CategoryDto> categoryList = categoryService.getCategoriesWithItem(storeId);
+    public ResponseEntity getCategoryList(@RequestHeader(value = "user-id") String userHeader){
+        Long userId = Long.parseLong(userHeader);
+        List<CategoryDto> categoryList = categoryService.getCategoriesWithItemByUserId(userId);
 
         List<CategoryResponse> categoryResponseList = categoryList.stream()
                 .map(CategoryResponse::new)
                 .collect(Collectors.toList());
 
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Result.createSuccessResult(categoryResponseList));
     }
-
-
 
     @Data
     static class CategoryResponse{
