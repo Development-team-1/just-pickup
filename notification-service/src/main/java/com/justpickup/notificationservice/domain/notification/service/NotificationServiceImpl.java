@@ -5,6 +5,8 @@ import com.justpickup.notificationservice.domain.notification.dto.UpdateNotifica
 import com.justpickup.notificationservice.domain.notification.entity.Notification;
 import com.justpickup.notificationservice.domain.notification.exception.NotExistNotification;
 import com.justpickup.notificationservice.domain.notification.repository.NotificationRepository;
+import com.justpickup.notificationservice.global.client.store.GetStoreResponse;
+import com.justpickup.notificationservice.global.client.store.StoreClient;
 import com.justpickup.notificationservice.global.dto.Yn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
+    private final StoreClient storeClient;
 
     @Override
     public List<FindNotificationDto> findNotificationByUserId(Long userId) {
@@ -48,5 +51,17 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public Long findNotificationCounts(Long userId, Yn readYn) {
         return notificationRepository.countByUserIdAndReadYn(userId, readYn);
+    }
+
+    @Transactional
+    @Override
+    public void insertOrderPlaced(Long userId, Long storeId) {
+        GetStoreResponse storeResponse = storeClient.getStore(String.valueOf(storeId)).getData();
+
+        String title = "주문이 신청되었어요.";
+        String storeName = "[" + storeResponse.getName() + "]";
+        String message = storeName + "매장의 주문이 신청되었습니다.";
+        Notification notification = Notification.of(userId, message, title);
+        notificationRepository.save(notification);
     }
 }
