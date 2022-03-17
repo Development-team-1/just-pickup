@@ -10,6 +10,7 @@
             :rules="[v => /.+@.+\..+/.test(v) || 'E-mail must be valid', v => !!v || '이메일은 필수 값입니다']"
             label="이메일"
             prepend-icon="mdi-account-circle"
+            v-on:keydown.enter="login"
         ></v-text-field>
         <v-text-field
             v-model="password"
@@ -18,6 +19,7 @@
             type="Password"
             prepend-icon="mdi-lock"
             append-icon="mdi-eye-off"
+            v-on:keydown.enter="login"
         ></v-text-field>
       </v-form>
     </v-card-text>
@@ -25,7 +27,11 @@
     <v-card-actions>
       <v-btn color="success" v-on:click="links('/register')">Register</v-btn>
       <v-spacer></v-spacer>
-      <v-btn color="info" v-on:click="login">Login</v-btn>
+      <v-btn color="info"
+             v-on:click="login"
+      >
+        Login
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -37,8 +43,8 @@ export default {
   name: "LoginUser",
   data: function() {
     return {
-      email: '',
-      password: ''
+      email: 'owner@gmail.com',
+      password: '1234'
     }
   },
   methods: {

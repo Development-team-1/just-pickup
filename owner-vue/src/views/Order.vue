@@ -20,18 +20,21 @@
             :itemNames="card.itemNames"
             :orderTime="card.orderTime"
             :orderStatus="card.orderStatus"
-            @placed="card.orderStatus = 'PLACED'"
-            @reject="card.orderStatus = 'REJECT'"
+            @accepted="card.orderStatus = 'ACCEPTED'"
+            @rejected="card.orderStatus = 'REJECTED'"
+            @waiting="card.orderStatus = 'WAITING'"
+            @finished="card.orderStatus = 'FINISHED'"
         >
         </order-card>
       </v-col>
     </v-row>
 
-    <br><br><br>
+    <br><br>
     <v-row justify="center" v-if="hasNext">
-      <v-btn rounded outlined color="primary"
+      <v-btn color="#006A95" outlined
              @click="more">더보기</v-btn>
     </v-row>
+    <br>
   </div>
 </template>
 

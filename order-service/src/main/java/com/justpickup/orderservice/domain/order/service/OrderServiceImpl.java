@@ -184,7 +184,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public FetchOrderDto fetchOrder(Long userId) {
-        Order order = orderRepositoryCustom.fetchOrder(userId)
+        Order order = orderRepositoryCustom.fetchOrderBasket(userId)
                 .orElseThrow(() -> new OrderException("장바구니 정보를 찾을 수 없습니다."));
         GetStoreReseponse store = storeClient.getStore(String.valueOf(order.getStoreId())).getData();
 
