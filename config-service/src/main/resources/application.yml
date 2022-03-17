@@ -11,56 +11,9 @@ spring:
           uri: git@github.com:Development-team-1/config-repo.git
           ignore-local-ssh-settings: true
           private-key: |
-            -----BEGIN RSA PRIVATE KEY-----
-            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
-            -----END RSA PRIVATE KEY-----
-
-
+            -----BEGIN EC PRIVATE KEY-----
+            MHcCAQEEIGd6xXSqRoSbY8I5vFisgRKtiyC3pOh/BMiNIDhI3F+yoAoGCCqGSM49
+            AwEHoUQDQgAEPs/brJDoCCEZBQUpmOPG25+BFK8MkUtUwxFNsP0naNUc1QHCBPLA
+            /eeneJgj2i4UKdWqzlg41BfqeuAtIre5cQ==
+            -----END EC PRIVATE KEY-----
+          default-label: master
