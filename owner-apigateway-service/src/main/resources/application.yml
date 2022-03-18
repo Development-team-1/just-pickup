@@ -8,8 +8,6 @@ eureka:
       register-with-eureka: true
       defaultZone: http://localhost:8761/eureka
 
-
-
 spring:
   application:
     name: owner-apigateway-service
@@ -59,6 +57,14 @@ spring:
             - AuthorizationHeaderFilter
             - RewritePath=/store-service/(?<segment>.*),/$\{segment}
 
+        - id: notification-service
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/notification-service/**
+          filters:
+            - AuthorizationHeaderFilter
+            - RewritePath=/notification-service/(?<segment>.*),/$\{segment}
+
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
@@ -92,8 +98,8 @@ spring:
           predicates:
             - Path=/user-service/**
           filters:
-            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
             - AuthorizationHeaderFilter
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
 
 
 token:
