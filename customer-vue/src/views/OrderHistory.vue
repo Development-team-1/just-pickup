@@ -82,6 +82,7 @@ export default {
         this.cards.push({
           orderId: order.orderId,
           orderTime: order.orderTime,
+          storeId: order.storeId,
           storeName: order.storeName,
           orderPrice: order.orderPrice,
           orderStatus: this.getOrderStatusName(order.orderStatus),
@@ -90,9 +91,11 @@ export default {
       });
     },
     getOrderStatusName(orderStatus) {
-      if (orderStatus === "REJECT") return "주문 거절";
-      if (orderStatus === "ORDER") return "주문 중";
-      if (orderStatus === "PLACED") return "주문 수락";
+      if (orderStatus === "PLACED") return "주문신청";
+      if (orderStatus === "REJECTED") return "주문거절";
+      if (orderStatus === "ACCEPTED") return "주문수락";
+      if (orderStatus === "WAITING") return "픽업대기";
+      if (orderStatus === "FINISHED") return "픽업완료";
       return orderStatus;
     },
     getOrderItemName(orderItems) {
@@ -100,7 +103,7 @@ export default {
       if (itemSize == 1) return orderItems[0].orderItemName;
       else if (itemSize > 1) return orderItems[0].orderItemName + " 외 " + (itemSize - 1) + "건";
       else return "없음";
-    }
+    },
   }
 }
 </script>

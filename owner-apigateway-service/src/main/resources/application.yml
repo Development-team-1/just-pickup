@@ -31,7 +31,7 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://just-pickup.com:8081"
+            allowedOrigins: "http://admin.just-pickup.com:8081"
             allowedMethods:
               - GET
               - POST

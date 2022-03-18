@@ -3,7 +3,11 @@
     <v-toolbar elevation="1" dense>
       <v-toolbar-title>{{ userName }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn outlined color="grey grey lighten-1" small>상세보기</v-btn>
+      <v-btn outlined color="grey grey lighten-1" small
+        @click="clickDetail"
+      >
+        상세보기
+      </v-btn>
     </v-toolbar>
     <v-card-title v-if="itemNames.length == 1">
       {{ itemNames[0] }}
@@ -11,37 +15,55 @@
     <v-card-title v-if="itemNames.length > 1">
       {{ itemNames[0] }} 외 {{ itemNames.length - 1 }}건
     </v-card-title>
-    <v-card-subtitle></v-card-subtitle>
+    <v-card-subtitle>{{ orderStatus | getOrderStatusName }}</v-card-subtitle>
     <v-card-text>{{ orderTime }}</v-card-text>
     <v-card-actions>
-      <v-row v-if="orderStatus === 'ORDER'">
+      <v-row v-if="orderStatus === 'PLACED'">
         <v-col sm="6">
           <v-btn
-              block depressed color="success"
-              @click="placed"
+              block depressed color="#006A95" class="white--text"
+              @click="accepted"
           >
-            주문 수령
+            주문수락하기
           </v-btn>
         </v-col>
         <v-col sm="6">
-          <v-btn block depressed color="error"
-            @click="reject"
+          <v-btn block depressed color="#FF1400" class="white--text"
+            @click="rejected"
           >
-            주문 거절
+            주문거절하기
           </v-btn>
         </v-col>
       </v-row>
-      <v-row v-else-if="orderStatus === 'PLACED'">
+      <v-row v-else-if="orderStatus === 'ACCEPTED'">
         <v-col>
-          <v-btn block depressed color="primary">
-            수락됨
+          <v-btn block depressed color="#58ADA0" class="white--text"
+            @click="waiting"
+          >
+            픽업 요청하기
           </v-btn>
         </v-col>
       </v-row>
-      <v-row v-else-if="orderStatus === 'REJECT'">
+      <v-row v-else-if="orderStatus === 'REJECTED'">
         <v-col>
-          <v-btn block depressed color="blue-grey" class="white--text">
+          <v-btn block disabled>
             거절됨
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row v-else-if="orderStatus === 'WAITING'">
+        <v-col>
+          <v-btn block depressed color="#FF5C00" class="white--text"
+                 @click="finished"
+          >
+            고객 수령완료하기
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row v-else-if="orderStatus === 'FINISHED'">
+        <v-col>
+          <v-btn block depressed color="#F9E0AF" class="grey--text">
+            픽업 완료됨
           </v-btn>
         </v-col>
       </v-row>
@@ -67,24 +89,47 @@ export default {
     orderStatus: String
   },
   methods: {
-    placed: async function() {
+    accepted: async function() {
       try {
-        await orderApi.patchOrder(this.id, 'PLACED');
-        this.$emit("placed");
+        await orderApi.patchOrder(this.id, 'ACCEPTED');
+        this.$emit("accepted");
         alert("해당 주문이 수락 되었습니다.");
       } catch(error) {
         console.log(error);
       }
     },
-    reject: async function() {
+    rejected: async function() {
       try {
-        await orderApi.patchOrder(this.id, 'REJECT');
-        this.$emit("reject");
+        await orderApi.patchOrder(this.id, 'REJECTED');
+        this.$emit("rejected");
         alert("해당 주문이 거절 되었습니다.");
 
       } catch(error) {
         console.log(error);
       }
+    },
+    waiting: async function() {
+      try {
+        await orderApi.patchOrder(this.id, 'WAITING');
+        this.$emit("waiting");
+        alert("해당 주문의 픽업이 요청 되었습니다.");
+
+      } catch(error) {
+        console.log(error);
+      }
+    },
+    finished: async function() {
+      try {
+        await orderApi.patchOrder(this.id, 'FINISHED');
+        this.$emit("finished");
+        alert("해당 주문이 픽업완료 처리 되었습니다.");
+
+      } catch(error) {
+        console.log(error);
+      }
+    },
+    clickDetail: function() {
+      alert("준비중 입니다...");
     }
   }
 }

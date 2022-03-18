@@ -8,6 +8,7 @@ import com.justpickup.userservice.domain.user.entity.User;
 import com.justpickup.userservice.domain.user.exception.DuplicateUserEmail;
 import com.justpickup.userservice.domain.user.exception.NotExistUserException;
 import com.justpickup.userservice.domain.user.repository.CustomerRepository;
+import com.justpickup.userservice.domain.user.repository.StoreOwnerRepository;
 import com.justpickup.userservice.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final CustomerRepository customerRepository;
+    private final StoreOwnerRepository storeOwnerRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -75,6 +77,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .stream()
                 .map(CustomerDto::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public StoreOwnerDto findOwnerById(Long userId) {
+        StoreOwner storeOwner = storeOwnerRepository.findById(userId)
+                .orElseThrow(() -> new NotExistUserException(userId + "는 존재하지 않은 사용자입니다."));
+
+        return StoreOwnerDto.of(storeOwner);
     }
 
 }

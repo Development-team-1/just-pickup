@@ -26,6 +26,7 @@
             class="my-3 mx-3"
             height="250"
             width="165"
+            @click="clickStore(item.id)"
         >
           <v-skeleton-loader>
           <v-img
@@ -59,7 +60,14 @@
 export default {
   name: "SlideStore",
   props:["storeList", "id"],
-
+  methods: {
+    clickStore: function(storeId) {
+      this.$router.push({
+        name: "store",
+        params: {storeId: storeId}
+      })
+    }
+  }
 }
 </script>
 

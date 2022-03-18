@@ -29,8 +29,8 @@ public class AuthController {
     private final CookieProvider cookieProvider;
 
     @GetMapping("/reissue")
-    public ResponseEntity<Result> refreshToken(@RequestHeader("X-AUTH-TOKEN") String accessToken,
-                                               @CookieValue("refresh-token") String refreshToken) {
+    public ResponseEntity<Result> refreshToken(@RequestHeader(value = "X-AUTH-TOKEN") String accessToken,
+                                               @CookieValue(value = "refresh-token") String refreshToken) {
         JwtTokenDto jwtTokenDto = refreshTokenService.refreshJwtToken(accessToken, refreshToken);
 
         ResponseCookie responseCookie = cookieProvider.createRefreshTokenCookie(refreshToken);
@@ -55,8 +55,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Result> logout(@RequestHeader("X-AUTH-TOKEN") String accessToken,
-                                         @RequestHeader("REFRESH-TOKEN") String refreshToken) {
+    public ResponseEntity<Result> logout(@RequestHeader("X-AUTH-TOKEN") String accessToken) {
 
         refreshTokenService.logoutToken(accessToken);
 
@@ -64,7 +63,7 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-                .body(Result.createErrorResult(""));
+                .body(Result.createSuccessResult(""));
     }
 
     @GetMapping("/check/access-token")

@@ -24,12 +24,10 @@ const authCheck = async function (to, from, next) {
 };
 const routes = [
   {
-    path: '/dashboard',
-    redirect: 'dashboard',
+    path: '/order',
+    redirect: 'order',
     component: DashboardLayout,
-    beforeEnter: authCheck,
     children: [
-
       {
         path: '/category',
         name: 'category',
@@ -53,7 +51,13 @@ const routes = [
         name: 'order',
         beforeEnter: authCheck,
         component: () => import('./../views/Order.vue')
-      }
+      },
+      {
+        path: '/notification',
+        name: 'notificationr',
+        beforeEnter: authCheck,
+        component: () => import('./../views/NotificationView.vue')
+      },
     ]
   },
   {

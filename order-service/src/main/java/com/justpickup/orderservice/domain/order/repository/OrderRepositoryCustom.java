@@ -49,8 +49,7 @@ public class OrderRepositoryCustom {
                         orderIdLt(condition.getLastOrderId()),
                         order.orderTime.between(start, end),
                         order.storeId.eq(storeId),
-                        order.orderStatus.ne(OrderStatus.PENDING),
-                        order.orderStatus.ne(OrderStatus.FAILED)
+                        order.orderStatus.ne(OrderStatus.PENDING)
                 )
                 .orderBy(order.id.desc())
                 .limit(pageSize + 1)
@@ -88,6 +87,7 @@ public class OrderRepositoryCustom {
                 .leftJoin(order.transaction).fetchJoin()
                 .where(
                         order.orderTime.between(search.getStartDateTime(), search.getEndDateTime()),
+                        order.orderStatus.ne(OrderStatus.PENDING),
                         order.storeId.eq(storeId)
                 )
                 .orderBy(order.orderTime.desc())
@@ -105,7 +105,8 @@ public class OrderRepositoryCustom {
                 .selectFrom(order)
                 .leftJoin(order.transaction).fetchJoin()
                 .where(
-                        order.userId.eq(userId)
+                        order.userId.eq(userId),
+                        order.orderStatus.ne(OrderStatus.PENDING)
                 )
                 .orderBy(order.orderTime.desc())
                 .offset(pageable.getOffset())
@@ -122,7 +123,7 @@ public class OrderRepositoryCustom {
         return new SliceImpl<>(contents, pageable, hasNext);
     }
 
-    public Optional<Order> fetchOrder(Long userId){
+    public Optional<Order> fetchOrderBasket(Long userId){
 
         return Optional.ofNullable(queryFactory.selectFrom(order)
                 .leftJoin(order.orderItems, orderItem).fetchJoin()

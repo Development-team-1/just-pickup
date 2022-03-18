@@ -26,6 +26,9 @@ export default {
       return false;
     }
 
+  },
+  requestUserInfo() {
+    return axios.get(process.env.VUE_APP_OWNER_SERVICE_BASEURL + '/user-service/store-owner');
   }
 }
 

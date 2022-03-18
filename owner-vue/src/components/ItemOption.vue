@@ -64,7 +64,6 @@ export default {
     addItemOption : function () {
       if(!this.data) return;
 
-      console.log(this.optionType)
       this.dialog = false
       this.$emit('addItemOption',this.data,this.optionType)
     }

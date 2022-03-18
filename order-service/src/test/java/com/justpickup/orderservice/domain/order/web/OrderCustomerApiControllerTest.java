@@ -92,6 +92,7 @@ class OrderCustomerApiControllerTest {
                                 fieldWithPath("data.orders[*].orderTime").description("주문 시간 [yyyy-MM-dd HH:mm]"),
                                 fieldWithPath("data.orders[*].orderPrice").description("합계"),
                                 fieldWithPath("data.orders[*].orderStatus").description("주문 상태"),
+                                fieldWithPath("data.orders[*].orderStatus").description("매장 고유번호"),
                                 fieldWithPath("data.orders[*].storeName").description("매장 이름"),
                                 fieldWithPath("data.orders[*].orderItems[*].orderItemId").description("주문 아이템 고유번호"),
                                 fieldWithPath("data.orders[*].orderItems[*].orderItemName").description("주문 아이템 이름"),

@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toMap;
 
 @FeignClient("USER-SERVICE")
 public interface UserClient {
@@ -15,4 +18,12 @@ public interface UserClient {
 
     @GetMapping("/customers/{userIds}")
     Result<List<GetCustomerResponse>> getCustomers(@PathVariable("userIds") Iterable<Long> userIds);
+
+    default Map<Long, String> getUserNameMap(Iterable<Long> userIds) {
+        List<GetCustomerResponse> userResponses = this.getCustomers(userIds).getData();
+        return userResponses.stream()
+                .collect(
+                        toMap(GetCustomerResponse::getUserId, GetCustomerResponse::getUserName)
+                );
+    }
 }

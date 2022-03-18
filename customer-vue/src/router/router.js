@@ -38,42 +38,49 @@ const routes = [
         path: "/home",
         beforeEnter: authCheck,
         name: 'home',
+        beforeEnter: authCheck,
         component: () => import('../views/HomeView')
       },
       {
         path: "/search",
         beforeEnter: authCheck,
         name: 'search-store',
+        beforeEnter: authCheck,
         component: () => import('../views/SearchStore')
       },
       {
         path: "/history",
         beforeEnter: authCheck,
         name: 'order-history',
+        beforeEnter: authCheck,
         component: () => import('../views/OrderHistory')
       },
       {
         path: "/favorite",
         beforeEnter: authCheck,
         name: 'favorite-store',
+        beforeEnter: authCheck,
         component: () => import('../views/FavoriteStore')
       },
       {
         path: "/notification",
         beforeEnter: authCheck,
         name: 'notification',
+        beforeEnter: authCheck,
         component: () => import('../views/NotificationView')
       },
       {
         path: "/item/:itemId",
         beforeEnter: authCheck,
         name: 'itemDetail',
+        beforeEnter: authCheck,
         component: () => import('../views/ItemDetail')
       },
       {
         path: "/order",
         beforeEnter: authCheck,
         name: 'orderPage',
+        beforeEnter: authCheck,
         component: () => import('../views/OrderPage')
       },
       {

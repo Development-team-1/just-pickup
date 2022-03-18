@@ -54,11 +54,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
         // refresh token 검증
         String findRefreshTokenId = findRefreshToken.getRefreshTokenId();
-        if (!jwtTokenProvider.validateJwtToken(refreshToken) ||
-                !jwtTokenProvider.equalRefreshTokenId(findRefreshTokenId, refreshToken)) {
-
+        if (!jwtTokenProvider.validateJwtToken(refreshToken)) {
             refreshTokenRedisRepository.delete(findRefreshToken);
             throw new RefreshTokenNotValidException("Not validate jwt token = " + refreshToken);
+        }
+
+        if (!jwtTokenProvider.equalRefreshTokenId(findRefreshTokenId, refreshToken)) {
+            throw new RefreshTokenNotValidException("redis 의 값과 일치하지 않습니다. = " + refreshToken);
         }
 
         User findUser = userRepository.findById(Long.valueOf(userId))
@@ -69,7 +71,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         List<String> roles = authentication.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
 
-        String newAccessToken = jwtTokenProvider.createJwtAccessToken(userId, "/refreshToken", roles);
+        String newAccessToken = jwtTokenProvider.createJwtAccessToken(userId, "/reissu", roles);
         Date expiredTime = jwtTokenProvider.getExpiredTime(newAccessToken);
 
         return JwtTokenDto.builder()

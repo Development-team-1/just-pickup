@@ -24,7 +24,7 @@ public class CategoryCustomerApiController {
 
     @GetMapping("/categories")
     public ResponseEntity<Result> getCategories(@RequestParam("storeId") Long storeId) {
-        List<CategoryDto> categoryList = categoryService.getCategoriesWithItem(storeId);
+        List<CategoryDto> categoryList = categoryService.getCategoriesWithItemById(storeId);
 
         GetCategoriesResponse getCategoriesResponse = new GetCategoriesResponse(categoryList);
 

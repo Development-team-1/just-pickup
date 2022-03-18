@@ -66,7 +66,7 @@ public class OrderHistoryDto {
         orderHistoryDto.orderTime = order.getOrderTime();
         orderHistoryDto.price = order.getOrderPrice();
         orderHistoryDto.orderStatus = order.getOrderStatus();
-        orderHistoryDto.storeId = order.getUserId();
+        orderHistoryDto.storeId = order.getStoreId();
 
         orderHistoryDto.orderItems = order.getOrderItems().stream()
                 .map(_OrderHistoryItem::of)
