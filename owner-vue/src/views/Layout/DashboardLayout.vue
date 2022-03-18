@@ -30,7 +30,7 @@ export default {
   },
   data: function() {
     return {
-      drawer: null,
+      drawer: true,
       notificationCounts: 0
     }
   },

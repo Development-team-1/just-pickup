@@ -167,6 +167,7 @@ export default {
         this.setItem.count =1
         return false
       }
+      return true
 
     }
 

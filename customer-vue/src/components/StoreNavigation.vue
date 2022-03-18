@@ -7,7 +7,7 @@
       hide-on-scroll
       absolute
   >
-    <v-app-bar-nav-icon>
+    <v-app-bar-nav-icon @click="$router.back()">
       <v-icon>mdi-arrow-left</v-icon>
     </v-app-bar-nav-icon>
     <v-spacer></v-spacer>

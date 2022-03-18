@@ -49,29 +49,27 @@ class CategoryOwnerApiControllerTest {
     @DisplayName("카테고리리스트_가져오기_성공")
     void getCategoryList_success() throws Exception {
         //given
-        Long storeId = 1L;
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         categoryDtoList.add(CategoryDto.builder()
                 .id(10L)
-                .name("카테고리1")
+                .name("카페인")
                 .items(List.of(new ItemDto(1L,"아메리카노",null,5000L)
-                        ,new ItemDto(1L,"카페라테",null,5000L)))
+                        ,new ItemDto(2L,"카페라테",null,5000L)))
                 .order(1)
                 .build());
 
         categoryDtoList.add(CategoryDto.builder()
                 .id(11L)
-                .name("카테고리2")
-                .items(List.of(new ItemDto(1L,"비스킷",null,5000L)
-                        ,new ItemDto(1L,"와플",null,5000L)))
+                .name("디저트")
+                .items(List.of(new ItemDto(3L,"비스킷",null,5000L)
+                        ,new ItemDto(4L,"와플",null,5000L)))
                 .order(2)
                 .build());
 
-        given(categoryService.getCategoriesWithItem(any())).willReturn(categoryDtoList);
+        given(categoryService.getCategoriesWithItemByUserId(any())).willReturn(categoryDtoList);
         //when
 
         ResultActions actions = mockMvc.perform(MockMvcRequestBuilders.get("/api/owner/category")
-                .param("storeId",String.valueOf(storeId))
                 .header("user-id","2")
         );
 

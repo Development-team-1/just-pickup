@@ -40,7 +40,7 @@
           </v-list-item>
 
           <v-card-actions class="pb-2">
-            <v-btn block color="warning">삭제하기</v-btn>
+            <v-btn block color="warning" @click="message('준비중입니다.')">삭제하기</v-btn>
           </v-card-actions>
 
         </v-card>
@@ -107,6 +107,9 @@ export default {
             console.log(error.response)
           })
     },
+    message: function(message){
+      alert(message)
+    }
   }
 }
 </script>
