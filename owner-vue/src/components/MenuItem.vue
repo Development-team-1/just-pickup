@@ -166,7 +166,6 @@ export default {
       this.$emit('save')
     },
     addItemOption : function (itemOptionValue,optionType){
-      console.log("saveOption",itemOptionValue,optionType)
       this.$emit("addItemOption",itemOptionValue,optionType)
     }
   }

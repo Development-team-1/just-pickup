@@ -198,10 +198,7 @@ export default {
         method='put'
       else
         method='post'
-      store.saveItem(method,itemData)
-        .then(response => console.log(response))
-        .catch(reason => console.log(reason))
-
+      store.saveItem(method,itemData);
     },
     addItemOption:function (itemOptionValue,type){
       var item = {

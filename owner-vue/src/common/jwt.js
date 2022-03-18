@@ -3,8 +3,6 @@ const moment = require('moment');
 const ACCESS_TOKEN_NAME = "accessToken";
 const EXPIRED_TIME_NAME = "expiredTime";
 
-const tag = "[jwt]";
-
 export default {
   getToken() {
     return localStorage.getItem(ACCESS_TOKEN_NAME);
@@ -33,7 +31,7 @@ export default {
 
     const difference = moment.duration(expiredMoment.diff(currentMoment)).asSeconds();
 
-    console.log(tag, "expireMoment = ", expiredMoment, "currentMoment = ", currentMoment, "diff = ", difference);
+    // console.log(tag, "expireMoment = ", expiredMoment, "currentMoment = ", currentMoment, "diff = ", difference);
 
     // 만료 30초 전일 경우 만료로 판단
     return difference <= 30;

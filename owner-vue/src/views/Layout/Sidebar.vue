@@ -43,7 +43,7 @@ export default {
       links: [
         {name: "지난 주문", url: "/prev-order", icon: "mdi-home-outline"},
         {name: "카테고리", url: "/category", icon: "mdi-magnify"},
-        {name: "주문", url: "/order", icon: "mdi-cards-heart-outline"},
+        {name: "주문", url: "/order", icon: "mdi-cards-heart"},
         {name: "메뉴 관리", url: "/menu", icon: "mdi-cards-heart-outline"},
       ],
     };

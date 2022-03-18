@@ -71,7 +71,6 @@ export default {
       this.renderCard(response.data)
     },
     renderCard: function (json) {
-      console.log(json);
       const orders = json.data.orders;
       const size = orders.length;
 

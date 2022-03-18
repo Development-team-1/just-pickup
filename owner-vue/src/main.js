@@ -46,7 +46,6 @@ axios.interceptors.response.use(
     if (error.response.status === 401) {
       let code = error.response.data.code;
       if (code === "EXPIRED") {
-        console.log("## expired");
         try {
           const accessToken = await auth.requestReissue();
           originalRequest.headers.Authorization = "Bearer " + accessToken;
