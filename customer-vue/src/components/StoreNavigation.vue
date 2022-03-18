@@ -38,7 +38,7 @@ export default {
       favoriteStore:{
         status:true,
         color:null,
-        icon: 'mdi-star-outline'
+        icon: 'mdi-heart-outline'
       }
     }
   },
@@ -64,10 +64,10 @@ export default {
 
       if(this.favoriteStore.status){
         this.favoriteStore.color = "rgb(255, 152, 0)"
-        this.favoriteStore.icon = "mdi-star"
+        this.favoriteStore.icon = "mdi-heart"
       }else{
         this.favoriteStore.color = null
-        this.favoriteStore.icon = "mdi-star-outline"
+        this.favoriteStore.icon = "mdi-heart-outline"
       }
       this.favoriteStore.status= !this.favoriteStore.status
 
