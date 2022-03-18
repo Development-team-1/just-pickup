@@ -1,14 +1,13 @@
 package com.justpickup.storeservice.domain.store.service;
 
 import com.justpickup.storeservice.domain.favoritestore.repository.FavoriteStoreCustom;
-import com.justpickup.storeservice.domain.store.dto.SearchStoreCondition;
-import com.justpickup.storeservice.domain.store.dto.SearchStoreResult;
-import com.justpickup.storeservice.domain.store.dto.StoreByUserIdDto;
-import com.justpickup.storeservice.domain.store.dto.StoreDto;
+import com.justpickup.storeservice.domain.map.entity.Map;
+import com.justpickup.storeservice.domain.store.dto.*;
 import com.justpickup.storeservice.domain.store.entity.Store;
 import com.justpickup.storeservice.domain.store.exception.NotExistStoreException;
 import com.justpickup.storeservice.domain.store.repository.StoreRepository;
 import com.justpickup.storeservice.domain.store.repository.StoreRepositoryCustom;
+import com.justpickup.storeservice.global.entity.Address;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
@@ -70,5 +69,20 @@ public class StoreServiceImpl implements StoreService {
                 .stream()
                 .map(StoreDto::of)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PostStoreDto saveStore(PostStoreDto postStoreDto) {
+        PostStoreDto._PostStoreAddress postStoreAddress = postStoreDto.getAddress();
+        Address address = new Address(postStoreAddress.getAddress(), postStoreAddress.getZipcode());
+
+        PostStoreDto._PostStoreMap postStoreMap = postStoreDto.getMap();
+        Map map = Map.of(postStoreMap.getLatitude(), postStoreMap.getLongitude());
+
+        Store store =
+                Store.of(address, map, postStoreDto.getUserId(), postStoreDto.getName(), postStoreDto.getPhoneNumber());
+
+        Store savedStore = storeRepository.save(store);
+        return PostStoreDto.of(savedStore);
     }
 }
