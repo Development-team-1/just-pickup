@@ -10,7 +10,7 @@ import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
 import com.justpickup.orderservice.domain.orderItem.entity.OrderItem;
 import com.justpickup.orderservice.domain.orderItemOption.entity.OrderItemOption;
 import com.justpickup.orderservice.global.client.store.GetItemResponse;
-import com.justpickup.orderservice.global.client.store.GetStoreReseponse;
+import com.justpickup.orderservice.global.client.store.GetStoreResponse;
 import com.justpickup.orderservice.global.client.store.StoreByUserIdResponse;
 import com.justpickup.orderservice.global.client.store.StoreClient;
 import com.justpickup.orderservice.global.client.user.UserClient;
@@ -186,7 +186,7 @@ public class OrderServiceImpl implements OrderService {
     public FetchOrderDto fetchOrder(Long userId) {
         Order order = orderRepositoryCustom.fetchOrderBasket(userId)
                 .orElseThrow(() -> new OrderException("장바구니 정보를 찾을 수 없습니다."));
-        GetStoreReseponse store = storeClient.getStore(String.valueOf(order.getStoreId())).getData();
+        GetStoreResponse store = storeClient.getStore(String.valueOf(order.getStoreId())).getData();
 
         List<GetItemResponse> data = storeClient.getItemAndItemOptions(order.getOrderItems().stream()
                 .map(OrderItem::getItemId)
@@ -209,14 +209,12 @@ public class OrderServiceImpl implements OrderService {
                                 ,orderItem))
                 .collect(Collectors.toList());
 
-        FetchOrderDto fetchOrderDto = FetchOrderDto.builder()
+        return FetchOrderDto.builder()
                         .userId(order.getUserId())
                         .orderPrice(order.getOrderPrice())
                         .storeName(store.getName())
                         .orderItemDtoList(orderItemDtoList)
                         .build();
-
-        return fetchOrderDto;
     }
 
     @Override

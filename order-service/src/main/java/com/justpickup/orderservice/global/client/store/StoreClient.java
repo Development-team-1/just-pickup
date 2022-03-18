@@ -29,18 +29,17 @@ public interface StoreClient {
     Result<List<GetStoreResponse>> getStoreAllById(@PathVariable("storeId") Iterable<Long> storeIds);
   
     @GetMapping("/store/{storeId}")
-    Result<GetStoreReseponse> getStore(@PathVariable(value = "storeId") String storeId);
+    Result<GetStoreResponse> getStore(@PathVariable(value = "storeId") String storeId);
 
     @GetMapping("/api/customer/items/{itemId}")
     Result<List<GetItemResponse>> getItemAndItemOptions(@PathVariable(value = "itemId") List<Long> itemIds);
 
     default Map<Long, String> getStoreNameMap(Set<Long> storeIds) {
         List<GetStoreResponse> storeResponses = this.getStoreAllById(storeIds).getData();
-        Map<Long, String> storeMap = storeResponses.stream()
+        return storeResponses.stream()
                 .collect(
                         toMap(GetStoreResponse::getId, GetStoreResponse::getName)
                 );
-        return storeMap;
     }
 
     default Map<Long, String> getItemNameMap(Iterable<Long> itemIds) {
