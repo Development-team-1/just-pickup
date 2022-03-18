@@ -23,6 +23,9 @@ export default {
     localStorage.removeItem(EXPIRED_TIME_NAME);
   },
   isExpired() {
+    if (this.getToken() == null) return true;
+    if (this.getExpiredTime() == null) return true;
+
     const expiredTime = this.getExpiredTime();
 
     const expiredMoment = moment(expiredTime);

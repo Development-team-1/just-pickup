@@ -15,7 +15,7 @@
     <v-card-title v-if="itemNames.length > 1">
       {{ itemNames[0] }} 외 {{ itemNames.length - 1 }}건
     </v-card-title>
-    <v-card-subtitle>{{this.getOrderStatusName(orderStatus)}}</v-card-subtitle>
+    <v-card-subtitle>{{ orderStatus | getOrderStatusName }}</v-card-subtitle>
     <v-card-text>{{ orderTime }}</v-card-text>
     <v-card-actions>
       <v-row v-if="orderStatus === 'PLACED'">
@@ -126,22 +126,6 @@ export default {
 
       } catch(error) {
         console.log(error);
-      }
-    },
-    getOrderStatusName: function(orderStatus) {
-      switch (orderStatus) {
-        case "PLACED":
-          return "주문신청됨";
-        case "ACCEPTED":
-          return "주문수락됨";
-        case "REJECTED":
-          return "주문거절됨";
-        case "WAITING":
-          return "픽업대기중";
-        case "FINISHED":
-          return "픽업완료됨";
-        default:
-          break;
       }
     },
     clickDetail: function() {

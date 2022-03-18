@@ -105,10 +105,10 @@ export default {
 
         this.orders.push({
           orderId: order.orderId,
-          orderStatus: this.getOrderStatusName(order.orderStatus),
+          orderStatus: this.$options.filters.getOrderStatusName(order.orderStatus),
           orderTime: order.orderTime,
           orderItemNames: this.getOrderItemName(order.orderItems),
-          orderPrice: order.orderPrice,
+          orderPrice: this.$options.filters.currency(order.orderPrice),
           userName: order.userName
         });
       })
@@ -136,12 +136,6 @@ export default {
     },
     inputEndDate: function(value) {
       this.endDate = value;
-    },
-    getOrderStatusName: function(orderStatus) {
-      if (orderStatus === "ORDER") return "주문";
-      if (orderStatus === "PLACED") return "주문 수락";
-      if (orderStatus === "REJECT") return "주문 거절";
-      return orderStatus;
     },
     getOrderItemName: function(orderItems) {
       const orderItemLength = orderItems.length;

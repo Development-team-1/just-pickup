@@ -38,9 +38,15 @@
 
 <script>
 import userApi from '../api/user.js'
+import jwt from "@/common/jwt";
 
 export default {
   name: "LoginUser",
+  mounted() {
+    if (false == jwt.isExpired()) {
+      this.$router.push('/order');
+    }
+  },
   data: function() {
     return {
       email: 'owner@gmail.com',
@@ -56,7 +62,7 @@ export default {
 
       const flag = await userApi.requestLoginUser(this.email, this.password);
 
-      if (flag) await this.$router.push('/prev-order');
+      if (flag) await this.$router.push('/order');
     }
   }
 }
