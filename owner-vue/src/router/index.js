@@ -27,9 +27,7 @@ const routes = [
     path: '/dashboard',
     redirect: 'dashboard',
     component: DashboardLayout,
-    beforeEnter: authCheck,
     children: [
-
       {
         path: '/category',
         name: 'category',
