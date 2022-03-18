@@ -56,11 +56,6 @@
             @click="saveOrder"
             color="primary"
         >주문하기</v-btn>
-<!--    <v-btn-->
-<!--        style="position: absolute; bottom: 0;transform: translateY(-100%); width: 100%"-->
-<!--        @click="orderItems"-->
-<!--    >주문하기</v-btn>-->
-
   </div>
 </template>
 
@@ -90,6 +85,7 @@ export default {
 
       orderApi.saveOrder()
           .then(()=>{
+            this.$emit('plusCount')
             alert('주문되었습니다.')
             this.$router.push("/history")
           })
