@@ -91,7 +91,7 @@ public class ItemServiceImpl implements ItemService {
 
         itemOptionDtos
                 .forEach(itemOptionDto -> {
-                    if(itemOptionDto.getId()==null) return;
+                    if(itemOptionDto.getId()!=null) return;
                     if (itemOptionRepository.existsById(itemOptionDto.getId()))
                             itemOptionRepository.save(ItemOptionDto.createItemOption(itemOptionDto, item));
                 });

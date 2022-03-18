@@ -56,11 +56,6 @@
             @click="saveOrder"
             color="primary"
         >주문하기</v-btn>
-<!--    <v-btn-->
-<!--        style="position: absolute; bottom: 0;transform: translateY(-100%); width: 100%"-->
-<!--        @click="orderItems"-->
-<!--    >주문하기</v-btn>-->
-
   </div>
 </template>
 
@@ -90,10 +85,12 @@ export default {
 
       orderApi.saveOrder()
           .then(()=>{
+            this.$emit('plusCount')
             alert('주문되었습니다.')
             this.$router.push("/history")
           })
           .catch(error=>{
+            alert("문제가 발생하였습니다. 다시 시도해보세요.")
             console.log(error)
             //this.$router.replace("/")
           })
@@ -105,8 +102,9 @@ export default {
             this.orderData=response.data.data
           })
           .catch(error=>{
+            alert("장바구니에 상품이 없습니다.")
+            this.$router.back();
             console.log(error.response)
-            history.back();
           })
     },
   }

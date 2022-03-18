@@ -120,7 +120,6 @@ export default {
     },
   },
   async mounted() {
-
     if (!jwt.isExpired())
       await router.push("/");
 

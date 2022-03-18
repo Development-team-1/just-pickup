@@ -36,6 +36,7 @@
         <v-col >
           <v-container>
             <v-text-field
+                readonly
                 v-model="setItem.count"
                 append-outer-icon="mdi-plus"
                 prepend-icon="mdi-minus"
@@ -111,7 +112,7 @@ export default {
         itemOptions:[],
       },
       setItem:{
-        count:0,
+        count:1,
         storeId:-1,
         itemId:-1,
         price:0,
@@ -145,9 +146,12 @@ export default {
     },
     addItemCount: function (v){
       this.setItem.count =
-          this.setItem.count+v >=0? this.setItem.count+v: 0;
+          this.setItem.count+v >=1? this.setItem.count+v: 1;
     },
     addItem: function(){
+      if(!this.validItem())
+        return;
+
       orderApi.addItemToBasket(this.setItem)
           .then(response=>{
             console.log(response)
@@ -156,7 +160,16 @@ export default {
           .catch(error=>{
             console.log(error.response)
           })
+    },
+    validItem(){
+      if(this.setItem.count <= 0 || isNaN(this.setItem.count)){
+        alert("수량이 잘못되었습니다.")
+        this.setItem.count =1
+        return false
+      }
+
     }
+
   },
 }
 </script>

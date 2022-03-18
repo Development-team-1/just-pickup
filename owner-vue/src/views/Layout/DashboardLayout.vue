@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
-    <side-bar v-bind:drawer="drawer"></side-bar>
-    <top-bar v-on:drawEvent="drawer = !drawer"></top-bar>
+    <side-bar :drawer="drawer"></side-bar>
+    <top-bar @drawerEvent="drawer = !drawer"></top-bar>
     <v-main style="background: #f5f5f540">
       <v-container class="py-8, px-6" fluid>
         <router-view></router-view>

@@ -163,6 +163,7 @@ export default {
   },
   methods:{
     save : function () {
+      this.dialog =false
       this.$emit('save')
     },
     addItemOption : function (itemOptionValue,optionType){

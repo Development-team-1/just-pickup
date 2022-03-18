@@ -41,5 +41,12 @@ export default {
   },
   requestStore(storeId) {
     return axios.get(process.env.VUE_APP_CUSTOMER_SERVICE_BASEURL + "/store-service/store/" + storeId);
+  },
+  getFavoriteStoreByStoreId(storeId) {
+    return axios.get(process.env.VUE_APP_CUSTOMER_SERVICE_BASEURL + "/store-service/api/customer/favoriteStore/" + storeId);
+  },
+  markStar(storeId) {
+    return axios.patch(process.env.VUE_APP_CUSTOMER_SERVICE_BASEURL + "/store-service/api/customer/favoriteStore/" + storeId);
   }
+
 }
