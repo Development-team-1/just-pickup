@@ -32,50 +32,62 @@ const routes = [
   {
     path: '/',
     redirect: 'home',
-    beforeEnter: authCheck,
     component: HomeLayout,
     children: [
       {
         path: "/home",
+        beforeEnter: authCheck,
         name: 'home',
         beforeEnter: authCheck,
         component: () => import('../views/HomeView')
       },
       {
         path: "/search",
+        beforeEnter: authCheck,
         name: 'search-store',
         beforeEnter: authCheck,
         component: () => import('../views/SearchStore')
       },
       {
         path: "/history",
+        beforeEnter: authCheck,
         name: 'order-history',
         beforeEnter: authCheck,
         component: () => import('../views/OrderHistory')
       },
       {
         path: "/favorite",
+        beforeEnter: authCheck,
         name: 'favorite-store',
         beforeEnter: authCheck,
         component: () => import('../views/FavoriteStore')
       },
       {
         path: "/notification",
+        beforeEnter: authCheck,
         name: 'notification',
         beforeEnter: authCheck,
         component: () => import('../views/NotificationView')
       },
       {
         path: "/item/:itemId",
+        beforeEnter: authCheck,
         name: 'itemDetail',
         beforeEnter: authCheck,
         component: () => import('../views/ItemDetail')
       },
       {
         path: "/order",
+        beforeEnter: authCheck,
         name: 'orderPage',
         beforeEnter: authCheck,
         component: () => import('../views/OrderPage')
+      },
+      {
+        path: "/mypage",
+        beforeEnter: authCheck,
+        name: 'mypage',
+        component: () => import('../views/MyPage')
       },
     ]
   },
@@ -87,12 +99,12 @@ const routes = [
   {
     path: '/store',
     redirect: 'store',
-    beforeEnter: authCheck,
     component: StoreLayout,
     children: [
       {
         path: "/store/:storeId",
         name: "store",
+        beforeEnter: authCheck,
         component: () => import('../views/StoreView'),
         props: true
       },

@@ -1,11 +1,9 @@
 package com.justpickup.userservice.domain.jwt.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.userservice.domain.user.dto.OAuthAttributeDto;
 import com.justpickup.userservice.domain.user.entity.Customer;
 import com.justpickup.userservice.domain.user.repository.CustomerRepository;
 import com.justpickup.userservice.domain.user.service.UserServiceImpl;
-import com.justpickup.userservice.global.dto.Result;
 import com.justpickup.userservice.global.utils.CookieProvider;
 import com.justpickup.userservice.global.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +28,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -42,8 +38,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final CustomerRepository customerRepository;
-    private final HttpServletResponse response;
-    private final HttpServletRequest request;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenService refreshTokenService;
     private final UserServiceImpl userServiceImpl;
@@ -70,11 +64,6 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         String userEmail = customer.getEmail();
 
         Collection<? extends GrantedAuthority> authorities = userServiceImpl.loadUserByUsername(userEmail).getAuthorities();
-
-        List<String> roles = authorities
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
 
         return new DefaultOAuth2User(
                 authorities

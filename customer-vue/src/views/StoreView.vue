@@ -28,6 +28,7 @@
             class="mx-auto mb-5"
             outlined
             v-for="item in category.items"
+            @click="itemDetail(item.id)"
             :key="item.id"
         >
           <v-list-item three-line>
@@ -91,6 +92,9 @@ export default {
         this.tags.push(category.name);
       })
     },
+    itemDetail: function (itemId) {
+      this.$router.push("/item/"+itemId)
+    }
   }
 }
 </script>
