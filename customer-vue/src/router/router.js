@@ -32,7 +32,6 @@ const routes = [
   {
     path: '/',
     redirect: 'home',
-    beforeEnter: authCheck,
     component: HomeLayout,
     children: [
       {
@@ -93,12 +92,12 @@ const routes = [
   {
     path: '/store',
     redirect: 'store',
-    beforeEnter: authCheck,
     component: StoreLayout,
     children: [
       {
         path: "/store/:storeId",
         name: "store",
+        beforeEnter: authCheck,
         component: () => import('../views/StoreView'),
         props: true
       },
