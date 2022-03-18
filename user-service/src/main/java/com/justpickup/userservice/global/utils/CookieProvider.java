@@ -22,6 +22,8 @@ public class CookieProvider {
 
     public ResponseCookie removeRefreshTokenCookie() {
         return ResponseCookie.from("refresh-token", null)
+                .maxAge(0)
+                .path("/")
                 .build();
     }
 

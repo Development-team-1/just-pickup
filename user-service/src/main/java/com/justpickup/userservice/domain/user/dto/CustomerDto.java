@@ -17,8 +17,8 @@ public class CustomerDto extends UserDto {
 
     @Builder
     public CustomerDto(Long id, String email, String password, String name,
-                       String phoneNumber, String dtype, String refreshTokenId) {
-        super(id, email, password, name, phoneNumber, dtype, refreshTokenId);
+                       String phoneNumber, String dtype) {
+        super(id, email, password, name, phoneNumber, dtype);
     }
 
 }

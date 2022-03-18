@@ -9,4 +9,5 @@ public interface UserService {
     CustomerDto findCustomerByUserId(Long userId);
     void saveStoreOwner(StoreOwnerDto storeOwnerDto);
     List<CustomerDto> findCustomerByUserIds(List<Long> userIds);
+    StoreOwnerDto findOwnerById(Long userId);
 }

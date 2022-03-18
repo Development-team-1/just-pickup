@@ -26,8 +26,8 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/customer/")
-    public ResponseEntity getCustomerByToken(@Valid @RequestHeader(value = "user-id") String userId ) {
+    @GetMapping("/customer")
+    public ResponseEntity getCustomerByToken(@Valid @RequestHeader(value="user-id") String userId) {
 
         CustomerDto customerDto = userService.findCustomerByUserId(Long.parseLong(userId));
 
@@ -87,6 +87,26 @@ public class UserController {
             this.userId = customerDto.getId();
             this.userName = customerDto.getName();
             this.phoneNumber = customerDto.getPhoneNumber();
+        }
+    }
+
+    @GetMapping("/store-owner")
+    public ResponseEntity<Result> getStoreOwnerByToken(@RequestHeader(value="user-id") String userHeader) {
+        Long userId = Long.valueOf(userHeader);
+
+        StoreOwnerDto storeOwnerDto = userService.findOwnerById(userId);
+
+        return ResponseEntity.ok(Result.createSuccessResult(storeOwnerDto));
+    }
+
+    @Data
+    static class StoreOwnerByTokenResponse {
+        private Long id;
+        private String name;
+
+        public StoreOwnerByTokenResponse(StoreOwnerDto dto) {
+            this.id = dto.getId();
+            this.name = dto.getName();
         }
     }
 
