@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <side-bar :drawer="drawer"></side-bar>
+    <side-bar :drawer="drawer" @drawerEvent="drawer = !drawer"></side-bar>
     <top-bar @drawerEvent="drawer = !drawer"
               :notificationCounts="notificationCounts"/>
     <v-main style="background: #f5f5f540">
