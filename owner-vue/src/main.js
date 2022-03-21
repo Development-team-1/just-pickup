@@ -57,6 +57,8 @@ axios.interceptors.response.use(
        }
       window.location.href = "/";
       alert("권한이 없습니다. 다시 로그인해주세요.");
+    } else {
+      if (error.response.data.message) alert(error.response.data.message);
     }
     return Promise.reject(error);
   }

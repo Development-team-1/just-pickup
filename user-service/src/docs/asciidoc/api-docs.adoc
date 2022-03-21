@@ -76,6 +76,4 @@ operation::customers-get[snippets='curl-request,http-request,http-response,path-
 
 == 점주
 === 회원가입 - 점주
-operation::storeOwner-post[snippets='curl-request,http-request,http-response,request-fields,response-fields']
-=== 회원가입 - 점주 : 중복 이메일
-operation::storeOwner-post-duplicateUserEmailException[snippets='curl-request,http-request,http-response,request-fields,response-fields']
+operation::api-owner-post-store-owner[snippets='curl-request,http-request,http-response,request-fields']

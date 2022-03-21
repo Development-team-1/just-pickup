@@ -1,8 +1,23 @@
 import jwt from '../common/jwt.js';
 
 export default {
-  requestRegisterUser(user) {
-    return axios.post(process.env.VUE_APP_USER_URL + "/store-owner", user);
+  requestRegisterUser(user, store) {
+    const param = {
+      email: user.email,
+      password: user.password,
+      name: user.name,
+      phoneNumber: user.phoneNumber,
+      businessNumber: user.businessNumber,
+
+      storeName: store.storeName,
+      storePhoneNumber: store.storePhoneNumber,
+      address: store.storeAddress,
+      zipcode: store.zipcode,
+      latitude: store.latitude,
+      longitude: store.longitude,
+    }
+
+    return axios.post(process.env.VUE_APP_USER_URL + "/api/owner/store-owner", param);
   },
 
   async requestLoginUser(email, password) {

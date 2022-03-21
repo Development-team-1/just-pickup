@@ -89,7 +89,7 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user-service/store-owner
+            - Path=/user-service/api/owner/store-owner
             - Method=POST
           filters:
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}

@@ -1,5 +1,6 @@
 package com.justpickup.storeservice.domain.store.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.storeservice.config.TestConfig;
 import com.justpickup.storeservice.domain.store.dto.StoreByUserIdDto;
 import com.justpickup.storeservice.domain.store.service.StoreService;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -20,8 +22,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,6 +37,9 @@ class StoreOwnerApiControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @MockBean
     StoreService storeService;
@@ -70,6 +75,48 @@ class StoreOwnerApiControllerTest {
                         )
                         ))
         ;
+    }
 
+    @Test
+    @DisplayName("[API] 점주 등록")
+    void postStore() throws Exception {
+        // GIVEN
+        StoreOwnerApiController.PostStoreRequest request = StoreOwnerApiController.PostStoreRequest.builder()
+                .name("점주 이름")
+                .phoneNumber("010-1234-5678")
+                .address("서울특별시 마포구 용강동 123-1길")
+                .zipcode("129845")
+                .latitude(30.90199982)
+                .longitude(112.1298347)
+                .build();
+
+        Long userId = 1L;
+        String content = objectMapper.writeValueAsString(request);
+
+        // THEN
+        ResultActions actions = mockMvc.perform(post(url + "/owner/store")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("user-id", String.valueOf(userId))
+        );
+
+        // WHEN
+        actions.andExpect(status().isCreated())
+                .andDo(print())
+                .andDo(document("api-post-store",
+                        requestHeaders(
+                                headerWithName("user-id").description("JWT 유저 고유 번호")
+                        ),
+                        requestFields(
+                                fieldWithPath("name").description("매징 이름"),
+                                fieldWithPath("phoneNumber").description("매장 번호"),
+                                fieldWithPath("address").description("매장 주소"),
+                                fieldWithPath("zipcode").description("매장 우편번호"),
+                                fieldWithPath("latitude").description("위도"),
+                                fieldWithPath("longitude").description("경도")
+                        )
+                ))
+        ;
     }
 }
