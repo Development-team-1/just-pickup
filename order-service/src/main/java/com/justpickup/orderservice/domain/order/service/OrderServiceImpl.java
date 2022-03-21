@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 import static com.justpickup.orderservice.domain.order.dto.OrderDetailDto.*;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
@@ -246,37 +247,41 @@ public class OrderServiceImpl implements OrderService {
         GetCustomerResponse customerInfo = userClient.getCustomerById(order.getUserId()).getData();
 
         Set<Long> itemIds = new HashSet<>();
-        Set<Long> itemOptionIds = new HashSet<>();
 
         // 아이템 이름 및 옵션 이름 가져오기
         for (OrderItem orderItem : orderItemsWithOptions) {
             itemIds.add(orderItem.getItemId());
-            for (OrderItemOption orderItemOption : orderItem.getOrderItemOptions()) {
-                itemOptionIds.add(orderItemOption.getItemOptionId());
-            }
         }
 
-        Map<Long, String> itemNameMap = storeClient.getItemNameMap(itemIds);
-        Map<Long, ItemOptionsResponse> itemOptionMap = storeClient.getItemOptionMap(itemOptionIds);
+        Map<Long, GetItemResponse> itemAndItemOptionMap = storeClient.getItemAndItemOptionMap(itemIds);
 
         List<OrderDetailItem> orderDetailItems = orderItemsWithOptions.stream()
                 .map(orderItem -> {
                     // 주문 상세 옵션 생성
+                    GetItemResponse itemResponse = itemAndItemOptionMap.get(orderItem.getItemId());
+
+                    // 아이템 옵션 맵 생성
+                    Map<Long, GetItemResponse.ItemOptionDto> itemOptionMap = itemResponse.getItemOptions().stream()
+                            .collect(
+                                    toMap(GetItemResponse.ItemOptionDto::getId, itemOptionDto -> itemOptionDto)
+                            );
+
                     List<OrderDetailItemOption> orderDetailItemOptions = orderItem.getOrderItemOptions()
                             .stream()
                             .map(orderItemOption -> {
                                 // 옵션 아이디에 해당하는 아이템 옵션 객체 가져오기
-                                ItemOptionsResponse itemOptionsResponse = itemOptionMap.get(orderItemOption.getItemOptionId());
+                                GetItemResponse.ItemOptionDto itemOptionDto =
+                                        itemOptionMap.get(orderItemOption.getItemOptionId());
 
                                 return OrderDetailItemOption.of(
                                         orderItemOption,
-                                        itemOptionsResponse.getName(),
-                                        itemOptionsResponse.getOptionType()
+                                        itemOptionDto.getName(),
+                                        itemOptionDto.getOptionType()
                                 );
                             })
                             .collect(toList());
                     // 아이템 아이디에 해당하는 아이템 이름 가져오기
-                    String itemName = itemNameMap.get(orderItem.getItemId());
+                    String itemName = itemResponse.getName();
                     return OrderDetailItem.of(orderItem, itemName, orderDetailItemOptions);
                 })
                 .collect(toList());
