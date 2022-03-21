@@ -83,6 +83,9 @@ operation::prevOrder-get[snippets='curl-request,http-request,http-response,reque
 === 점주 서비스 - 지난 주문 페이지 (잘못된 파라미터 형식)
 operation::prevOrder-get-BindException[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
 
+=== 점주 서비스 - 대쉬보드
+operation::owner-findDashboard[snippets='curl-request,http-request,http-response,request-headers,response-fields']
+
 == Just Pick-up
 === 주문 내역 페이지
 operation::api-customer-order-history[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
