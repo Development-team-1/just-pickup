@@ -24,10 +24,16 @@ const authCheck = async function (to, from, next) {
 };
 const routes = [
   {
-    path: '/order',
-    redirect: 'order',
+    path: '/',
+    redirect: 'dashboard',
     component: DashboardLayout,
     children: [
+      {
+        path: '/dashboard',
+        name: 'dashboard',
+        beforeEnter: authCheck,
+        component: () => import('./../views/HomeDashBoard')
+      },
       {
         path: '/category',
         name: 'category',
@@ -61,7 +67,7 @@ const routes = [
     ]
   },
   {
-    path: '/',
+    path: '/login',
     redirect: 'login',
     component: AuthLayout,
     children: [

@@ -25,5 +25,8 @@ export default {
             orderStatus: orderStatus
         }
         return axios.patch(process.env.VUE_APP_OWNER_SERVICE_BASEURL + "/order-service/order/" + orderId, body);
+    },
+    findDashboard(){
+        return axios.get(process.env.VUE_APP_API_URL + "/order/dashboard");
     }
 }
