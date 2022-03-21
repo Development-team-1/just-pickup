@@ -1,9 +1,6 @@
 package com.justpickup.storeservice.domain.store.service;
 
-import com.justpickup.storeservice.domain.store.dto.SearchStoreCondition;
-import com.justpickup.storeservice.domain.store.dto.SearchStoreResult;
-import com.justpickup.storeservice.domain.store.dto.StoreByUserIdDto;
-import com.justpickup.storeservice.domain.store.dto.StoreDto;
+import com.justpickup.storeservice.domain.store.dto.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 
@@ -15,4 +12,5 @@ public interface StoreService {
     StoreDto findStoreById(Long storeId);
     StoreByUserIdDto findStoreByUserId(Long userId);
     List<StoreDto> findStoreAllById(Iterable<Long> storeIds);
+    PostStoreDto saveStore(PostStoreDto postStoreDto);
 }

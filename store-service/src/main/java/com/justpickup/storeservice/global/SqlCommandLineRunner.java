@@ -116,7 +116,7 @@ public class SqlCommandLineRunner implements CommandLineRunner {
             List<Item> items = List.of(아메리카노, 카페라떼, 카페모카, 콜드브루, 녹차라떼, 딸기라떼, 녹차, 히비스커스);
             itemRepository.saveAll(items);
 
-            items.forEach(item -> store.addItem(item));
+            items.forEach(store::addItem);
         });
     }
 
@@ -136,37 +136,41 @@ public class SqlCommandLineRunner implements CommandLineRunner {
     void createStores(StoreRepository storeRepository, List<Store> stores) {
         stores.add(
                 Store.of(
-                        new Address("서울시", "마포구 도화동", "201-20"),
+                        new Address("서울시 마포구 도화동", "201-20"),
                         Map.of(37.5398271003404, 126.94769672415691),
                         1L,
-                        "커피온리 마포역점"
+                        "커피온리 마포역점",
+                        "010-1234-5678"
                 )
         );
 
         stores.add(
                 Store.of(
-                        new Address("서울시", "마포구 도화동", "50-10"),
+                        new Address("서울시 마포구 도화동",  "50-10"),
                         Map.of(37.54010719003089, 126.94556661330861),
                         2L,
-                        "만랩커피 마포점"
+                        "만랩커피 마포점",
+                        "010-1234-5678"
                 )
         );
 
         stores.add(
                 Store.of(
-                        new Address("서울시", "마포구 도화동", "555"),
+                        new Address("서울시 마포구 도화동",  "555"),
                         Map.of(37.539797393793755, 126.9453578838543),
                         3L,
-                        "이디야커피 마포오벨리스크점"
+                        "이디야커피 마포오벨리스크점",
+                        "010-1234-5678"
                 )
         );
 
         stores.add(
                 Store.of(
-                        new Address("서울시", "영등포구 도림로", "31길 2"),
+                        new Address("서울시 영등포구 도림로",  "31길 2"),
                         Map.of(37.493033141569505, 126.89593667847592),
                         4L,
-                        "이디야커피 대림역점"
+                        "이디야커피 대림역점",
+                        "010-1234-5678"
                 )
         );
 

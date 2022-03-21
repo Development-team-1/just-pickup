@@ -1,6 +1,8 @@
 package com.justpickup.userservice.domain.user.service;
 
 import com.justpickup.userservice.domain.user.dto.CustomerDto;
+import com.justpickup.userservice.domain.user.dto.PostOwnerDto;
+import com.justpickup.userservice.domain.user.dto.PostStoreDto;
 import com.justpickup.userservice.domain.user.dto.StoreOwnerDto;
 import com.justpickup.userservice.domain.user.entity.Customer;
 import com.justpickup.userservice.domain.user.entity.StoreOwner;
@@ -10,13 +12,13 @@ import com.justpickup.userservice.domain.user.exception.NotExistUserException;
 import com.justpickup.userservice.domain.user.repository.CustomerRepository;
 import com.justpickup.userservice.domain.user.repository.StoreOwnerRepository;
 import com.justpickup.userservice.domain.user.repository.UserRepository;
+import com.justpickup.userservice.global.client.store.StoreClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +37,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final CustomerRepository customerRepository;
     private final StoreOwnerRepository storeOwnerRepository;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final StoreClient storeClient;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -56,22 +58,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    @Transactional
-    public void saveStoreOwner(StoreOwnerDto storeOwnerDto) {
-        String email = storeOwnerDto.getEmail();
-        boolean exists = userRepository.existsByEmail(email);
-
-        if (exists) throw new DuplicateUserEmail(email + "은 중복된 이메일입니다.");
-
-        String encode = passwordEncoder.encode(storeOwnerDto.getPassword());
-
-        StoreOwner storeOwner = new StoreOwner(email, encode, storeOwnerDto.getName(),
-                storeOwnerDto.getPhoneNumber(), storeOwnerDto.getBusinessNumber());
-
-        userRepository.save(storeOwner);
-    }
-
-    @Override
     public List<CustomerDto> findCustomerByUserIds(List<Long> userIds) {
         return customerRepository.findAllById(userIds)
                 .stream()
@@ -87,4 +73,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return StoreOwnerDto.of(storeOwner);
     }
 
+    @Transactional
+    @Override
+    public void saveStoreOwner(PostOwnerDto postOwnerDto, PostStoreDto postStoreDto) {
+
+        StoreOwner storeOwner = postOwnerDto.toStoreOwner();
+
+        String email = storeOwner.getEmail();
+        if (userRepository.existsByEmail(email)) {
+            throw new DuplicateUserEmail(email + "은 중복된 이메일 입니다.");
+        }
+
+        StoreOwner savedOwner = storeOwnerRepository.save(storeOwner);
+
+        Long userId = savedOwner.getId();
+        storeClient.postStore(postStoreDto.toPostStoreRequest(), userId);
+
+    }
 }

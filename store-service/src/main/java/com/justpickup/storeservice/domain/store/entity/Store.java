@@ -68,12 +68,13 @@ public class Store extends BaseEntity {
         item.setStore(this);
     }
 
-    public static Store of(Address address, Map map, Long userId, String name) {
+    public static Store of(Address address, Map map, Long userId, String name, String phoneNumber) {
         Store store = new Store();
         store.address = address;
         store.map = map;
         store.userId = userId;
         store.name = name;
+        store.phoneNumber = phoneNumber;
         return store;
     }
 }

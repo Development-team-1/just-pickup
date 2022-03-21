@@ -2,9 +2,8 @@ package com.justpickup.userservice.global.security;
 
 import com.justpickup.userservice.domain.jwt.service.OAuthService;
 import com.justpickup.userservice.domain.jwt.service.RefreshTokenServiceImpl;
-import com.justpickup.userservice.global.utils.JwtTokenProvider;
-import com.justpickup.userservice.domain.user.service.UserService;
 import com.justpickup.userservice.global.utils.CookieProvider;
+import com.justpickup.userservice.global.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,16 +13,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder bCryptPasswordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenServiceImpl refreshTokenServiceImpl;
     private final CookieProvider cookieProvider;

@@ -27,6 +27,8 @@ public class GlobalExceptionHandler {
         HttpStatus status = ce.getStatus();
         Result errorResult = ce.getErrorResult();
 
+        log.warn("[CustomException] {}, {}", status, errorResult);
+
         return ResponseEntity.status(status)
                 .body(errorResult);
     }
