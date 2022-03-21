@@ -11,11 +11,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -109,37 +110,4 @@ public class UserController {
             this.name = dto.getName();
         }
     }
-
-    @PostMapping("/store-owner")
-    public ResponseEntity<Result> joinStoreOwner(@Valid @RequestBody JoinStoreOwnerRequest joinRequest) {
-        // 회원 가입
-        userService.saveStoreOwner(joinRequest.toStoreOwnerDto());
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Result.createSuccessResult(null));
-    }
-
-    @Data @NoArgsConstructor @AllArgsConstructor
-    static class JoinStoreOwnerRequest {
-        @Email(message = "email 형식이 아닙니다.")
-        @NotEmpty
-        private String email;
-        @NotEmpty
-        private String password;
-        @NotEmpty
-        private String name;
-        @NotEmpty
-        private String phoneNumber;
-        @NotEmpty
-        private String businessNumber;
-
-        public StoreOwnerDto toStoreOwnerDto() {
-            return StoreOwnerDto.builder()
-                    .email(email).password(password).name(name)
-                    .password(password).businessNumber(businessNumber)
-                    .build();
-        }
-    }
-
-
 }

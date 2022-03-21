@@ -4,6 +4,7 @@ import com.justpickup.userservice.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 
@@ -31,7 +32,7 @@ public abstract class User extends BaseEntity {
 
     public User(String email, String password, String name, String phoneNumber) {
         this.email = email;
-        this.password = password;
+        this.password = new BCryptPasswordEncoder().encode(password);
         this.name = name;
         this.phoneNumber = phoneNumber;
     }
