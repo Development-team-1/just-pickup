@@ -1,11 +1,14 @@
 package com.justpickup.orderservice.domain.order.repository;
 
+import com.justpickup.orderservice.domain.order.dto.DashBoardDto;
 import com.justpickup.orderservice.domain.order.dto.OrderMainResult;
 import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
 import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
 import com.justpickup.orderservice.domain.order.entity.Order;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.ConstantImpl;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -137,5 +140,76 @@ public class OrderRepositoryCustom {
                             .fetchOne());
 
     }
+
+    public List<DashBoardDto.OrderPrice> salesAmountBetweenADay(Long storeId){
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime startTime = LocalDateTime.of(today.getYear(),today.getMonth(),today.getDayOfMonth(),0,0);
+
+        return queryFactory
+                .select(Projections.fields(DashBoardDto.OrderPrice.class,
+                            order.orderPrice
+                        ))
+                .from(order)
+                .where(
+                          order.storeId.eq(storeId)
+                    .and( order.orderTime.between(startTime,today))
+                ).fetch();
+    }
+
+    public DashBoardDto.BestSellItem bestItemBetweenAWeek(Long storeId){
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime startTime = LocalDateTime.of(today.getYear(),
+                today.getMonth(),
+                today.getDayOfMonth(),
+                0,0)
+                .minusDays(7);
+
+        return queryFactory.
+                select(
+                        Projections.fields(DashBoardDto.BestSellItem.class,
+                                orderItem.itemId.as("itemId"),
+                                orderItem.count.sum().as("sumCounts")
+                       )
+                )
+                .from(orderItem)
+                .join(orderItem.order, order)
+                .where(orderItem.order.storeId.eq(storeId)
+                        .and(orderItem.order.orderTime.between(startTime,today)))
+                .groupBy(orderItem.itemId)
+                .orderBy(orderItem.count.sum().desc())
+                .limit(1L)
+                .fetchOne()
+        ;
+    }
+
+    public List<DashBoardDto.SellAmountAWeek> salesAmountBetweenAWeek(Long storeId){
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime startTime = LocalDateTime.of(today.getYear(),
+                        today.getMonth(),
+                        today.getDayOfMonth(),
+                        0,0)
+                .minusDays(7);
+
+
+        DateTimeTemplate formattedDate =
+                Expressions.dateTimeTemplate(LocalDateTime.class,
+                        "CAST({0} AS date) ", orderItem.order.orderTime );
+
+        return queryFactory.
+                select(
+                        Projections.fields(DashBoardDto.SellAmountAWeek.class,
+                                formattedDate.as("sellDate"),
+                                orderItem.price.sum().multiply(orderItem.count.sum()).as("sellAmount")
+                        )
+                )
+                .from(orderItem)
+                .join(orderItem.order, order)
+                .where(orderItem.order.storeId.eq(storeId)
+                        .and(orderItem.order.orderTime.between(startTime,today)))
+                .groupBy(formattedDate)
+                .fetch();
+
+    }
+
 
 }

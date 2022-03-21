@@ -1,9 +1,6 @@
 package com.justpickup.orderservice.domain.order.web;
 
-import com.justpickup.orderservice.domain.order.dto.OrderMainDto;
-import com.justpickup.orderservice.domain.order.dto.OrderSearchCondition;
-import com.justpickup.orderservice.domain.order.dto.PrevOrderDto;
-import com.justpickup.orderservice.domain.order.dto.PrevOrderSearch;
+import com.justpickup.orderservice.domain.order.dto.*;
 import com.justpickup.orderservice.domain.order.entity.OrderStatus;
 import com.justpickup.orderservice.domain.order.service.OrderService;
 import com.justpickup.orderservice.domain.order.validator.PrevOrderSearchValidator;
@@ -39,6 +36,15 @@ public class OrderOwnerApiController {
 
     private final OrderService orderService;
     private final PrevOrderSearchValidator prevOrderSearchValidator;
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<Result> dashboard( @RequestHeader(value="user-id") String userId) {
+
+        DashBoardDto dashboardDto = orderService.findDashboard(Long.valueOf(userId));
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Result.createSuccessResult(dashboardDto));
+    }
 
     @GetMapping("/order-main")
     public ResponseEntity<Result> orderMain(@Valid OrderSearchCondition condition,

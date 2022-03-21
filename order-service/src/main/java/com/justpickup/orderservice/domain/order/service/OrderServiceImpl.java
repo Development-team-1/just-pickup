@@ -14,6 +14,7 @@ import com.justpickup.orderservice.global.client.store.GetStoreResponse;
 import com.justpickup.orderservice.global.client.store.StoreByUserIdResponse;
 import com.justpickup.orderservice.global.client.store.StoreClient;
 import com.justpickup.orderservice.global.client.user.UserClient;
+import com.justpickup.orderservice.global.dto.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -234,4 +235,24 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(orderStatus);
     }
 
+    @Override
+    public DashBoardDto findDashboard(Long userId) {
+
+        Result<StoreByUserIdResponse> storeByUserId = storeClient.getStoreByUserId(userId);
+        Long storeId = storeByUserId.getData().getId();
+
+        // 하루 판매금액
+        List<DashBoardDto.OrderPrice> orderPrices = orderRepositoryCustom.salesAmountBetweenADay(storeId);
+
+        // 일주일 판매 상위메뉴
+        DashBoardDto.BestSellItem bestSellItem = orderRepositoryCustom.bestItemBetweenAWeek(storeId);
+        bestSellItem.setItemName(storeClient.getItem(bestSellItem.getItemId()).getData().getName());
+
+        // 일주일 판매금액( 일별 )
+        List<DashBoardDto.SellAmountAWeek> sellAmountAWeeks = orderRepositoryCustom.salesAmountBetweenAWeek(storeId);
+
+        log.info("asdad");
+
+        return DashBoardDto.of(orderPrices , bestSellItem, sellAmountAWeeks);
+    }
 }
