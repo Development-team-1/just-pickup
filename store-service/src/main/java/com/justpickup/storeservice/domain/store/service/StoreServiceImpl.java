@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,6 +72,7 @@ public class StoreServiceImpl implements StoreService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public PostStoreDto saveStore(PostStoreDto postStoreDto) {
         PostStoreDto._PostStoreAddress postStoreAddress = postStoreDto.getAddress();
