@@ -3,7 +3,6 @@ package com.justpickup.userservice.domain.user.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justpickup.userservice.config.TestConfig;
 import com.justpickup.userservice.domain.user.dto.CustomerDto;
-import com.justpickup.userservice.domain.user.exception.DuplicateUserEmail;
 import com.justpickup.userservice.domain.user.exception.NotExistUserException;
 import com.justpickup.userservice.domain.user.service.UserService;
 import com.justpickup.userservice.global.dto.Code;
@@ -20,8 +19,6 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.headers.HeaderDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -29,15 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -183,74 +178,6 @@ class UserControllerTest {
                         )
                         ))
                 ;
-    }
-
-    @Test
-    @DisplayName("회원가입 - 점주")
-    void registerStoreOwner() throws Exception {
-        UserController.JoinStoreOwnerRequest requestBody =
-                new UserController.JoinStoreOwnerRequest("test@naver.com", "1234", "Park",
-                        "010-1234-5678", "1234");
-
-        ResultActions actions = mockMvc.perform(post("/store-owner")
-                .content(objectMapper.writeValueAsString(requestBody))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        );
-
-        actions.andExpect(status().isCreated())
-                .andDo(print())
-                .andDo(document("storeOwner-post",
-                        requestFields(
-                                fieldWithPath("email").description("이메일"),
-                                fieldWithPath("password").description("비밀번호"),
-                                fieldWithPath("name").description("이름"),
-                                fieldWithPath("phoneNumber").description("휴대폰번호"),
-                                fieldWithPath("businessNumber").description("사업자등록번호")
-                        ),
-                        responseFields(
-                                fieldWithPath("code").description("결과코드 SUCCESS/ERROR"),
-                                fieldWithPath("message").description("메시지"),
-                                fieldWithPath("data").description("데이터")
-                        )
-                ))
-        ;
-    }
-
-    @Test
-    @DisplayName("회원가입 - 점주 : 존재하는 회원 이메일")
-    void registerStoreOwnerDuplicateUserEmailException() throws Exception {
-        String email = "test@naver.com";
-        UserController.JoinStoreOwnerRequest requestBody =
-                new UserController.JoinStoreOwnerRequest(email, "1234", "Park",
-                        "010-1234-5678", "1234");
-
-        willThrow(new DuplicateUserEmail(email + "은 중복된 이메일입니다."))
-                .given(userService).saveStoreOwner(any());
-
-        ResultActions actions = mockMvc.perform(post("/store-owner")
-                .content(objectMapper.writeValueAsString(requestBody))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        );
-
-        actions.andExpect(status().isConflict())
-                .andDo(print())
-                .andDo(document("storeOwner-post-duplicateUserEmailException",
-                        requestFields(
-                                fieldWithPath("email").description("이메일"),
-                                fieldWithPath("password").description("비밀번호"),
-                                fieldWithPath("name").description("이름"),
-                                fieldWithPath("phoneNumber").description("휴대폰번호"),
-                                fieldWithPath("businessNumber").description("사업자등록번호")
-                        ),
-                        responseFields(
-                                fieldWithPath("code").description("결과코드 SUCCESS/ERROR"),
-                                fieldWithPath("message").description("메시지"),
-                                fieldWithPath("data").description("데이터")
-                        )
-                ))
-        ;
     }
 
     @Test
