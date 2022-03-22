@@ -9,8 +9,9 @@
     <v-app-bar-nav-icon @click="$router.back()">
       <v-icon>mdi-arrow-left</v-icon>
     </v-app-bar-nav-icon>
+
     <v-spacer></v-spacer>
-    <v-toolbar-title>
+    <v-toolbar-title style="position: absolute; left: 50%; transform:translateX(-50%);">
       <v-img :src="require('@/assets/just-logo.png')"></v-img>
     </v-toolbar-title>
     <v-spacer></v-spacer>
