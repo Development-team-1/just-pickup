@@ -30,7 +30,7 @@ public class OrderController {
     public ResponseEntity<Result> patchOrder(@PathVariable("orderId") Long orderId,
                                              @RequestBody PatchOrderRequest patchOrderRequest) {
         OrderStatus orderStatus = patchOrderRequest.getOrderStatus();
-        if (orderStatus == OrderStatus.PENDING && orderStatus == OrderStatus.FAILED) {
+        if (orderStatus == OrderStatus.PENDING || orderStatus == OrderStatus.FAILED) {
             throw new OrderException(orderStatus.getMessage() + "는 변경 불가능합니다.");
         }
 
@@ -48,22 +48,25 @@ public class OrderController {
     public ResponseEntity<Result> getOrderDetail(@PathVariable Long orderId) {
 
         OrderDetailDto orderDetail = orderService.findOrderDetail(orderId);
-
         return ResponseEntity.ok(Result.createSuccessResult(new OrderDetailResponse(orderDetail)));
     }
 
     @Data @NoArgsConstructor @AllArgsConstructor
     static class OrderDetailResponse {
         private Long id;
+        private OrderStatus orderStatus;
         private String orderTime;
         private Long orderPrice;
+        private String storeName;
         private OrderDetailUserResponse user;
         private List<OrderDetailItemResponse> orderItems = new ArrayList<>();
 
         public OrderDetailResponse(OrderDetailDto dto) {
             this.id = dto.getId();
-            this.orderTime = dto.getOrderTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            this.orderStatus = dto.getOrderStatus();
+            this.orderTime = dto.getOrderTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
             this.orderPrice = dto.getOrderPrice();
+            this.storeName = dto.getStoreName();
             this.user = new OrderDetailUserResponse(dto.getUser());
             this.orderItems = dto.getOrderItems().stream()
                     .map(OrderDetailItemResponse::new)

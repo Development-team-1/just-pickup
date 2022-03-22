@@ -243,8 +243,7 @@ public class OrderServiceImpl implements OrderService {
 
         List<OrderItem> orderItemsWithOptions = orderItemRepositoryCustom.getOrderItemsWithOptions(order.getId());
 
-        // 고객 정보 가져오기
-        GetCustomerResponse customerInfo = userClient.getCustomerById(order.getUserId()).getData();
+
 
         Set<Long> itemIds = new HashSet<>();
 
@@ -286,6 +285,9 @@ public class OrderServiceImpl implements OrderService {
                 })
                 .collect(toList());
 
+        // 고객 정보 가져오기
+        GetCustomerResponse customerInfo = userClient.getCustomerById(order.getUserId()).getData();
+
         // 주문한 사용자 정보 생성
         OrderDetailUser orderDetailUser = OrderDetailUser.builder()
                 .id(customerInfo.getUserId())
@@ -293,7 +295,10 @@ public class OrderServiceImpl implements OrderService {
                 .name(customerInfo.getUserName())
                 .build();
 
-        return OrderDetailDto.of(order, orderDetailItems, orderDetailUser);
+        // 매장 정보 가져오기
+        GetStoreResponse storeInfo = storeClient.getStore(String.valueOf(order.getStoreId())).getData();
+
+        return OrderDetailDto.of(order, storeInfo.getName(), orderDetailItems, orderDetailUser);
     }
 
 }
