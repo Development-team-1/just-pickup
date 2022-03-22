@@ -29,7 +29,7 @@ export default {
   props: ["drawer"],
   data() {
     return {
-      drawer_sidebar:false,
+      drawer_sidebar:null,
       links: [
         {name: "지난 주문", url: "/prev-order", icon: "mdi-clipboard-check-outline"},
         {name: "카테고리", url: "/category", icon: "mdi-shape-outline"},
