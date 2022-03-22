@@ -12,7 +12,7 @@
           </div>
         </v-list-item-title>
         <v-list-item-subtitle class="mb-5">
-          {{ card.orderStatus }}
+          {{ card.orderStatus | getOrderStatusName }}
         </v-list-item-subtitle>
         <div class="text-body-1 mb-5">
           {{ card.orderItemNames }}
@@ -50,6 +50,7 @@ export default {
   name: "OrderHistoryCard",
   props: {
     card: {
+      orderId: String,
       storeId: Number,
       storeName: String,
       orderTime: String,
@@ -66,7 +67,10 @@ export default {
       })
     },
     clickDetail: function() {
-      alert("준비 중입니다.");
+      this.$router.push({
+        name: "order-detail",
+        params: {orderId: this.card.orderId}
+      });
     }
   }
 }
