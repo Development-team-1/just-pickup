@@ -162,7 +162,9 @@ export default {
         categoryId: 0,
         categoryList : [],
         requiredOption : [],
-        otherOption : []
+        requiredOptionItems : [],
+        otherOption : [],
+        otherOptionItems : []
       }
 
       store.getCategoryList()
@@ -184,10 +186,14 @@ export default {
           vm.modalData.itemPrice = item.price;
           vm.modalData.categoryId = item.categoryId;
           item.itemOptions.forEach(function(ele){
-            if(ele.optionType === "REQUIRED")
+            if(ele.optionType === "REQUIRED"){
               vm.modalData.requiredOption.push(ele)
-            else
+              vm.modalData.requiredOptionItems.push(ele)
+            }
+            else{
               vm.modalData.otherOption.push(ele)
+              vm.modalData.otherOptionItems.push(ele)
+            }
           })
         });
     },
@@ -198,17 +204,46 @@ export default {
         method='put'
       else
         method='post'
-      store.saveItem(method,itemData);
+
+
+      var requiredOption = []
+      for (const ele of this.modalData.requiredOption) {
+        if(isNaN(ele)) {
+          requiredOption.push(ele)
+        }else{
+          const option = this.modalData.requiredOptionItems.find(value => value.id == ele)
+          requiredOption.push(option)
+        }
+      }
+
+      var otherOption = []
+      for (const ele of this.modalData.otherOption) {
+        if(isNaN(ele)) {
+          otherOption.push(ele)
+        }else{
+          const option = this.modalData.otherOptionItems.find(value => value.id == ele)
+          otherOption.push(option)
+        }
+      }
+
+      this.modalData.requiredOption = requiredOption
+      this.modalData.otherOption = otherOption
+      store.saveItem(method,itemData)
     },
     addItemOption:function (itemOptionValue,type){
       var item = {
         name:itemOptionValue,
         optionType:type
       }
-      if(type ==='REQUIRED')
+      if(type ==='REQUIRED'){
         this.modalData.requiredOption.push(item)
-      else
+        this.modalData.requiredOptionItems.push(item)
+      }
+      else{
         this.modalData.otherOption.push(item)
+        this.modalData.otherOptionItems.push(item)
+      }
+
     }
   },
 

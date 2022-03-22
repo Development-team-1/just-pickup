@@ -89,10 +89,23 @@ public class ItemServiceImpl implements ItemService {
 
         item.setItemNameAndPriceAndCategory(itemName,itemPrice,category);
 
+
+        //item에 해당하는 itemoption  전부조회
+        List<ItemOption> byItem = itemOptionRepository.findByItem(item);
+
+        //itemOptionDtos 없는 itemOption 전부 삭제
+        byItem.forEach(itemOption -> {
+            boolean isDeleted = true;
+            for ( ItemOptionDto itemOptionDto: itemOptionDtos) {
+                if(itemOption.getId().equals(itemOptionDto.getId())) isDeleted = false;
+            }
+            if(isDeleted) itemOptionRepository.delete(itemOption);
+        });
+
+        //id가 없으면 저장
         itemOptionDtos
                 .forEach(itemOptionDto -> {
-                    if(itemOptionDto.getId()!=null) return;
-                    if (itemOptionRepository.existsById(itemOptionDto.getId()))
+                    if(itemOptionDto.getId()==null)
                             itemOptionRepository.save(ItemOptionDto.createItemOption(itemOptionDto, item));
                 });
     }
