@@ -27,8 +27,10 @@ Vue.filter('getOrderStatusName', function (orderStatus) {
       return "픽업대기중";
     case "FINISHED":
       return "픽업완료됨";
+    case "FAILED":
+      return "주문실패";
     default:
-      break;
+      return orderStatus;
   }
 });
 

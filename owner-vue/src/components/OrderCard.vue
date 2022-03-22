@@ -67,6 +67,13 @@
             </v-btn>
           </v-col>
         </v-row>
+        <v-row v-else-if="orderStatus === 'FAILED'">
+          <v-col>
+            <v-btn block disabled>
+              주문 실패
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-card-actions>
     </v-card>
   </div>

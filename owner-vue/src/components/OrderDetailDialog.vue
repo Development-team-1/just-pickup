@@ -21,6 +21,7 @@
       <v-card-text class="pa-12">
         <v-row>
           <v-col cols="12" sm="6">
+            <h1>{{orderInfo.storeName}}</h1><br>
             <h3>{{orderId}}. {{orderInfo.orderStatus | getOrderStatusName }}</h3><br>
             주문일시: {{ orderInfo.orderTime }}<br>
             주 문 자: {{ user.name }}<br>
@@ -131,7 +132,8 @@ export default {
         id: orderDetail.id,
         orderTime: orderDetail.orderTime,
         orderPrice: orderDetail.orderPrice,
-        orderStatus: orderDetail.orderStatus
+        orderStatus: orderDetail.orderStatus,
+        storeName: orderDetail.storeName
       };
 
       const orderItems = orderDetail.orderItems;
