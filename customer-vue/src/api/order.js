@@ -24,5 +24,8 @@ export default {
   getOrder() {
     return axios.get(process.env.VUE_APP_ORDER_API_URL + "/order/orders");
   },
+  deleteOrderItem(orderItemId){
+    return axios.delete(process.env.VUE_APP_ORDER_API_URL + "/orderItem/"+orderItemId);
+  }
 
 }

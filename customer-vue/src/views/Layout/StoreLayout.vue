@@ -8,17 +8,6 @@
         <router-view
             v-on:getStoreId="renderNavigation">
         </router-view>
-        <div align="right" >
-          <v-btn
-              color="primary"
-              dark
-              right
-              fab
-              @click="toOrder"
-          >
-            <v-icon>mdi-basket</v-icon>
-          </v-btn>
-        </div>
       </v-container>
     </v-main>
     <bottom-navigation></bottom-navigation>
@@ -56,11 +45,6 @@ export default {
 
       const response = await storeApi.requestStore(this.store.id);
       this.store = response.data.data;
-    },
-    toOrder(){
-      if(confirm("주문화면으로 이동할까요?")){
-        this.$router.push("/order")
-      }
     }
   }
 }

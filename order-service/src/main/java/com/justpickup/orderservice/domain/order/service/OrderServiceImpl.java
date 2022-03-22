@@ -175,12 +175,16 @@ public class OrderServiceImpl implements OrderService {
         //HARD_CODE
         Long userCouponId=0L;
 
+        Long countByUserIdAndOrderStatus = orderRepository.countByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
+        if(countByUserIdAndOrderStatus>=2) throw new OrderException("장바구니 데이터는 2건 이상 일 수 없습니다.");
+
         Optional<Order> optionalOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
         if(optionalOrder.isPresent()){
             if(!optionalOrder.get().addOrderItem(orderItem)
                     .getStoreId().equals(storeId))
                 throw new OrderException("장바구니에 여러 카페의 메뉴를 담을수 없습니다.");
         }else{
+
             orderRepository.save(Order.of(userId,userCouponId,storeId,orderItem));
         }
     }
@@ -189,6 +193,9 @@ public class OrderServiceImpl implements OrderService {
     public FetchOrderDto fetchOrder(Long userId) {
         Order order = orderRepositoryCustom.fetchOrderBasket(userId)
                 .orElseThrow(() -> new OrderException("장바구니 정보를 찾을 수 없습니다."));
+
+
+
         GetStoreResponse store = storeClient.getStore(String.valueOf(order.getStoreId())).getData();
 
         List<GetItemResponse> data = storeClient.getItemAndItemOptions(order.getOrderItems().stream()
@@ -252,8 +259,6 @@ public class OrderServiceImpl implements OrderService {
 
         // 일주일 판매금액( 일별 )
         List<DashBoardDto.SellAmountAWeek> sellAmountAWeeks = orderRepositoryCustom.salesAmountBetweenAWeek(storeId);
-
-        log.info("asdad");
 
         return DashBoardDto.of(orderPrices , bestSellItem, sellAmountAWeeks);
     }

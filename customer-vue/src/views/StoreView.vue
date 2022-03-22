@@ -54,6 +54,17 @@
         <br>
       </div>
     </div>
+    <div align="right" >
+      <v-btn
+          color="primary"
+          dark
+          right
+          fab
+          @click="toOrder"
+      >
+        <v-icon>mdi-basket</v-icon>
+      </v-btn>
+    </div>
   </div>
 </template>
 
@@ -94,6 +105,11 @@ export default {
     },
     itemDetail: function (itemId) {
       this.$router.push("/item/"+itemId)
+    },
+    toOrder(){
+      if(confirm("주문화면으로 이동할까요?")){
+        this.$router.push("/order")
+      }
     }
   }
 }

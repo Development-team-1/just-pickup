@@ -64,12 +64,12 @@ const routes = [
         name: 'notification',
         component: () => import('../views/NotificationView')
       },
-      {
-        path: "/item/:itemId",
-        beforeEnter: authCheck,
-        name: 'itemDetail',
-        component: () => import('../views/ItemDetail')
-      },
+      // {
+      //   path: "/item/:itemId",
+      //   beforeEnter: authCheck,
+      //   name: 'itemDetail',
+      //   component: () => import('../views/ItemDetail')
+      // },
       {
         path: "/order",
         beforeEnter: authCheck,
@@ -100,6 +100,19 @@ const routes = [
         beforeEnter: authCheck,
         component: () => import('../views/StoreView'),
         props: true
+      },
+    ]
+  },
+  {
+    path: '/item',
+    redirect: 'item',
+    component: StoreLayout,
+    children: [
+      {
+        path: "/item/:itemId",
+        beforeEnter: authCheck,
+        name: 'itemDetail',
+        component: () => import('../views/ItemDetail')
       },
     ]
   },
