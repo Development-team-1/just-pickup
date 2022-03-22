@@ -8,7 +8,7 @@
     <v-row>
       <v-col
         v-for=" orderItem in orderData.orderItemDtoList"
-        :key = "orderItem.itemId"
+        :key = "orderItem.id"
       >
         <v-card
             class="mx-auto mb-5"

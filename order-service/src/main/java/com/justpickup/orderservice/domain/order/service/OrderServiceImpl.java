@@ -161,7 +161,9 @@ public class OrderServiceImpl implements OrderService {
 
         //orderItemOption Entity를 생성한다.
         List<OrderItemOption> orderItemOptions = orderItemDto.getOrderItemOptionDtoList()
-                .stream().map(orderItemOptionDto -> OrderItemOption.of(orderItemDto.getId()))
+                .stream()
+                .filter(orderItemOptionDto -> orderItemOptionDto.getId()!=null)
+                .map(orderItemOptionDto -> OrderItemOption.of(orderItemOptionDto.getId()))
                 .collect(toList());
 
         //orderItem을 Entity를 생성한다.

@@ -116,7 +116,6 @@ export default {
         storeId:-1,
         itemId:-1,
         price:0,
-        requireOption:{},
         otherOptions:[],
       },
     }
