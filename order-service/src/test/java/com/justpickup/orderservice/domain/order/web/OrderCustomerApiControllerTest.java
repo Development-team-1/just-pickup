@@ -185,10 +185,13 @@ class OrderCustomerApiControllerTest {
                 new FetchOrderDto(2L,2L,12000L,"저스트카페"
                 ,List.of(
                         new FetchOrderDto.OrderItemDto(1L,1L,"카페라테",
-                                List.of(new GetItemResponse.ItemOptionDto(2L, OptionType.REQUIRED,"Hot")
-                                        ,new GetItemResponse.ItemOptionDto(2L, OptionType.OTHER,"샷추카")),3000L,32L)
+                                List.of(new FetchOrderDto.OrderItemDto.OrderItemOptionDto(2L, OptionType.REQUIRED,"Hot")
+                                        ,new FetchOrderDto.OrderItemDto.OrderItemOptionDto(2L, OptionType.OTHER,"샷추카"))
+                                ,3000L
+                                ,32L)
                         )
                 );
+
 
 
         given(orderService.fetchOrder(2L)).willReturn(fetchOrderDto);

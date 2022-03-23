@@ -25,7 +25,7 @@
               <div class="text-body-1 mb-5" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                 {{ orderItem.orderItemOptionDtoList   ?
                           orderItem.orderItemOptionDtoList.map(x=>x.name).join(', ')
-                          : null}}
+                          : null}} &nbsp;
               </div>
               <div class="text--primary">
                 합계 : <b> {{ orderItem.count * orderItem.price | currency}} 원</b>

@@ -191,20 +191,24 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public FetchOrderDto fetchOrder(Long userId) {
+
+        //장바구니
         Order order = orderRepositoryCustom.fetchOrderBasket(userId)
                 .orElseThrow(() -> new OrderException("장바구니 정보를 찾을 수 없습니다."));
 
 
-
+        // feign 통신 -> store 정보 가져옴
         GetStoreResponse store = storeClient.getStore(String.valueOf(order.getStoreId())).getData();
 
+        // feign 통신 -> item, option 정보 가져옴
         List<GetItemResponse> data = storeClient.getItemAndItemOptions(order.getOrderItems().stream()
                 .map(OrderItem::getItemId)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toUnmodifiableList())
         ).getData();
 
-        Map<Long, GetItemResponse> itemMap = data.stream().collect(
+        //itemAndOptionMap
+        Map<Long, GetItemResponse> itemOptionMap = data.stream().collect(
                 Collectors.toMap(
                         GetItemResponse::getId
                         , getItemResponse -> getItemResponse
@@ -215,7 +219,7 @@ public class OrderServiceImpl implements OrderService {
         List<FetchOrderDto.OrderItemDto> orderItemDtoList = order.getOrderItems()
                 .stream().map(orderItem ->
                         new FetchOrderDto.OrderItemDto(
-                                itemMap.get(orderItem.getItemId())
+                                itemOptionMap.get(orderItem.getItemId())
                                 ,orderItem))
                 .collect(Collectors.toList());
 
