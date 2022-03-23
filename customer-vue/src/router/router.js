@@ -82,6 +82,13 @@ const routes = [
         name: 'mypage',
         component: () => import('../views/MyPage')
       },
+      {
+        path: "/order-detail/:orderId",
+        beforeEnter: authCheck,
+        name: 'order-detail',
+        props: true,
+        component: () => import('../views/OrderDetail')
+      },
     ]
   },
   {

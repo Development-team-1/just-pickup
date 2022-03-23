@@ -112,9 +112,4 @@ public class Order extends BaseEntity {
     public void fail() {
         this.orderStatus = OrderStatus.FAILED;
     }
-
-
-    public void changeOrderDate(LocalDateTime orderTime){
-        this.orderTime = orderTime;
-    }
 }

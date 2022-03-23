@@ -25,6 +25,12 @@
         hide-default-footer
         class="elevation-1"
     >
+      <template v-slot:item.detail="{ item }">
+        <order-detail-dialog
+            :dialog="false"
+            :orderId="item.orderId"
+        ></order-detail-dialog>
+      </template>
     </v-data-table>
     <div class="text-center pt-2">
       <v-pagination
@@ -40,13 +46,15 @@
 import orderApi from '../api/order.js';
 
 import DatePicker from "@/components/DatePicker";
+import OrderDetailDialog from "@/components/OrderDetailDialog";
 
 const moment = require('moment');
 
 export default {
   name: "PrevOrder",
   components: {
-    'date-picker': DatePicker
+    'date-picker': DatePicker,
+    "order-detail-dialog": OrderDetailDialog
   },
   mounted: function() {
     this.search();
@@ -81,6 +89,7 @@ export default {
         { text: '주문상품', value: 'orderItemNames' },
         { text: '결제금액', value: 'orderPrice' },
         { text: '닉네임', value: 'userName' },
+        { text: '상세보기', value: 'detail', sortable: false}
       ],
       orders: [],
     }

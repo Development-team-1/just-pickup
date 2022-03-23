@@ -32,7 +32,7 @@ public interface StoreClient {
     Result<GetStoreResponse> getStore(@PathVariable(value = "storeId") String storeId);
 
     @GetMapping("/api/customer/items/{itemId}")
-    Result<List<GetItemResponse>> getItemAndItemOptions(@PathVariable(value = "itemId") List<Long> itemIds);
+    Result<List<GetItemResponse>> getItemAndItemOptions(@PathVariable(value = "itemId") Iterable<Long> itemIds);
 
     default Map<Long, String> getStoreNameMap(Set<Long> storeIds) {
         List<GetStoreResponse> storeResponses = this.getStoreAllById(storeIds).getData();
@@ -50,5 +50,11 @@ public interface StoreClient {
                 );
     }
 
-
+    default Map<Long, GetItemResponse> getItemAndItemOptionMap(Iterable<Long> itemIds) {
+        List<GetItemResponse> responses = this.getItemAndItemOptions(itemIds).getData();
+        return responses.stream()
+                .collect(
+                        toMap(GetItemResponse::getId, getItemsResponse -> getItemsResponse)
+                );
+    }
 }

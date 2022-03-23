@@ -67,6 +67,8 @@ domain-httpRequestCode-etc
 == 주문
 === 주문 수정
 operation::order-patch[snippets='curl-request,http-request,http-response,path-parameters,request-fields,response-fields']
+=== 주문 상세보기
+operation::api-orderDetail[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 
 == 점주 서비스
 === 주문 페이지

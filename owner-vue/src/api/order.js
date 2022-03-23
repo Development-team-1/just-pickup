@@ -28,5 +28,8 @@ export default {
     },
     findDashboard(){
         return axios.get(process.env.VUE_APP_API_URL + "/order/dashboard");
+    },
+    getOrderDetail(orderId) {
+        return axios.get(process.env.VUE_APP_OWNER_SERVICE_BASEURL + "/order-service/api/order-detail/" + orderId);
     }
 }

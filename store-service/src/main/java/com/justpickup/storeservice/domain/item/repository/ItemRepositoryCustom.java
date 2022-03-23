@@ -37,6 +37,7 @@ public class ItemRepositoryCustom {
         return queryFactory.selectFrom(item)
                 .join(item.itemOptions,itemOption).fetchJoin()
                 .where(item.id.in(itemIds))
+                .distinct()
                 .fetch();
 
     }

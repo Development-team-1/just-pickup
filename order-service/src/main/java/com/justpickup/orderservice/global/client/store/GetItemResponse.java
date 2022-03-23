@@ -4,7 +4,6 @@ import com.justpickup.orderservice.global.entity.Yn;
 import lombok.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
