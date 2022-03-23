@@ -8,7 +8,7 @@
     <v-row>
       <v-col
         v-for=" orderItem in orderData.orderItemDtoList"
-        :key = "orderItem.itemId"
+        :key = "orderItem.id"
       >
         <v-card
             class="mx-auto mb-5"
@@ -25,7 +25,7 @@
               <div class="text-body-1 mb-5" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                 {{ orderItem.orderItemOptionDtoList   ?
                           orderItem.orderItemOptionDtoList.map(x=>x.name).join(', ')
-                          : null}}
+                          : null}} &nbsp;
               </div>
               <div class="text--primary">
                 합계 : <b> {{ orderItem.count * orderItem.price | currency}} 원</b>
@@ -40,7 +40,7 @@
           </v-list-item>
 
           <v-card-actions class="pb-2">
-            <v-btn block color="warning" @click="message('준비중입니다.')">삭제하기</v-btn>
+            <v-btn block color="warning" @click="deleteOrderItem(orderItem)">삭제하기</v-btn>
           </v-card-actions>
 
         </v-card>
@@ -98,7 +98,6 @@ export default {
     getOrder: function(){
       orderApi.getOrder()
           .then(response=>{
-            console.log(response)
             this.orderData=response.data.data
           })
           .catch(error=>{
@@ -107,9 +106,27 @@ export default {
             console.log(error.response)
           })
     },
-    message: function(message){
-      alert(message)
-    }
+    deleteOrderItem: function(orderItem){
+      var vm = this
+      const deleteOrderItemId = orderItem.id
+      console.log(deleteOrderItemId)
+      orderApi.deleteOrderItem(deleteOrderItemId)
+          .then(response=>{
+            console.log(response)
+            alert(response.data.data+"삭제되었습니다.")
+            vm.orderData.orderPrice -=orderItem.price
+            vm.orderData.orderItemDtoList.splice(
+                vm.orderData.orderItemDtoList.indexOf(orderItem),1
+            )
+            if(vm.orderData.orderItemDtoList.length ==0)
+              this.$router.back()
+          })
+          .catch(error=>{
+            alert("문제가 발생하였습니다.")
+            console.log(error.response)
+          })
+
+    },
   }
 }
 </script>

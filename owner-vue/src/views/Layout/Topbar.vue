@@ -33,7 +33,7 @@
                 <v-icon>mdi-account-circle</v-icon>
               </v-avatar>
             </v-badge>
-            <span class="ml-3">{{ userName }}</span>
+            <span class="ml-3">{{ userInfo.name }}</span>
           </v-chip>
         </span>
       </template>
@@ -44,7 +44,7 @@
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title>{{ userName }}</v-list-item-title>
+            <v-list-item-title>{{ userInfo.name }}</v-list-item-title>
             <v-list-item-subtitle>Logged In</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -63,27 +63,13 @@
 </template>
 
 <script>
-import userApi from "../../api/user";
 import authApi from "../../api/auth";
 
 export default {
   name: "Topbar",
-  props: ["notificationCounts"],
-  data() {
-    return {
-      userName: '',
-    };
-  },
-  async mounted() {
-    // 사용자 정보 가져오기
-    const data = await this.getUserInfo();
-    this.userName = data.name;
-  },
+  props: ["notificationCounts","userInfo"],
   methods: {
-    getUserInfo: async function() {
-      const response = await userApi.requestUserInfo();
-      return response.data.data;
-    },
+
     logout: async function() {
       await authApi.logout();
     },

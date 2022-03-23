@@ -24,7 +24,7 @@ public class ItemRepositoryCustom {
 
     public Optional<Item> fetchItem(Long itemId){
         Item fetchItem = queryFactory.selectFrom(item)
-                .join(item.itemOptions, itemOption).fetchJoin()
+                .leftJoin(item.itemOptions, itemOption).fetchJoin()
                 .join(item.category,category).fetchJoin()
                 .where(item.id.eq(itemId))
                 .fetchOne();

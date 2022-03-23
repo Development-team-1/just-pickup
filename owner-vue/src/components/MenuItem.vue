@@ -38,6 +38,7 @@
                 md="12"
             >
               <v-text-field
+                  type="number"
                   v-model="modalData.itemPrice"
                   :rules="[() => !!modalData.itemPrice || 'This field is required']"
                   label="가격*"
@@ -65,7 +66,7 @@
             >
               <v-select
                   v-model="modalData.requiredOption"
-                  :items="modalData.requiredOption"
+                  :items="modalData.requiredOptionItems"
                   item-text="name"
                   item-value="id"
                   label="필수 옵션*"
@@ -87,7 +88,7 @@
             >
               <v-select
                   v-model="modalData.otherOption"
-                  :items="modalData.otherOption"
+                  :items="modalData.otherOptionItems"
                   item-text="name"
                   item-value="id"
                   label="기타 옵션"

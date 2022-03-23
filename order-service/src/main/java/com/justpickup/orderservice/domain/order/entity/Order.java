@@ -43,7 +43,7 @@ public class Order extends BaseEntity {
     private Transaction transaction;
 
     @BatchSize(size = 100)
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     public static Order of(Long userId, Long userCouponId, Long storeId, OrderItem orderItem) {
@@ -83,6 +83,13 @@ public class Order extends BaseEntity {
         return this;
     }
 
+    public Order deleteOrderItem(OrderItem orderItem) {
+        this.orderPrice -= orderItem.getTotalPrice();
+        this.orderItems.remove(orderItem);
+
+        return this;
+    }
+
     public void setOrderStatus(OrderStatus orderStatus){
         this.orderStatus = orderStatus;
     }
@@ -104,9 +111,5 @@ public class Order extends BaseEntity {
 
     public void fail() {
         this.orderStatus = OrderStatus.FAILED;
-    }
-
-    public void changOrderTime(LocalDateTime orderTime) {
-        this.orderTime = orderTime;
     }
 }

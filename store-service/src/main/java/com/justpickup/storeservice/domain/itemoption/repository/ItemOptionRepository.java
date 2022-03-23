@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface ItemOptionRepository extends JpaRepository<ItemOption,Long> {
 
+    List<ItemOption> findByItem(Item item);
 }

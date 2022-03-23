@@ -44,7 +44,7 @@ export default {
   name: "LoginUser",
   mounted() {
     if (false == jwt.isExpired()) {
-      this.$router.push('/order');
+      this.$router.push('/');
     }
   },
   data: function() {
@@ -62,7 +62,7 @@ export default {
 
       const flag = await userApi.requestLoginUser(this.email, this.password);
 
-      if (flag) await this.$router.push('/order');
+      if (flag) await this.$router.push('/');
     }
   }
 }

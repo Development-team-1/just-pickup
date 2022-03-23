@@ -320,4 +320,54 @@ class OrderOwnerApiControllerTest {
                 ))
         ;
     }
+
+    @Test
+    @DisplayName("점주 서비스 - 대쉬보드")
+    void findDashboard() throws Exception {
+        // GIVEN
+
+        given(orderService.findDashboard(1L))
+                .willReturn(
+                        DashBoardDto.builder()
+                        .salesAmount(1237801239L)
+                        .bestSellItem(new DashBoardDto.BestSellItem(40L,"까메리카노",3217L))
+                        .sellAmountAWeeks(
+                                List.of(new DashBoardDto.SellAmountAWeek("2022-03-22",1235L),
+                                        new DashBoardDto.SellAmountAWeek("2022-03-23",235L),
+                                        new DashBoardDto.SellAmountAWeek("2022-03-24",2235L),
+                                        new DashBoardDto.SellAmountAWeek("2022-03-25",1635L),
+                                        new DashBoardDto.SellAmountAWeek("2022-03-26",35L),
+                                        new DashBoardDto.SellAmountAWeek("2022-03-27",635L))
+                        )
+                        .build()
+                );
+        // THEN
+        ResultActions actions = mockMvc.perform(get(url + "/dashboard")
+                .header("user-id", "1")
+        );
+
+        // WHEN
+        actions.andExpect(status().isOk())
+                .andExpect(jsonPath("code").value(Code.SUCCESS.name()))
+                .andDo(print())
+                .andDo(document("owner-findDashboard",
+                        requestHeaders(
+                                headerWithName("user-id").description("유저 고유번호")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),
+                                fieldWithPath("message").description("메시지"),
+                                fieldWithPath("data").description("데이터"),
+                                fieldWithPath("data.salesAmount").description("총 판매금약"),
+                                fieldWithPath("data.bestSellItem").description("7일간 베스트 판매 상품"),
+                                fieldWithPath("data.bestSellItem.itemId").description("7일간 베스트 판매 상품 고유번호"),
+                                fieldWithPath("data.bestSellItem.itemName").description("7일간 베스트 판매 상품명"),
+                                fieldWithPath("data.bestSellItem.sumCounts").description("7일간 베스트 판매 상품판매량"),
+                                fieldWithPath("data.sellAmountAWeeks").description("7일간 판매 통계"),
+                                fieldWithPath("data.sellAmountAWeeks[*].sellDate").description("7일간 판매 통계날짜"),
+                                fieldWithPath("data.sellAmountAWeeks[*].sellAmount").description("7일간 판매 통계날짜별 판매량")
+                        )
+                ))
+        ;
+    }
 }

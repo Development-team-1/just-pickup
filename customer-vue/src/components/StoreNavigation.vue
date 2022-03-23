@@ -11,7 +11,7 @@
       <v-icon>mdi-arrow-left</v-icon>
     </v-app-bar-nav-icon>
     <v-spacer></v-spacer>
-    <v-toolbar-title>
+    <v-toolbar-title style="position: absolute; left: 50%; transform:translateX(-50%);">
       <b>{{store.name}}</b>
     </v-toolbar-title>
     <v-spacer></v-spacer>
@@ -23,11 +23,19 @@
         :color="favoriteStore.color"
       >{{ favoriteStore.icon }}</v-icon>
     </v-btn>
+    <v-btn
+        color="white"
+        elevation="0"
+        @click="logout"
+    >
+      <v-icon>mdi-logout</v-icon>
+    </v-btn>
   </v-app-bar>
 </template>
 
 <script>
 import storeApi from "@/api/store";
+import authApi from "@/api/auth";
 
 export default {
   name: "StoreNavigation",
@@ -71,7 +79,14 @@ export default {
       }
       this.favoriteStore.status= !this.favoriteStore.status
 
+    },
+    logout: function () {
+      if(confirm("로그아웃하시겠습니까?")){
+        authApi.logout();
+
+      }
     }
+
   },
   mounted() {
     console.log(this.$route.params)

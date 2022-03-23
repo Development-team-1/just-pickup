@@ -13,6 +13,7 @@ import com.justpickup.orderservice.domain.orderItemOption.entity.OrderItemOption
 import com.justpickup.orderservice.global.client.store.*;
 import com.justpickup.orderservice.global.client.user.GetCustomerResponse;
 import com.justpickup.orderservice.global.client.user.UserClient;
+import com.justpickup.orderservice.global.dto.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -162,7 +163,9 @@ public class OrderServiceImpl implements OrderService {
 
         //orderItemOption Entity를 생성한다.
         List<OrderItemOption> orderItemOptions = orderItemDto.getOrderItemOptionDtoList()
-                .stream().map(orderItemOptionDto -> OrderItemOption.of(orderItemDto.getId()))
+                .stream()
+                .filter(orderItemOptionDto -> orderItemOptionDto.getId()!=null)
+                .map(orderItemOptionDto -> OrderItemOption.of(orderItemOptionDto.getId()))
                 .collect(toList());
 
         //orderItem을 Entity를 생성한다.
@@ -174,29 +177,40 @@ public class OrderServiceImpl implements OrderService {
         //HARD_CODE
         Long userCouponId=0L;
 
+        Long countByUserIdAndOrderStatus = orderRepository.countByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
+        if(countByUserIdAndOrderStatus>=2) throw new OrderException("장바구니 데이터는 2건 이상 일 수 없습니다.");
+
         Optional<Order> optionalOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
         if(optionalOrder.isPresent()){
             if(!optionalOrder.get().addOrderItem(orderItem)
                     .getStoreId().equals(storeId))
                 throw new OrderException("장바구니에 여러 카페의 메뉴를 담을수 없습니다.");
         }else{
+
             orderRepository.save(Order.of(userId,userCouponId,storeId,orderItem));
         }
     }
 
     @Override
     public FetchOrderDto fetchOrder(Long userId) {
+
+        //장바구니
         Order order = orderRepositoryCustom.fetchOrderBasket(userId)
                 .orElseThrow(() -> new OrderException("장바구니 정보를 찾을 수 없습니다."));
+
+
+        // feign 통신 -> store 정보 가져옴
         GetStoreResponse store = storeClient.getStore(String.valueOf(order.getStoreId())).getData();
 
+        // feign 통신 -> item, option 정보 가져옴
         List<GetItemResponse> data = storeClient.getItemAndItemOptions(order.getOrderItems().stream()
                 .map(OrderItem::getItemId)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toUnmodifiableList())
         ).getData();
 
-        Map<Long, GetItemResponse> itemMap = data.stream().collect(
+        //itemAndOptionMap
+        Map<Long, GetItemResponse> itemOptionMap = data.stream().collect(
                 Collectors.toMap(
                         GetItemResponse::getId
                         , getItemResponse -> getItemResponse
@@ -207,7 +221,7 @@ public class OrderServiceImpl implements OrderService {
         List<FetchOrderDto.OrderItemDto> orderItemDtoList = order.getOrderItems()
                 .stream().map(orderItem ->
                         new FetchOrderDto.OrderItemDto(
-                                itemMap.get(orderItem.getItemId())
+                                itemOptionMap.get(orderItem.getItemId())
                                 ,orderItem))
                 .collect(Collectors.toList());
 
@@ -234,6 +248,25 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new OrderException(orderId + "는 없는 주문 번호입니다."));
 
         order.setOrderStatus(orderStatus);
+    }
+
+    @Override
+    public DashBoardDto findDashboard(Long userId) {
+
+        Result<StoreByUserIdResponse> storeByUserId = storeClient.getStoreByUserId(userId);
+        Long storeId = storeByUserId.getData().getId();
+
+        // 하루 판매금액
+        List<DashBoardDto.OrderPrice> orderPrices = orderRepositoryCustom.salesAmountBetweenADay(storeId);
+
+        // 일주일 판매 상위메뉴
+        DashBoardDto.BestSellItem bestSellItem = orderRepositoryCustom.bestItemBetweenAWeek(storeId);
+        bestSellItem.setItemName(storeClient.getItem(bestSellItem.getItemId()).getData().getName());
+
+        // 일주일 판매금액( 일별 )
+        List<DashBoardDto.SellAmountAWeek> sellAmountAWeeks = orderRepositoryCustom.salesAmountBetweenAWeek(storeId);
+
+        return DashBoardDto.of(orderPrices , bestSellItem, sellAmountAWeeks);
     }
 
     @Override

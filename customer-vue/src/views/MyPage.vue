@@ -43,7 +43,9 @@
               />
               <v-btn
                   color="orange"
-                  block>수정하기</v-btn>
+                  block
+                  @click="message('준비중입니다.')"
+              >수정하기</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
@@ -75,6 +77,9 @@ export default {
       }).catch(error =>{
         console.log(error.response)
       })
+    },
+    message: function(message){
+      alert(message)
     },
   },
   mounted() {
