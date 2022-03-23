@@ -101,7 +101,6 @@ export default {
             this.orderData=response.data.data
           })
           .catch(error=>{
-            alert("장바구니에 상품이 없습니다.")
             this.$router.back();
             console.log(error.response)
           })
@@ -114,7 +113,7 @@ export default {
           .then(response=>{
             console.log(response)
             alert(response.data.data+"삭제되었습니다.")
-            vm.orderData.orderPrice -=orderItem.price
+            vm.orderData.orderPrice -=orderItem.price* orderItem.count
             vm.orderData.orderItemDtoList.splice(
                 vm.orderData.orderItemDtoList.indexOf(orderItem),1
             )

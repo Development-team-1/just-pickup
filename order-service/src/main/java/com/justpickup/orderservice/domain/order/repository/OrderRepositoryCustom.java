@@ -154,6 +154,8 @@ public class OrderRepositoryCustom {
                 .where(
                           order.storeId.eq(storeId)
                     .and( order.orderTime.between(startTime,today))
+                    .and(order.orderStatus.eq(OrderStatus.FINISHED))
+
                 ).fetch();
     }
 
@@ -175,7 +177,8 @@ public class OrderRepositoryCustom {
                 .from(orderItem)
                 .join(orderItem.order, order)
                 .where(orderItem.order.storeId.eq(storeId)
-                        .and(orderItem.order.orderTime.between(startTime,today)))
+                        .and(orderItem.order.orderTime.between(startTime,today))
+                        .and(orderItem.order.orderStatus.eq(OrderStatus.FINISHED)))
                 .groupBy(orderItem.itemId)
                 .orderBy(orderItem.count.sum().desc())
                 .limit(1L)
@@ -194,19 +197,20 @@ public class OrderRepositoryCustom {
 
         DateTimeTemplate formattedDate =
                 Expressions.dateTimeTemplate(LocalDateTime.class,
-                        "CAST({0} AS date) ", orderItem.order.orderTime );
+                        "CAST({0} AS date) ", order.orderTime );
 
         return queryFactory.
                 select(
                         Projections.fields(DashBoardDto.SellAmountAWeek.class,
                                 formattedDate.as("sellDate"),
-                                orderItem.price.sum().multiply(orderItem.count.sum()).as("sellAmount")
+                                order.orderPrice.sum().as("sellAmount")
                         )
                 )
-                .from(orderItem)
-                .join(orderItem.order, order)
-                .where(orderItem.order.storeId.eq(storeId)
-                        .and(orderItem.order.orderTime.between(startTime,today)))
+                .from(order)
+                .where(order.storeId.eq(storeId)
+                        .and(order.orderTime.between(startTime,today))
+                        .and(order.orderStatus.eq(OrderStatus.FINISHED))
+                )
                 .groupBy(formattedDate)
                 .fetch();
 
