@@ -15,4 +15,5 @@ public interface OrderService {
     FetchOrderDto fetchOrder(Long userId);
     void saveOrder(Long userId);
     void modifyOrder(Long userId, OrderStatus orderStatus);
+    OrderDetailDto findOrderDetail(Long orderId);
 }

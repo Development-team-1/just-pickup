@@ -77,6 +77,7 @@ public class OrderRepositoryCustom {
                 .leftJoin(order.transaction)
                 .where(
                         order.orderTime.between(search.getStartDateTime(), search.getEndDateTime()),
+                        order.orderStatus.ne(OrderStatus.PENDING),
                         order.storeId.eq(storeId)
                 )
                 .fetchOne();

@@ -8,11 +8,10 @@ import com.justpickup.orderservice.domain.order.repository.OrderRepository;
 import com.justpickup.orderservice.domain.order.repository.OrderRepositoryCustom;
 import com.justpickup.orderservice.domain.orderItem.dto.OrderItemDto;
 import com.justpickup.orderservice.domain.orderItem.entity.OrderItem;
+import com.justpickup.orderservice.domain.orderItem.repository.OrderItemRepositoryCustom;
 import com.justpickup.orderservice.domain.orderItemOption.entity.OrderItemOption;
-import com.justpickup.orderservice.global.client.store.GetItemResponse;
-import com.justpickup.orderservice.global.client.store.GetStoreResponse;
-import com.justpickup.orderservice.global.client.store.StoreByUserIdResponse;
-import com.justpickup.orderservice.global.client.store.StoreClient;
+import com.justpickup.orderservice.global.client.store.*;
+import com.justpickup.orderservice.global.client.user.GetCustomerResponse;
 import com.justpickup.orderservice.global.client.user.UserClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.justpickup.orderservice.domain.order.dto.OrderDetailDto.*;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderRepositoryCustom orderRepositoryCustom;
+    private final OrderItemRepositoryCustom orderItemRepositoryCustom;
     private final StoreClient storeClient;
     private final UserClient userClient;
   
@@ -232,6 +234,71 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new OrderException(orderId + "는 없는 주문 번호입니다."));
 
         order.setOrderStatus(orderStatus);
+    }
+
+    @Override
+    public OrderDetailDto findOrderDetail(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderException(orderId + "는 없는 주문 번호입니다."));
+
+        List<OrderItem> orderItemsWithOptions = orderItemRepositoryCustom.getOrderItemsWithOptions(order.getId());
+
+
+
+        Set<Long> itemIds = new HashSet<>();
+
+        // 아이템 이름 및 옵션 이름 가져오기
+        for (OrderItem orderItem : orderItemsWithOptions) {
+            itemIds.add(orderItem.getItemId());
+        }
+
+        Map<Long, GetItemResponse> itemAndItemOptionMap = storeClient.getItemAndItemOptionMap(itemIds);
+
+        List<OrderDetailItem> orderDetailItems = orderItemsWithOptions.stream()
+                .map(orderItem -> {
+                    // 주문 상세 옵션 생성
+                    GetItemResponse itemResponse = itemAndItemOptionMap.get(orderItem.getItemId());
+
+                    // 아이템 옵션 맵 생성
+                    Map<Long, GetItemResponse.ItemOptionDto> itemOptionMap = itemResponse.getItemOptions().stream()
+                            .collect(
+                                    toMap(GetItemResponse.ItemOptionDto::getId, itemOptionDto -> itemOptionDto)
+                            );
+
+                    List<OrderDetailItemOption> orderDetailItemOptions = orderItem.getOrderItemOptions()
+                            .stream()
+                            .map(orderItemOption -> {
+                                // 옵션 아이디에 해당하는 아이템 옵션 객체 가져오기
+                                GetItemResponse.ItemOptionDto itemOptionDto =
+                                        itemOptionMap.get(orderItemOption.getItemOptionId());
+
+                                return OrderDetailItemOption.of(
+                                        orderItemOption,
+                                        itemOptionDto.getName(),
+                                        itemOptionDto.getOptionType()
+                                );
+                            })
+                            .collect(toList());
+                    // 아이템 아이디에 해당하는 아이템 이름 가져오기
+                    String itemName = itemResponse.getName();
+                    return OrderDetailItem.of(orderItem, itemName, orderDetailItemOptions);
+                })
+                .collect(toList());
+
+        // 고객 정보 가져오기
+        GetCustomerResponse customerInfo = userClient.getCustomerById(order.getUserId()).getData();
+
+        // 주문한 사용자 정보 생성
+        OrderDetailUser orderDetailUser = OrderDetailUser.builder()
+                .id(customerInfo.getUserId())
+                .phoneNumber(customerInfo.getPhoneNumber())
+                .name(customerInfo.getUserName())
+                .build();
+
+        // 매장 정보 가져오기
+        GetStoreResponse storeInfo = storeClient.getStore(String.valueOf(order.getStoreId())).getData();
+
+        return OrderDetailDto.of(order, storeInfo.getName(), orderDetailItems, orderDetailUser);
     }
 
 }

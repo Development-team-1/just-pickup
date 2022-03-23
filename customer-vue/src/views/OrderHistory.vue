@@ -51,14 +51,10 @@ export default {
   methods: {
     search: async function() {
       this.isLoading = true;
-      try {
-        this.page = 0;
-        const response = await orderApi.requestOrderHistory(this.page);
-        this.cards = [];
-        this.renderCard(response.data);
-      } catch (error) {
-        console.log(error);
-      }
+      this.page = 0;
+      const response = await orderApi.requestOrderHistory(this.page);
+      this.cards = [];
+      this.renderCard(response.data);
       this.isLoading = false;
     },
     more: async function() {
@@ -85,18 +81,10 @@ export default {
           storeId: order.storeId,
           storeName: order.storeName,
           orderPrice: order.orderPrice,
-          orderStatus: this.getOrderStatusName(order.orderStatus),
+          orderStatus: order.orderStatus,
           orderItemNames: this.getOrderItemName(order.orderItems)
         })
       });
-    },
-    getOrderStatusName(orderStatus) {
-      if (orderStatus === "PLACED") return "주문신청";
-      if (orderStatus === "REJECTED") return "주문거절";
-      if (orderStatus === "ACCEPTED") return "주문수락";
-      if (orderStatus === "WAITING") return "픽업대기";
-      if (orderStatus === "FINISHED") return "픽업완료";
-      return orderStatus;
     },
     getOrderItemName(orderItems) {
       const itemSize = orderItems.length;
