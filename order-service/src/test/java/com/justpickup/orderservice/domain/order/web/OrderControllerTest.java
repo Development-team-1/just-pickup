@@ -101,6 +101,8 @@ class OrderControllerTest {
                                 fieldWithPath("code").description("결과코드 SUCCESS/ERROR"),
                                 fieldWithPath("message").description("메세지"),
                                 fieldWithPath("data.id").description("주문 고유번호"),
+                                fieldWithPath("data.storeName").description("주문 매장이름"),
+                                fieldWithPath("data.orderStatus").description("주문 상태"),
                                 fieldWithPath("data.orderTime").description("주문 시간 [yyy-MM-dd]"),
                                 fieldWithPath("data.orderPrice").description("주문 금액"),
                                 fieldWithPath("data.user.id").description("주문한 회원 고유번호"),
@@ -168,7 +170,9 @@ class OrderControllerTest {
 
         return OrderDetailDto.builder()
                 .id(orderId)
+                .orderStatus(OrderStatus.PLACED)
                 .orderTime(LocalDateTime.now())
+                .storeName("매장이름")
                 .orderPrice(76600L)
                 .user(orderDetailUser)
                 .orderItems(List.of(카페라떼, 아메리카노))

@@ -19,19 +19,31 @@ import java.util.List;
 public class OrderSender {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ObjectMapper objectMapper;
 
-    public void orderPlaced( KafkaSendOrderDto kafkaSendOrderDto) throws Exception{
-        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
-        String jsonInString = mapper.writeValueAsString(kafkaSendOrderDto);
+    public void orderPlaced(Order order) throws Exception{
+        objectMapper.registerModule(new JavaTimeModule());
+
+        KafkaSendOrderDto kafkaSendOrderDto = KafkaSendOrderDto.createPrimitiveField(order);
+        String jsonInString = objectMapper.writeValueAsString(kafkaSendOrderDto);
         kafkaTemplate.send("orderPlaced", jsonInString);
         log.info("kafka Producer sent data from the Order microservice: "+ kafkaSendOrderDto);
+    }
+
+    public void orderAccepted(Order order) throws Exception {
+        objectMapper.registerModule(new JavaTimeModule());
+
+        KafkaSendOrderDto kafkaSendOrderDto = KafkaSendOrderDto.createPrimitiveField(order);
+        String json = objectMapper.writeValueAsString(kafkaSendOrderDto);
+        kafkaTemplate.send("orderAccepted", json);
+        log.info("[OrderSender] orderAccepted = {}", json);
     }
 
     @NoArgsConstructor
     @Data
     @AllArgsConstructor
     @Builder
-    public static class KafkaSendOrderDto{
+    public static class KafkaSendOrderDto {
         private Long id;
 
         private Long userId;

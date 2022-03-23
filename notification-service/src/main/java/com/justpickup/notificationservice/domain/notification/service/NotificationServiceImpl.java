@@ -59,9 +59,22 @@ public class NotificationServiceImpl implements NotificationService {
         GetStoreResponse storeResponse = storeClient.getStore(String.valueOf(storeId)).getData();
 
         String title = "주문이 신청되었어요.";
-        String storeName = "[" + storeResponse.getName() + "]";
+        String storeName = "[" + storeResponse.getName() + "] ";
         String message = storeName + "매장의 주문이 신청되었습니다.";
         Notification notification = Notification.of(userId, message, title);
         notificationRepository.save(notification);
     }
+
+    @Transactional
+    @Override
+    public void insertOrderAccepted(Long userId, Long storeId) {
+        GetStoreResponse storeInfo = storeClient.getStore(String.valueOf(storeId)).getData();
+
+        String title = "주문이 수락되었어요.";
+        String storeName = "[" + storeInfo.getName() + "] ";
+        String message = storeName + "매장의 주문이 수락되었습니다.";
+        Notification notification = Notification.of(userId, message, title);
+        notificationRepository.save(notification);
+    }
+
 }
