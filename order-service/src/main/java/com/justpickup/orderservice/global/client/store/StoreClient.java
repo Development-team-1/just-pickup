@@ -35,6 +35,7 @@ public interface StoreClient {
     Result<List<GetItemResponse>> getItemAndItemOptions(@PathVariable(value = "itemId") Iterable<Long> itemIds);
 
     default Map<Long, String> getStoreNameMap(Set<Long> storeIds) {
+        if (!storeIds.iterator().hasNext()) return null;
         List<GetStoreResponse> storeResponses = this.getStoreAllById(storeIds).getData();
         return storeResponses.stream()
                 .collect(
@@ -43,6 +44,7 @@ public interface StoreClient {
     }
 
     default Map<Long, String> getItemNameMap(Iterable<Long> itemIds) {
+        if (!itemIds.iterator().hasNext()) return null;
         List<GetItemsResponse> itemResponses = this.getItems(itemIds).getData();
         return itemResponses.stream()
                 .collect(
@@ -51,6 +53,7 @@ public interface StoreClient {
     }
 
     default Map<Long, GetItemResponse> getItemAndItemOptionMap(Iterable<Long> itemIds) {
+        if (!itemIds.iterator().hasNext()) return null;
         List<GetItemResponse> responses = this.getItemAndItemOptions(itemIds).getData();
         return responses.stream()
                 .collect(

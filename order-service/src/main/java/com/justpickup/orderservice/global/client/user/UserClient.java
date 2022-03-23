@@ -20,6 +20,7 @@ public interface UserClient {
     Result<List<GetCustomerResponse>> getCustomers(@PathVariable("userIds") Iterable<Long> userIds);
 
     default Map<Long, String> getUserNameMap(Iterable<Long> userIds) {
+        if (!userIds.iterator().hasNext()) return null;
         List<GetCustomerResponse> userResponses = this.getCustomers(userIds).getData();
         return userResponses.stream()
                 .collect(

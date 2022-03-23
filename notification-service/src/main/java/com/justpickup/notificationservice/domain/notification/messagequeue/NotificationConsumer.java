@@ -34,6 +34,17 @@ public class NotificationConsumer {
         notificationService.insertOrderPlaced(kafkaSendOrderDto.getUserId(), kafkaSendOrderDto.getStoreId());
     }
 
+    @Transactional
+    @KafkaListener(topics = "orderAccepted")
+    public void orderAccepted(String kafkaMessage) throws JsonProcessingException {
+        log.debug("## NotificationConsumer.orderAccepted");
+        log.debug("#### kafka Message = {}", kafkaMessage);
+
+        KafkaSendOrderDto orderDto = objectMapper.readValue(kafkaMessage, KafkaSendOrderDto.class);
+
+        notificationService.insertOrderAccepted(orderDto.userId, orderDto.storeId);
+    }
+
     @Data @NoArgsConstructor
     static class KafkaSendOrderDto {
         private Long id;

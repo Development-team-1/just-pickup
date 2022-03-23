@@ -15,21 +15,24 @@ public class OrderListener {
     @Lazy
     private OrderSender orderSender;
 
-
     // TODO: 2022/03/15 exception 발생시 order fail 처리
     @PostUpdate
     public void postUpdate(Order order){
         OrderStatus orderStatus = order.getOrderStatus();
+        log.info("[OrderListener] {}", OrderStatus.PLACED.name());
         if (orderStatus == OrderStatus.PLACED) {
-            log.info("[OrderListener] {}", OrderStatus.PLACED.name());
             try{
-                orderSender.orderPlaced(OrderSender.KafkaSendOrderDto.createPrimitiveField(order));
+                orderSender.orderPlaced(order);
             }catch (Exception ex){
                 throw new OrderException(ex.getMessage());
             }
 
         } else if (orderStatus == OrderStatus.ACCEPTED) {
-            log.info("[OrderListener] {}", OrderStatus.ACCEPTED.name());
+            try {
+                orderSender.orderAccepted(order);
+            } catch (Exception ex) {
+                throw new OrderException(ex.getMessage());
+            }
         }
     }
 }
