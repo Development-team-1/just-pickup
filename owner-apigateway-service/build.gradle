@@ -33,6 +33,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	// zipkin & sleuth
+	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+	implementation 'org.springframework.cloud:spring-cloud-starter-zipkin:2.2.3.RELEASE'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
