@@ -4,6 +4,14 @@ server:
 spring:
   application:
     name: store-service
+
+  zipkin:
+    base-url: http://127.0.0.1:9411
+    enabled: true
+  sleuth:
+    sampler:
+      probability: 1.0
+
   config:
     import: optional:configserver:http://127.0.0.1:8888
   cloud:
@@ -26,13 +34,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/storedb
     username: postgres
     password: admin
-
-
-#  sql:
-#    init:
-#      data-locations: classpath:data/data.sql
-#      mode: always
-
 
 eureka:
   client:

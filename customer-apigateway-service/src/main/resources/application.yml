@@ -18,8 +18,17 @@ eureka:
 spring:
   application:
     name: customer-apigateway-service
+
   config:
     import: optional:configserver:http://127.0.0.1:8888
+
+  zipkin:
+    base-url: http://127.0.0.1:9411
+    enabled: true
+  sleuth:
+    sampler:
+      probability: 1.0
+
   cloud:
     config:
       name: bootstrap

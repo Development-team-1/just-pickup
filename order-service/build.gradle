@@ -32,22 +32,20 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-	/*implementation 'org.springframework.boot:spring-boot-starter-amqp'*/
-	/*implementation 'org.springframework.boot:spring-boot-starter-security'*/
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	implementation 'org.springframework.kafka:spring-kafka'
 	// https://mvnrepository.com/artifact/com.github.gavlyukovskiy/p6spy-spring-boot-starter
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
-
+	// zipkin & sleuth
+	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+	implementation 'org.springframework.cloud:spring-cloud-starter-zipkin:2.2.3.RELEASE'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//    testImplementation 'org.springframework.amqp:spring-rabbit-test'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
-//    testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'com.h2database:h2'
 
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'

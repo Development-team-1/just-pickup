@@ -30,6 +30,9 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	// https://mvnrepository.com/artifact/io.netty/netty-resolver-dns-native-macos
 	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
+	// zipkin & sleuth
+	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+	implementation 'org.springframework.cloud:spring-cloud-starter-zipkin:2.2.3.RELEASE'
 
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'
 

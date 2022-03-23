@@ -4,6 +4,14 @@ server:
 spring:
   application:
     name: order-service
+
+  zipkin:
+    base-url: http://127.0.0.1:9411
+    enabled: true
+  sleuth:
+    sampler:
+      probability: 1.0
+
   config:
     import: optional:configserver:http://127.0.0.1:8888
   cloud:
@@ -24,7 +32,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/orderdb
     username: postgres
     password: admin
-
 
 eureka:
   client:
