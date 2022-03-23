@@ -96,5 +96,9 @@ operation::add-item-to-basket[snippets='curl-request,http-request,http-response,
 === 장바구니 내역 가져오기
 operation::fetch-order[snippets='curl-request,http-request,http-response,request-headers,response-fields']
 
+=== 장바구니 상품 삭제
+operation::delete-orderItem[snippets='curl-request,http-request,http-response,request-headers,path-parameters,response-fields']
+
+
 === 주문하기
 operation::save-order[snippets='curl-request,http-request,http-response,request-headers']
