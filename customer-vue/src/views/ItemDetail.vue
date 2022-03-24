@@ -124,17 +124,18 @@ export default {
     getItemData: async function (){
       storeApi.fetchItem(this.itemId)
       .then(response=>{
-        console.log(response)
         this.itemData = response.data.data
         this.setItem.itemId = this.itemData.id
         this.setItem.price = this.itemData.price
         this.storeId = this.itemData.storeId
         this.setItem.storeId = this.itemData.storeId
+        this.$emit('getStoreId', this.storeId)
       })
       .catch(error=>{
         console.log(error)
         this.$router.push("/")
       })
+
     },
     parseGroup: function (type){
       let group= [];

@@ -27,6 +27,8 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -76,14 +78,10 @@ class CategoryOwnerApiControllerTest {
         //then
 
         actions.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("data[0].categoryId").value("10"))
-                .andExpect(MockMvcResultMatchers.jsonPath("data[0].name").value("카테고리1"))
-                .andExpect(MockMvcResultMatchers.jsonPath("data[1].categoryId").value("11"))
-                .andExpect(MockMvcResultMatchers.jsonPath("data[1].name").value("카테고리2"))
                 .andDo(MockMvcResultHandlers.print())
                 .andDo(MockMvcRestDocumentation.document("get-categoryList",
-                        requestParameters(
-                                parameterWithName("storeId").description("매장 고유 번호")
+                        requestHeaders(
+                                headerWithName("user-id").description("로그인한 유저 id")
                         ),
                         responseFields(
                                 fieldWithPath("code").description("결과 코드 SUCCESS/ERROR"),

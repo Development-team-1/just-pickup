@@ -42,7 +42,6 @@ export default {
   props: ["store"],
   data: function() {
     return {
-      storeId:-1,
       favoriteStore:{
         status:true,
         color:null,
@@ -50,34 +49,40 @@ export default {
       }
     }
   },
-  methods:{
+  watch:{
+    store (){
 
+      // alert()
+      this.getFavoriteStoreByStoreId()
+    }
+  },
+  methods:{
     markStar:function () {
-      this.changeStarStatus()
+      this.changeStarStatus(!this.favoriteStore.status)
       var vm = this
-      storeApi.markStar(this.storeId)
+      storeApi.markStar(this.store.id)
           .then(()=>{
             vm.favoriteStore.status?
                 alert('즐겨찾는 매장에서 제외되었습니다.') : alert('즐겨찾는 매장에 등록되었습니다.')
           })
     },
-    getFavoriteStoreByStoreId: function (storeId){
+    getFavoriteStoreByStoreId: function (){
       var vm = this
-      storeApi.getFavoriteStoreByStoreId(storeId)
+      storeApi.getFavoriteStoreByStoreId(this.store.id)
           .then((response)=>{
-            if(response.data.data.exist) vm.changeStarStatus()
+            if(response.data.data.exist) vm.changeStarStatus(response.data.data.exist)
           })
     },
-    changeStarStatus(){
+    changeStarStatus(status){
 
-      if(this.favoriteStore.status){
+      if(status){
         this.favoriteStore.color = "rgb(255, 152, 0)"
         this.favoriteStore.icon = "mdi-heart"
       }else{
         this.favoriteStore.color = null
         this.favoriteStore.icon = "mdi-heart-outline"
       }
-      this.favoriteStore.status= !this.favoriteStore.status
+      this.favoriteStore.status= status
 
     },
     logout: function () {
@@ -89,9 +94,8 @@ export default {
 
   },
   mounted() {
-    console.log(this.$route.params)
-    this.storeId =this.$route.params.storeId
-    this.getFavoriteStoreByStoreId(this.storeId)
+
+    // this.getFavoriteStoreByStoreId(this.storeId)
   }
 }
 </script>
