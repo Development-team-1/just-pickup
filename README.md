@@ -57,5 +57,13 @@
     </tr>
 </table>
 
+### API 설계 ✏️
+| 서비스 | 설계서 |
+| --- | --- |
+| USER-SERVICE |  |
+| STORE-SERVICE |  |
+| ORDER-SERVICE |  |
+| NOTIFICATION-SERVICE |  |
+
 
 
