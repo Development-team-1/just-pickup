@@ -61,7 +61,11 @@ spring:
           filters:
             - AuthorizationHeaderFilter
             - RewritePath=/order-service/(?<segment>.*),/$\{segment}
-
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 3
+                redis-rate-limiter.burstCapacity: 3
+                key-resolver: "#{@tokenKeyResolver}"
         - id: store-service
           uri: lb://STORE-SERVICE
           predicates:
@@ -69,6 +73,11 @@ spring:
           filters:
             - AuthorizationHeaderFilter
             - RewritePath=/store-service/(?<segment>.*),/$\{segment}
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 3
+                redis-rate-limiter.burstCapacity: 3
+                key-resolver: "#{@tokenKeyResolver}"
 
         - id: notification-service
           uri: lb://NOTIFICATION-SERVICE
