@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>/Notification-Service-API-%EB%AC%B8%EC%84%9C/</loc>
+<lastmod>2022-03-24T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>/Order-Service-API-%EB%AC%B8%EC%84%9C/</loc>
+<lastmod>2022-03-24T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>/Store-Service-API-%EB%AC%B8%EC%84%9C/</loc>
+<lastmod>2022-03-24T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>/User-Service-API-%EB%AC%B8%EC%84%9C/</loc>
+<lastmod>2022-03-24T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>/Just-pickup%EC%9D%B4%EB%9E%80/</loc>
+<lastmod>2022-03-25T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>/about/</loc>
+</url>
+<url>
+<loc>/</loc>
+</url>
+</urlset>

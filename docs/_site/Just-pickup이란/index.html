@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Just Pickup이란? – Development-team-1 – 커피픽업 서비스 관련 docs</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="README.md
+
+" />
+    <meta property="og:description" content="README.md
+
+" />
+    
+    <meta name="author" content="Development-team-1" />
+
+    
+    <meta property="og:title" content="Just Pickup이란?" />
+    <meta property="twitter:title" content="Just Pickup이란?" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Development-team-1 - 커피픽업 서비스 관련 docs" href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://avatars.githubusercontent.com/u/98140851?s=400&u=7c77c68cb94efc83399176cd1347eb9df6497026&v=4" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Development-team-1</a></h1>
+            <p class="site-description">커피픽업 서비스 관련 docs</p>
+          </div>
+
+          <nav>
+            <a href="https://github.com/Development-team-1/just-pickup/">About</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Just Pickup이란?</h1>
+
+  <div class="entry">
+    <h1 id="readmemd">README.md</h1>
+
+<p>생성일: March 23, 2022 7:16 PM</p>
+
+<h2 id="just-pickup---프로젝트-기획-배경-및-목표-개요">Just pickup! - 프로젝트 기획 배경 및 목표 (개요)</h2>
+
+<hr />
+
+<p><img src="/images/Untitled.png" alt="Untitled" /></p>
+
+<p><strong>기획배경</strong></p>
+
+<p>현업에서 오래된 모놀리틱 서비스를 유지보수 해보면서 프로그램은 점점 노후화되고, 새로운 기술을 적용하기에는 프로그램의 의존성에 묶여 시도하기가 힘든 환경이 되가면서 점점 MSA에 관심이 가게 되었습니다.</p>
+
+<p>그래서 기술적용에 자유롭고 도메인 변경에 유연하게 대처할수 있는 MSA를 적용한 프로젝트를 만들어보자는 생각을 가졌습니다. 같은 고민을 가지고 있는 개발자 2명이 모여서 MSA을 적용한 프로젝트인 Just pickup!을 기획하였습니다. Just pickup! 이란 사용자가 카페로 간단하게 주문을 넣어서 단지 픽업을 하면 된다는 뜻으로 만들었습니다.</p>
+
+<p><strong>애자일</strong></p>
+
+<p>저희는 프로젝트 생명주기 동안 <strong>애자일</strong>을 적용하여 이벤트 스토밍을 적용하였으며 <strong><a href="https://github.com/Development-team-1/just-pickup#%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%8A%A4%ED%86%A0%EB%B0%8D-event-storming">(!이벤트스토밍 링크)</a></strong></p>
+
+<p>이슈에 유연하게 대처하기 위해 github issue를 적극 활용하였습니다.</p>
+
+<p><strong>기술</strong></p>
+
+<p>spring cloud 오픈소스 기반으로 마이크로 서비스 아키텍처를 설계하여 개발하였습니다.</p>
+
+<h2 id="설계서">설계서</h2>
+
+<hr />
+
+<p>…</p>
+
+<h3 id="api-설계-️">API 설계 ✏️</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>서비스</th>
+      <th>설계서</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>유저 서비스</td>
+      <td>창훈</td>
+    </tr>
+    <tr>
+      <td>매장</td>
+      <td>상범</td>
+    </tr>
+    <tr>
+      <td>주문</td>
+      <td>상범</td>
+    </tr>
+    <tr>
+      <td>알림</td>
+      <td>창훈</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="overview-"><strong>**Overview</strong>** 🔎</h3>
+
+<ul>
+  <li>점주
+    <ul>
+      <li>창훈</li>
+    </ul>
+  </li>
+  <li>사용자
+    <ul>
+      <li>상범</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="아키텍처">아키텍처</h2>
+
+<hr />
+
+<h3 id="기술-스택-및-개발환경">기술 스택 및 개발환경</h3>
+
+<ul>
+  <li>상범</li>
+  <li>Spring Boot
+    <ul>
+      <li>Spring Framwork XX</li>
+      <li>…</li>
+    </ul>
+  </li>
+  <li>Vue
+    <ul>
+      <li>Vue-Router</li>
+      <li>…</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. 췍
+2. 췍
+3. 췍췍
+</code></pre></div></div>
+
+<h3 id="시스템-아키텍처">시스템 아키텍처</h3>
+
+<ul>
+  <li>창훈</li>
+</ul>
+
+<p>[작성 예정] 하단은 예시</p>
+
+<p><img src="/images/Untitled%201.png" alt="Untitled" /></p>
+
+<h3 id="micro-service-통신">Micro service 통신</h3>
+
+<ul>
+  <li>Zipkin
+<img src="/images/Untitled%202.png" alt="Untitled" /></li>
+</ul>
+
+<h2 id="주요-이슈">주요 이슈</h2>
+
+<hr />
+
+<ul>
+  <li><a href="https://www.notion.so/9af1b880c93b4420a7ab70c3cd3c5723">JWT 구현</a> (링크달기)</li>
+  <li>…</li>
+  <li></li>
+</ul>
+
+<h2 id="build--run">build &amp; run</h2>
+
+<hr />
+
+<p>[도커 실행방법 작성]</p>
+
+<ul>
+  <li>상범</li>
+</ul>
+
+  </div>
+
+  <div class="date">
+    Written on March 25, 2022
+  </div>
+
+  
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/Development-team-1/just-pickup"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+
+  </body>
+</html>
