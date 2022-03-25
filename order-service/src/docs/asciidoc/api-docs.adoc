@@ -60,10 +60,6 @@
 | 클라이언트의 요청이 서버의 상태와 충돌이 발생한 경우.
 |===
 
-[[snippets-write-convention]]
-== snippets 작성 컨벤션
-domain-httpRequestCode-etc
-
 == 주문
 === 주문 수정
 operation::order-patch[snippets='curl-request,http-request,http-response,path-parameters,request-fields,response-fields']
