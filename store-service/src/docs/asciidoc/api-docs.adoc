@@ -60,59 +60,59 @@
 | 클라이언트의 요청이 서버의 상태와 충돌이 발생한 경우.
 |===
 
+== 카테고리 (점주 서비스)
+=== 카테고리 조회
+operation::get-categoryList[snippets='curl-request,http-request,http-response,request-headers,response-fields']
+
 
 == 상품
 === 상품 조회
 operation::item-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
-=== 상품 조회 (존재하지 않는 상품)
+=== 상품 조회 - 존재하지 않는 상품
 operation::item-get-notExistItemException[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 === 상품 리스트 조회
 operation::items-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 
-
-== 상품 (판매자)
-=== 상품 조회
-=== 상품 리스트 조회(구매자)
-operation::customer-itemList-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
-
-
-=== 상품 조회(판매자)
-operation::owner-item-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
+== 상품 (점주 서비스)
 === 상품 리스트 조회
-operation::owner-itemList-get[snippets='curl-request,http-request,http-response,response-fields']
-
-=== 상품 수정
-operation::owner-put-item[snippets='curl-request,http-request,http-response']
+operation::owner-itemList-get[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
+=== 상품 조회
+operation::owner-item-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 === 상품 등록
-operation::owner-create-item[snippets='curl-request,http-request,http-response']
+operation::owner-create-item[snippets='curl-request,http-request,http-response,request-headers,request-fields']
+=== 상품 수정
+operation::owner-put-item[snippets='curl-request,http-request,http-response,request-headers,request-fields']
 
-== 카테고리
-== 카테고리 조회
-operation::get-categoryList[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
-
-== 카테고리 수정
-operation::put-categoryList[snippets='curl-request,http-request,http-response,request-body,request-fields']
-
+== 상품 (사용자 서비스)
+=== 상품 리스트 조회
+operation::customer-itemList-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
+=== 상품 조회
+operation::customer-item-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 
 == 매장
-=== 매장 검색 조회
-operation::api-customer-store-search[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
-=== 자주찾는 매장
-operation::favoriteStore-get[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
 === 매장 조회
 operation::store-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
-=== 매장 조회 (회원 고유번호)
-operation::api-get-store-byUserId[snippets='curl-request,http-request,http-response,request-headers,response-fields']
 === 매장 리스트 조회
 operation::stores-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
-=== 매장 생성 (점주 서비스)
+
+== 매장 (점주 서비스)
+=== 사용자 고유번호로 매장 조회
+operation::api-get-store-byUserId[snippets='curl-request,http-request,http-response,request-headers,response-fields']
+=== 매장 등록
 operation::api-post-store[snippets='curl-request,http-request,http-response,request-headers,request-fields']
 
-== 즐겨찾는 매장
+== 매장 (사용자 서비스)
+=== 즐겨찾는 매장 조회
+operation::favoriteStore-get[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
+=== 매장 검색 조회
+operation::api-customer-store-search[snippets='curl-request,http-request,http-response,request-parameters,response-fields']
+
+// itemcustomerapicontrollertest
+
+== 즐겨찾는 매장 (사용자 서비스)
 === 즐겨찾는 매장 조회
 operation::get-favoritestore-by-storeid[snippets='curl-request,http-request,http-response,request-headers,path-parameters,response-fields']
-=== 즐겨찾는 매장 추가/삭제
+
+=== 즐겨찾는 매장 추가 | 제거
 operation::patch-FavoriteStore[snippets='curl-request,http-request,http-response,request-headers,path-parameters']
 
-
-operation::customer-item-get[snippets='curl-request,http-request,http-response,path-parameters,response-fields']

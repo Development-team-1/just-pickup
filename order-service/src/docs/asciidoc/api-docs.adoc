@@ -63,40 +63,31 @@
 == 주문
 === 주문 수정
 operation::order-patch[snippets='curl-request,http-request,http-response,path-parameters,request-fields,response-fields']
-=== 주문 상세보기
+=== 주문 상세보기 조회
 operation::api-orderDetail[snippets='curl-request,http-request,http-response,path-parameters,response-fields']
 
-== 점주 서비스
-=== 주문 페이지
-- 페이지 offset : 6
-
-operation::orderMain-get[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
-=== 점주 서비스 - 주문 페이지 (잘못된 파라미터 형식)
-
-operation::orderMain-get-badParameterException[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
-
-=== 점주 서비스 - 지난 주문 페이지
-operation::prevOrder-get[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
-
-=== 점주 서비스 - 지난 주문 페이지 (잘못된 파라미터 형식)
-operation::prevOrder-get-BindException[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
-
-=== 점주 서비스 - 대쉬보드
-operation::owner-findDashboard[snippets='curl-request,http-request,http-response,request-headers,response-fields']
-
-== Just Pick-up
-=== 주문 내역 페이지
+== 주문 (사용자 서비스)
+=== 주문 내역 조회
 operation::api-customer-order-history[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
-
 === 장바구니 상품 추가
 operation::add-item-to-basket[snippets='curl-request,http-request,http-response,request-headers,request-body,request-fields']
-
-=== 장바구니 내역 가져오기
+=== 장바구니 내역 조회
 operation::fetch-order[snippets='curl-request,http-request,http-response,request-headers,response-fields']
-
-=== 장바구니 상품 삭제
-operation::delete-orderItem[snippets='curl-request,http-request,http-response,request-headers,path-parameters,response-fields']
-
-
-=== 주문하기
+=== 주문 생성
 operation::save-order[snippets='curl-request,http-request,http-response,request-headers']
+
+== 주문 (점주 서비스)
+=== 주문 페이지 조회
+operation::orderMain-get[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
+=== 주문 페이지 조회 (잘못된 파라미터 형식)
+operation::prevOrder-get-BindException[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
+=== 지난 주문 페이지 조회
+operation::prevOrder-get[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
+=== 지난 주문 페이지 조회 (파라미터 오류)
+operation::prevOrder-get-BindException[snippets='curl-request,http-request,http-response,request-headers,request-parameters,response-fields']
+=== 대쉬보드 조회
+operation::owner-findDashboard[snippets='curl-request,http-request,http-response,request-headers,response-fields']
+
+== 주문상품 (사용자 서비스)
+=== 장바구니 아이템 삭제
+operation::delete-orderItem[snippets='curl-request,http-request,http-response,request-headers,path-parameters,response-fields']
