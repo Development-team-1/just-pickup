@@ -65,5 +65,40 @@
 | ORDER-SERVICE |[링크](https://development-team-1.github.io/just-pickup/Order-Service-API-%E1%84%86%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5/)|
 | NOTIFICATION-SERVICE |[링크](https://development-team-1.github.io/just-pickup/Notification-Service-API-%EB%AC%B8%EC%84%9C/)|
 
+### Overview 🔎
+| 서비스 | PDF |
+| --- | --- |
+|사용자|[링크](https://github.com/Development-team-1/just-pickup/blob/master/docs/overview/Just_Pickup.pdf)|
+|점주|[링크](https://github.com/Development-team-1/just-pickup/blob/master/docs/overview/%E1%84%8C%E1%85%A5%E1%86%B7%E1%84%8C%E1%85%AE%E1%84%8B%E1%85%AD%E1%86%BC%20%E1%84%80%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%83%E1%85%B3.pdf)|
 
+## 아키텍처
+| 기술스택 | 개발환경 |
+| --- | --- |
+| Spring Boot | - Spring Framwork 2.6.3 </br> - Java 11 </br> - Gradle </br> - Spring Web Mvc </br> - Spring Security |
+| Spring Cloud | - Eureka </br> - Gateway </br> - OpenFeign </br> - Config </br> - Redis Rate Limiter |
+| Authenticate | - JWT (Json Web Token) </br> - OAuth 2.0 |
+| ORM | - JPA </br> - QueryDsl |
+| Message Queue | - Kafka |
+| Database | - PostgreSQL </br> - Redis  |
+| Test | - Spring RestDocs |
+| 모니터링 | - Zipkin </br> - Spring Cloud Sleuth |
+| Vue | - Vue-Router </br> - axios </br> - Vuetify |
+ ```
+1. JWT 토큰을 이용한 로그인, 회원가입 구현
+2. Kafka를 사용해 이벤트 드리븐 아키텍처 구현
+3. RestDocs를 이용한 테스트 작성 및 API 문서 작성
+4. Open Feign을 이용한 인터페이스 형식의 HTTP 통신 구현 
+5. reactive redis를 사용하여 api 호출 과부화를 막는 rate limiter 구현
+```
+
+### 시스템 아키텍처
+![system architecture](https://user-images.githubusercontent.com/72686708/161487968-9d8795be-efdd-4f2d-97ea-d2c21ecaf5fb.png)
+
+### Microservice 통신
+![microservice](https://user-images.githubusercontent.com/72686708/161488158-66a9bc1c-7757-4062-b46e-0e14005e505a.png)
+
+
+## 주요 이슈
+
+## build & run
 
