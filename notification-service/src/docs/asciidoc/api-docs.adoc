@@ -60,10 +60,6 @@
 | 클라이언트의 요청이 서버의 상태와 충돌이 발생한 경우.
 |===
 
-[[snippets-write-convention]]
-== snippets 작성 컨벤션
-domain-httpRequestCode-etc
-
 == 알림
 === 알림 조회 - 회원 고유번호
 operation::notification-get[snippets='curl-request,http-request,http-response,request-headers,response-fields']

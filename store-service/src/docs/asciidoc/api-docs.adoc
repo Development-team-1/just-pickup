@@ -63,8 +63,7 @@
 == 카테고리 (점주 서비스)
 === 카테고리 조회
 operation::get-categoryList[snippets='curl-request,http-request,http-response,request-headers,response-fields']
-=== 카테고리 수정
-operation::put-categoryList[snippets='curl-request,http-request,http-response,request-fields']
+
 
 == 상품
 === 상품 조회
@@ -113,6 +112,7 @@ operation::api-customer-store-search[snippets='curl-request,http-request,http-re
 == 즐겨찾는 매장 (사용자 서비스)
 === 즐겨찾는 매장 조회
 operation::get-favoritestore-by-storeid[snippets='curl-request,http-request,http-response,request-headers,path-parameters,response-fields']
+
 === 즐겨찾는 매장 추가 | 제거
 operation::patch-FavoriteStore[snippets='curl-request,http-request,http-response,request-headers,path-parameters']
 
