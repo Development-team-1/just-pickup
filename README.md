@@ -60,10 +60,10 @@
 ### API 설계 ✏️
 | 서비스 | 설계서 |
 | --- | --- |
-| USER-SERVICE |  |
-| STORE-SERVICE |  |
-| ORDER-SERVICE |  |
-| NOTIFICATION-SERVICE |  |
+| USER-SERVICE |[링크](https://development-team-1.github.io/just-pickup/User-Service-API-%EB%AC%B8%EC%84%9C/)|
+| STORE-SERVICE |[링크](https://development-team-1.github.io/just-pickup/Store-Service-API-%E1%84%86%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5/)|
+| ORDER-SERVICE |[링크](https://development-team-1.github.io/just-pickup/Order-Service-API-%E1%84%86%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5/)|
+| NOTIFICATION-SERVICE |[링크](https://development-team-1.github.io/just-pickup/Notification-Service-API-%EB%AC%B8%EC%84%9C/)|
 
 
 
