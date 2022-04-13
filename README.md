@@ -99,6 +99,7 @@
 
 
 ## 주요 이슈
+- [Feign Client 다중 호출 성능 최적기](https://github.com/Development-team-1/just-pickup/issues/61)
 
 ## build & run
 
