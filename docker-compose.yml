@@ -22,6 +22,14 @@ services:
       - zookeeper
     networks:
       - justpickup-network
+  
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - justpickup-network
 
   discovery:
     container_name: discovery
@@ -44,6 +52,7 @@ services:
       - justpickup-network
     environment:
       - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      - spring.zipkin.base-url=http://zipkin:9411
     depends_on:
       - discovery
   
@@ -58,6 +67,7 @@ services:
       - justpickup-network
     environment:
       - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      - spring.zipkin.base-url=http://zipkin:9411
     depends_on:
       - discovery
 
@@ -104,6 +114,7 @@ services:
       - spring.config.import=optional:configserver:http://config:8888
       - spring.datasource.url=jdbc:postgresql://postgres:5432/userdb
       - spring.redis.host=redis
+      - spring.zipkin.base-url=http://zipkin:9411
     depends_on:
       - discovery
       - config
@@ -123,6 +134,7 @@ services:
       - spring.datasource.url=jdbc:postgresql://postgres:5432/orderdb
       - kafka.host=172.18.0.101
       - kafka.port=9092
+      - spring.zipkin.base-url=http://zipkin:9411
     depends_on:
       - discovery
       - config
@@ -140,6 +152,7 @@ services:
     environment:
       - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
       - spring.datasource.url=jdbc:postgresql://postgres:5432/storedb
+      - spring.zipkin.base-url=http://zipkin:9411
     depends_on:
       - discovery
       - config
@@ -156,6 +169,7 @@ services:
     environment:
       - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
       - spring.datasource.url=jdbc:postgresql://postgres:5432/notificationdb
+      - spring.zipkin.base-url=http://zipkin:9411
     depends_on:
       - discovery
       - config
